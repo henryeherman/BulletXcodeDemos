@@ -26,7 +26,7 @@ ReWritten by: Francisco León
 #include "LinearMath/btIDebugDraw.h"
 
 #include "GLDebugDrawer.h"
-#include "GenericJointDemo.h"
+#include "HexapodSimulation.h"
 
 
 
@@ -71,15 +71,20 @@ void GenericJointDemo::initPhysics()
 	}
 
 	// Spawn one ragdoll
-	spawnRagdoll();
+	spawnHexapod();
 
 	clientResetScene();
 }
 
-void GenericJointDemo::spawnRagdoll(bool random)
+void GenericJointDemo::spawnHexapod(bool random)
 {
-	RagDoll* ragDoll = new RagDoll (m_dynamicsWorld, btVector3 (0,0,5),5.f);
-	m_ragdolls.push_back(ragDoll);
+	Hexapod* hexapod = new Hexapod (m_dynamicsWorld, btVector3 (0,0,2),5.f);
+	m_hexapods.push_back(hexapod);
+    
+    //Leg* leg = new Leg (m_dynamicsWorld, btVector3 (0,0,5),5.f);
+    //delete leg;
+    //m_legs.push_back(leg);
+    
 }
 
 void GenericJointDemo::clientMoveAndDisplay()
@@ -125,7 +130,7 @@ void GenericJointDemo::keyboardCallback(unsigned char key, int x, int y)
 	switch (key)
 	{
 	case 'e':
-		spawnRagdoll(true);
+		spawnHexapod(true);
 		break;
 	default:
 		DemoApplication::keyboardCallback(key, x, y);

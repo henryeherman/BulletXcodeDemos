@@ -46,6 +46,27 @@
 		050765891553178C00DEEF87 /* BulletDynamics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050764FE1553102600DEEF87 /* BulletDynamics.framework */; };
 		0507658A1553178C00DEEF87 /* BulletMultiThreaded.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050764FF1553102600DEEF87 /* BulletMultiThreaded.framework */; };
 		0507658B1553178C00DEEF87 /* BulletSoftBody.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050765001553102600DEEF87 /* BulletSoftBody.framework */; };
+		051CA9E9155B361A00955732 /* Hexapod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 051CA9E7155B361A00955732 /* Hexapod.cpp */; };
+		051CA9EC155B36F000955732 /* HexapodSimulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 051CA9EA155B36F000955732 /* HexapodSimulation.cpp */; };
+		051CA9ED155B370800955732 /* LinearMath.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0507653E155315C000DEEF87 /* LinearMath.framework */; };
+		051CA9EE155B370800955732 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050765071553104600DEEF87 /* OpenGL.framework */; };
+		051CA9EF155B370800955732 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050765051553103B00DEEF87 /* GLUT.framework */; };
+		051CA9F0155B370800955732 /* BulletCollision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050764FD1553102600DEEF87 /* BulletCollision.framework */; };
+		051CA9F1155B370800955732 /* BulletDynamics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050764FE1553102600DEEF87 /* BulletDynamics.framework */; };
+		051CA9F2155B370800955732 /* BulletMultiThreaded.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050764FF1553102600DEEF87 /* BulletMultiThreaded.framework */; };
+		051CA9F3155B370800955732 /* BulletSoftBody.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050765001553102600DEEF87 /* BulletSoftBody.framework */; };
+		051CA9F7155B374800955732 /* DemoApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0507654E155316EE00DEEF87 /* DemoApplication.cpp */; };
+		051CA9F8155B374A00955732 /* GL_DialogDynamicsWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05076550155316EE00DEEF87 /* GL_DialogDynamicsWorld.cpp */; };
+		051CA9F9155B374D00955732 /* GL_DialogWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05076552155316EE00DEEF87 /* GL_DialogWindow.cpp */; };
+		051CA9FA155B377300955732 /* GLDebugDrawer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05076558155316EE00DEEF87 /* GLDebugDrawer.cpp */; };
+		051CA9FB155B377500955732 /* GLDebugFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0507655A155316EE00DEEF87 /* GLDebugFont.cpp */; };
+		051CA9FC155B377A00955732 /* GlutDemoApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0507655C155316EE00DEEF87 /* GlutDemoApplication.cpp */; };
+		051CA9FD155B377F00955732 /* GlutStuff.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0507655E155316EE00DEEF87 /* GlutStuff.cpp */; };
+		051CA9FE155B395200955732 /* GL_ShapeDrawer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05076554155316EE00DEEF87 /* GL_ShapeDrawer.cpp */; };
+		051CA9FF155B395200955732 /* GL_Simplex1to4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05076556155316EE00DEEF87 /* GL_Simplex1to4.cpp */; };
+		0534676D1558C2670017E380 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 055DB0D215586C1300F40D05 /* main.cpp */; };
+		053AC44A155B28BC00B8EC11 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 053AC449155B28BC00B8EC11 /* main.cpp */; };
+		053AC44C155B28BC00B8EC11 /* hexapod.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 053AC44B155B28BC00B8EC11 /* hexapod.1 */; };
 		053AEB8815534B9900CB0698 /* CcdPhysicsDemo.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 053AEB8715534B9900CB0698 /* CcdPhysicsDemo.1 */; };
 		053AEB8F15534C0A00CB0698 /* CcdPhysicsDemo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 053AEB8C15534C0A00CB0698 /* CcdPhysicsDemo.cpp */; };
 		053AEB9015534C0A00CB0698 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 053AEB8E15534C0A00CB0698 /* main.cpp */; };
@@ -220,6 +241,54 @@
 		055DB0C01558539600F40D05 /* BulletDynamics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050764FE1553102600DEEF87 /* BulletDynamics.framework */; };
 		055DB0C11558539600F40D05 /* BulletMultiThreaded.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050764FF1553102600DEEF87 /* BulletMultiThreaded.framework */; };
 		055DB0C21558539600F40D05 /* BulletSoftBody.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050765001553102600DEEF87 /* BulletSoftBody.framework */; };
+		055DB0CD15586BE100F40D05 /* HelloGraphics.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 055DB0CC15586BE100F40D05 /* HelloGraphics.1 */; };
+		055DB0D715586C2F00F40D05 /* LinearMath.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0507653E155315C000DEEF87 /* LinearMath.framework */; };
+		055DB0D815586C2F00F40D05 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050765071553104600DEEF87 /* OpenGL.framework */; };
+		055DB0D915586C2F00F40D05 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050765051553103B00DEEF87 /* GLUT.framework */; };
+		055DB0DA15586C2F00F40D05 /* BulletCollision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050764FD1553102600DEEF87 /* BulletCollision.framework */; };
+		055DB0DB15586C2F00F40D05 /* BulletDynamics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050764FE1553102600DEEF87 /* BulletDynamics.framework */; };
+		055DB0DC15586C2F00F40D05 /* BulletMultiThreaded.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050764FF1553102600DEEF87 /* BulletMultiThreaded.framework */; };
+		055DB0DD15586C2F00F40D05 /* BulletSoftBody.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050765001553102600DEEF87 /* BulletSoftBody.framework */; };
+		055DB0DF15586D4B00F40D05 /* DemoApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0507654E155316EE00DEEF87 /* DemoApplication.cpp */; };
+		055DB0E015586D4B00F40D05 /* GL_DialogDynamicsWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05076550155316EE00DEEF87 /* GL_DialogDynamicsWorld.cpp */; };
+		055DB0E115586D4B00F40D05 /* GL_DialogWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05076552155316EE00DEEF87 /* GL_DialogWindow.cpp */; };
+		055DB0E215586D4B00F40D05 /* GL_ShapeDrawer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05076554155316EE00DEEF87 /* GL_ShapeDrawer.cpp */; };
+		055DB0E315586D4B00F40D05 /* GL_Simplex1to4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05076556155316EE00DEEF87 /* GL_Simplex1to4.cpp */; };
+		055DB0E415586D4B00F40D05 /* GLDebugDrawer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05076558155316EE00DEEF87 /* GLDebugDrawer.cpp */; };
+		055DB0E515586D4B00F40D05 /* GLDebugFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0507655A155316EE00DEEF87 /* GLDebugFont.cpp */; };
+		055DB0E615586D4B00F40D05 /* GlutDemoApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0507655C155316EE00DEEF87 /* GlutDemoApplication.cpp */; };
+		055DB0E715586D4B00F40D05 /* GlutStuff.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0507655E155316EE00DEEF87 /* GlutStuff.cpp */; };
+		05A1CACA155AC54700699658 /* learnhexapod.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05A1CAC9155AC54700699658 /* learnhexapod.1 */; };
+		05A1CAD0155AC58400699658 /* MotorDemo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05A1CACE155AC58400699658 /* MotorDemo.cpp */; };
+		05A1CAD2155AC5BA00699658 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05A1CAD1155AC5BA00699658 /* main.cpp */; };
+		05A1CAD3155AC60200699658 /* LinearMath.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0507653E155315C000DEEF87 /* LinearMath.framework */; };
+		05A1CAD4155AC60200699658 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050765071553104600DEEF87 /* OpenGL.framework */; };
+		05A1CAD5155AC60200699658 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050765051553103B00DEEF87 /* GLUT.framework */; };
+		05A1CAD6155AC60200699658 /* BulletCollision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050764FD1553102600DEEF87 /* BulletCollision.framework */; };
+		05A1CAD7155AC60200699658 /* BulletDynamics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050764FE1553102600DEEF87 /* BulletDynamics.framework */; };
+		05A1CAD8155AC60200699658 /* BulletMultiThreaded.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050764FF1553102600DEEF87 /* BulletMultiThreaded.framework */; };
+		05A1CAD9155AC60200699658 /* BulletSoftBody.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050765001553102600DEEF87 /* BulletSoftBody.framework */; };
+		05A1CADA155AC62B00699658 /* DemoApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0507654E155316EE00DEEF87 /* DemoApplication.cpp */; };
+		05A1CADB155AC62B00699658 /* GL_DialogDynamicsWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05076550155316EE00DEEF87 /* GL_DialogDynamicsWorld.cpp */; };
+		05A1CADC155AC62B00699658 /* GL_DialogWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05076552155316EE00DEEF87 /* GL_DialogWindow.cpp */; };
+		05A1CADD155AC62B00699658 /* GL_ShapeDrawer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05076554155316EE00DEEF87 /* GL_ShapeDrawer.cpp */; };
+		05A1CADE155AC62B00699658 /* GL_Simplex1to4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05076556155316EE00DEEF87 /* GL_Simplex1to4.cpp */; };
+		05A1CADF155AC62B00699658 /* GLDebugDrawer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05076558155316EE00DEEF87 /* GLDebugDrawer.cpp */; };
+		05A1CAE0155AC62B00699658 /* GLDebugFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0507655A155316EE00DEEF87 /* GLDebugFont.cpp */; };
+		05A1CAE1155AC62B00699658 /* GlutDemoApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0507655C155316EE00DEEF87 /* GlutDemoApplication.cpp */; };
+		05A1CAE2155AC62B00699658 /* GlutStuff.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0507655E155316EE00DEEF87 /* GlutStuff.cpp */; };
+		05A1CAE5155AC7D600699658 /* Ragdoll.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05A1CAE3155AC7D600699658 /* Ragdoll.cpp */; };
+		05A1CAF0155AE6B400699658 /* SoftDemo.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05A1CAEF155AE6B400699658 /* SoftDemo.1 */; };
+		05A1CAF9155AE6FD00699658 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05A1CAF4155AE6EC00699658 /* main.cpp */; };
+		05A1CAFA155AE6FD00699658 /* SoftDemo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05A1CAF5155AE6EC00699658 /* SoftDemo.cpp */; };
+		05A1CAFB155AE70700699658 /* LinearMath.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0507653E155315C000DEEF87 /* LinearMath.framework */; };
+		05A1CAFC155AE70700699658 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050765071553104600DEEF87 /* OpenGL.framework */; };
+		05A1CAFD155AE70700699658 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050765051553103B00DEEF87 /* GLUT.framework */; };
+		05A1CAFE155AE70700699658 /* BulletCollision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050764FD1553102600DEEF87 /* BulletCollision.framework */; };
+		05A1CAFF155AE70700699658 /* BulletDynamics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050764FE1553102600DEEF87 /* BulletDynamics.framework */; };
+		05A1CB00155AE70700699658 /* BulletMultiThreaded.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050764FF1553102600DEEF87 /* BulletMultiThreaded.framework */; };
+		05A1CB01155AE70700699658 /* BulletSoftBody.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050765001553102600DEEF87 /* BulletSoftBody.framework */; };
+		05A1CB04155AE99B00699658 /* Hexapod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05A1CB02155AE99B00699658 /* Hexapod.cpp */; };
 		05BFD5D81553197200D38F23 /* DemoApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0507654E155316EE00DEEF87 /* DemoApplication.cpp */; };
 		05BFD5D91553197500D38F23 /* GL_DialogDynamicsWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05076550155316EE00DEEF87 /* GL_DialogDynamicsWorld.cpp */; };
 		05BFD5DA155319A300D38F23 /* GL_DialogWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05076552155316EE00DEEF87 /* GL_DialogWindow.cpp */; };
@@ -335,6 +404,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		053AC444155B28BC00B8EC11 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				053AC44C155B28BC00B8EC11 /* hexapod.1 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 		053AEB8015534B9900CB0698 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -425,6 +504,36 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		055DB0C515586BE100F40D05 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				055DB0CD15586BE100F40D05 /* HelloGraphics.1 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		05A1CAC2155AC54700699658 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				05A1CACA155AC54700699658 /* learnhexapod.1 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		05A1CAE8155AE6B300699658 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				05A1CAF0155AE6B400699658 /* SoftDemo.1 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 		05BFD5EA15531B3400D38F23 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -508,6 +617,14 @@
 		05076566155316EE00DEEF87 /* Win32DemoApplication.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Win32DemoApplication.cpp; sourceTree = "<group>"; };
 		05076567155316EE00DEEF87 /* Win32DemoApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Win32DemoApplication.h; sourceTree = "<group>"; };
 		050765791553172400DEEF87 /* BasicDemo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BasicDemo; sourceTree = BUILT_PRODUCTS_DIR; };
+		051CA9E7155B361A00955732 /* Hexapod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Hexapod.cpp; sourceTree = "<group>"; };
+		051CA9E8155B361A00955732 /* Hexapod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hexapod.h; sourceTree = "<group>"; };
+		051CA9EA155B36F000955732 /* HexapodSimulation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HexapodSimulation.cpp; sourceTree = "<group>"; };
+		051CA9EB155B36F000955732 /* HexapodSimulation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HexapodSimulation.h; sourceTree = "<group>"; };
+		051CA9F4155B370800955732 /* AllBulletDemos.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = AllBulletDemos.xcodeproj; sourceTree = "<group>"; };
+		053AC446155B28BC00B8EC11 /* hexapod */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = hexapod; sourceTree = BUILT_PRODUCTS_DIR; };
+		053AC449155B28BC00B8EC11 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		053AC44B155B28BC00B8EC11 /* hexapod.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = hexapod.1; sourceTree = "<group>"; };
 		053AEB8215534B9900CB0698 /* CcdPhysicsDemo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CcdPhysicsDemo; sourceTree = BUILT_PRODUCTS_DIR; };
 		053AEB8715534B9900CB0698 /* CcdPhysicsDemo.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = CcdPhysicsDemo.1; sourceTree = "<group>"; };
 		053AEB8C15534C0A00CB0698 /* CcdPhysicsDemo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CcdPhysicsDemo.cpp; sourceTree = "<group>"; };
@@ -657,6 +774,25 @@
 		055DB0B21558537400F40D05 /* ForkLiftDemo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ForkLiftDemo; sourceTree = BUILT_PRODUCTS_DIR; };
 		055DB0B51558537400F40D05 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		055DB0B71558537400F40D05 /* ForkLiftDemo.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = ForkLiftDemo.1; sourceTree = "<group>"; };
+		055DB0C715586BE100F40D05 /* HelloGraphics */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = HelloGraphics; sourceTree = BUILT_PRODUCTS_DIR; };
+		055DB0CC15586BE100F40D05 /* HelloGraphics.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = HelloGraphics.1; sourceTree = "<group>"; };
+		055DB0D115586C1300F40D05 /* HelloWorld.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HelloWorld.cpp; sourceTree = "<group>"; };
+		055DB0D215586C1300F40D05 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		055DB0DE15586D1A00F40D05 /* HellWorld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HellWorld.h; sourceTree = "<group>"; };
+		05A1CAC4155AC54700699658 /* learnhexapod */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = learnhexapod; sourceTree = BUILT_PRODUCTS_DIR; };
+		05A1CAC9155AC54700699658 /* learnhexapod.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = learnhexapod.1; sourceTree = "<group>"; };
+		05A1CACE155AC58400699658 /* MotorDemo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MotorDemo.cpp; sourceTree = "<group>"; };
+		05A1CACF155AC58400699658 /* MotorDemo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MotorDemo.h; sourceTree = "<group>"; };
+		05A1CAD1155AC5BA00699658 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		05A1CAE3155AC7D600699658 /* Ragdoll.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Ragdoll.cpp; sourceTree = "<group>"; };
+		05A1CAE4155AC7D600699658 /* Ragdoll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ragdoll.h; sourceTree = "<group>"; };
+		05A1CAEA155AE6B300699658 /* SoftDemo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SoftDemo; sourceTree = BUILT_PRODUCTS_DIR; };
+		05A1CAEF155AE6B400699658 /* SoftDemo.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = SoftDemo.1; sourceTree = "<group>"; };
+		05A1CAF4155AE6EC00699658 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		05A1CAF5155AE6EC00699658 /* SoftDemo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SoftDemo.cpp; sourceTree = "<group>"; };
+		05A1CAF6155AE6EC00699658 /* SoftDemo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoftDemo.h; sourceTree = "<group>"; };
+		05A1CB02155AE99B00699658 /* Hexapod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Hexapod.cpp; sourceTree = "<group>"; };
+		05A1CB03155AE99B00699658 /* Hexapod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hexapod.h; sourceTree = "<group>"; };
 		05BFD5EC15531B3400D38F23 /* DynamicControlDemo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DynamicControlDemo; sourceTree = BUILT_PRODUCTS_DIR; };
 		05BFD5F815531B6400D38F23 /* DynamicControlDemo.1 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.man; path = DynamicControlDemo.1; sourceTree = "<group>"; };
 		05BFD5F915531B6400D38F23 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -720,6 +856,20 @@
 				050765891553178C00DEEF87 /* BulletDynamics.framework in Frameworks */,
 				0507658A1553178C00DEEF87 /* BulletMultiThreaded.framework in Frameworks */,
 				0507658B1553178C00DEEF87 /* BulletSoftBody.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		053AC443155B28BC00B8EC11 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				051CA9ED155B370800955732 /* LinearMath.framework in Frameworks */,
+				051CA9EE155B370800955732 /* OpenGL.framework in Frameworks */,
+				051CA9EF155B370800955732 /* GLUT.framework in Frameworks */,
+				051CA9F0155B370800955732 /* BulletCollision.framework in Frameworks */,
+				051CA9F1155B370800955732 /* BulletDynamics.framework in Frameworks */,
+				051CA9F2155B370800955732 /* BulletMultiThreaded.framework in Frameworks */,
+				051CA9F3155B370800955732 /* BulletSoftBody.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -828,6 +978,48 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		055DB0C415586BE100F40D05 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				055DB0D715586C2F00F40D05 /* LinearMath.framework in Frameworks */,
+				055DB0D815586C2F00F40D05 /* OpenGL.framework in Frameworks */,
+				055DB0D915586C2F00F40D05 /* GLUT.framework in Frameworks */,
+				055DB0DA15586C2F00F40D05 /* BulletCollision.framework in Frameworks */,
+				055DB0DB15586C2F00F40D05 /* BulletDynamics.framework in Frameworks */,
+				055DB0DC15586C2F00F40D05 /* BulletMultiThreaded.framework in Frameworks */,
+				055DB0DD15586C2F00F40D05 /* BulletSoftBody.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		05A1CAC1155AC54700699658 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				05A1CAD3155AC60200699658 /* LinearMath.framework in Frameworks */,
+				05A1CAD4155AC60200699658 /* OpenGL.framework in Frameworks */,
+				05A1CAD5155AC60200699658 /* GLUT.framework in Frameworks */,
+				05A1CAD6155AC60200699658 /* BulletCollision.framework in Frameworks */,
+				05A1CAD7155AC60200699658 /* BulletDynamics.framework in Frameworks */,
+				05A1CAD8155AC60200699658 /* BulletMultiThreaded.framework in Frameworks */,
+				05A1CAD9155AC60200699658 /* BulletSoftBody.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		05A1CAE7155AE6B300699658 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				05A1CAFB155AE70700699658 /* LinearMath.framework in Frameworks */,
+				05A1CAFC155AE70700699658 /* OpenGL.framework in Frameworks */,
+				05A1CAFD155AE70700699658 /* GLUT.framework in Frameworks */,
+				05A1CAFE155AE70700699658 /* BulletCollision.framework in Frameworks */,
+				05A1CAFF155AE70700699658 /* BulletDynamics.framework in Frameworks */,
+				05A1CB00155AE70700699658 /* BulletMultiThreaded.framework in Frameworks */,
+				05A1CB01155AE70700699658 /* BulletSoftBody.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		05BFD5E915531B3400D38F23 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -890,10 +1082,10 @@
 		050764E415530DCF00DEEF87 = {
 			isa = PBXGroup;
 			children = (
+				051CA9F4155B370800955732 /* AllBulletDemos.xcodeproj */,
 				053AEBD3155410E600CB0698 /* Serialize */,
 				0507654B155316EE00DEEF87 /* OpenGL */,
 				050764F215530DD000DEEF87 /* AllBulletDemos */,
-				055DB0B41558537400F40D05 /* ForkLiftDemo */,
 				050764FC15530DEC00DEEF87 /* Frameworks */,
 				050764F015530DD000DEEF87 /* Products */,
 			);
@@ -917,6 +1109,10 @@
 				055DB07F1558286D00F40D05 /* VehicleDemo */,
 				055DB08D15582A4A00F40D05 /* GenericJointDemo */,
 				055DB0B21558537400F40D05 /* ForkLiftDemo */,
+				055DB0C715586BE100F40D05 /* HelloGraphics */,
+				05A1CAC4155AC54700699658 /* learnhexapod */,
+				05A1CAEA155AE6B300699658 /* SoftDemo */,
+				053AC446155B28BC00B8EC11 /* hexapod */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -924,6 +1120,11 @@
 		050764F215530DD000DEEF87 /* AllBulletDemos */ = {
 			isa = PBXGroup;
 			children = (
+				053AC448155B28BC00B8EC11 /* hexapod */,
+				05A1CAEC155AE6B300699658 /* SoftDemo */,
+				05A1CAC6155AC54700699658 /* learnhexapod */,
+				055DB0C915586BE100F40D05 /* HelloGraphics */,
+				055DB0B41558537400F40D05 /* ForkLiftDemo */,
 				055DB08F15582A4A00F40D05 /* GenericJointDemo */,
 				055DB05F1558232F00F40D05 /* MovingConcaveDemo */,
 				055DB0811558286D00F40D05 /* VehicleDemo */,
@@ -1017,6 +1218,25 @@
 				05076561155316EE00DEEF87 /* Makefile */,
 			);
 			path = ibmsdk;
+			sourceTree = "<group>";
+		};
+		051CA9F5155B370800955732 /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
+			sourceTree = "<group>";
+		};
+		053AC448155B28BC00B8EC11 /* hexapod */ = {
+			isa = PBXGroup;
+			children = (
+				051CA9EA155B36F000955732 /* HexapodSimulation.cpp */,
+				051CA9EB155B36F000955732 /* HexapodSimulation.h */,
+				051CA9E7155B361A00955732 /* Hexapod.cpp */,
+				051CA9E8155B361A00955732 /* Hexapod.h */,
+				053AC449155B28BC00B8EC11 /* main.cpp */,
+				053AC44B155B28BC00B8EC11 /* hexapod.1 */,
+			);
+			name = hexapod;
+			path = ../hexapod;
 			sourceTree = "<group>";
 		};
 		053AEB8415534B9900CB0698 /* CcdPhysicsDemo */ = {
@@ -1283,7 +1503,48 @@
 				055DB0B51558537400F40D05 /* main.cpp */,
 				055DB0B71558537400F40D05 /* ForkLiftDemo.1 */,
 			);
-			path = ForkLiftDemo;
+			name = ForkLiftDemo;
+			path = ../ForkLiftDemo;
+			sourceTree = "<group>";
+		};
+		055DB0C915586BE100F40D05 /* HelloGraphics */ = {
+			isa = PBXGroup;
+			children = (
+				055DB0D115586C1300F40D05 /* HelloWorld.cpp */,
+				055DB0DE15586D1A00F40D05 /* HellWorld.h */,
+				055DB0D215586C1300F40D05 /* main.cpp */,
+				055DB0CC15586BE100F40D05 /* HelloGraphics.1 */,
+			);
+			name = HelloGraphics;
+			path = ../HelloGraphics;
+			sourceTree = "<group>";
+		};
+		05A1CAC6155AC54700699658 /* learnhexapod */ = {
+			isa = PBXGroup;
+			children = (
+				05A1CB02155AE99B00699658 /* Hexapod.cpp */,
+				05A1CB03155AE99B00699658 /* Hexapod.h */,
+				05A1CAE3155AC7D600699658 /* Ragdoll.cpp */,
+				05A1CAE4155AC7D600699658 /* Ragdoll.h */,
+				05A1CAD1155AC5BA00699658 /* main.cpp */,
+				05A1CACE155AC58400699658 /* MotorDemo.cpp */,
+				05A1CACF155AC58400699658 /* MotorDemo.h */,
+				05A1CAC9155AC54700699658 /* learnhexapod.1 */,
+			);
+			name = learnhexapod;
+			path = ../learnhexapod;
+			sourceTree = "<group>";
+		};
+		05A1CAEC155AE6B300699658 /* SoftDemo */ = {
+			isa = PBXGroup;
+			children = (
+				05A1CAF4155AE6EC00699658 /* main.cpp */,
+				05A1CAF5155AE6EC00699658 /* SoftDemo.cpp */,
+				05A1CAF6155AE6EC00699658 /* SoftDemo.h */,
+				05A1CAEF155AE6B400699658 /* SoftDemo.1 */,
+			);
+			name = SoftDemo;
+			path = ../SoftDemo;
 			sourceTree = "<group>";
 		};
 		05BFD5F615531B6400D38F23 /* DynamicControlDemo */ = {
@@ -1388,6 +1649,23 @@
 			name = BasicDemo;
 			productName = BasicDemo;
 			productReference = 050765791553172400DEEF87 /* BasicDemo */;
+			productType = "com.apple.product-type.tool";
+		};
+		053AC445155B28BC00B8EC11 /* hexapod */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 053AC44F155B28BC00B8EC11 /* Build configuration list for PBXNativeTarget "hexapod" */;
+			buildPhases = (
+				053AC442155B28BC00B8EC11 /* Sources */,
+				053AC443155B28BC00B8EC11 /* Frameworks */,
+				053AC444155B28BC00B8EC11 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = hexapod;
+			productName = hexapod;
+			productReference = 053AC446155B28BC00B8EC11 /* hexapod */;
 			productType = "com.apple.product-type.tool";
 		};
 		053AEB8115534B9900CB0698 /* CcdPhysicsDemo */ = {
@@ -1527,6 +1805,57 @@
 			productReference = 055DB0B21558537400F40D05 /* ForkLiftDemo */;
 			productType = "com.apple.product-type.tool";
 		};
+		055DB0C615586BE100F40D05 /* HelloGraphics */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 055DB0CE15586BE100F40D05 /* Build configuration list for PBXNativeTarget "HelloGraphics" */;
+			buildPhases = (
+				055DB0C315586BE100F40D05 /* Sources */,
+				055DB0C415586BE100F40D05 /* Frameworks */,
+				055DB0C515586BE100F40D05 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HelloGraphics;
+			productName = HelloGraphics;
+			productReference = 055DB0C715586BE100F40D05 /* HelloGraphics */;
+			productType = "com.apple.product-type.tool";
+		};
+		05A1CAC3155AC54700699658 /* learnhexapod */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 05A1CACB155AC54700699658 /* Build configuration list for PBXNativeTarget "learnhexapod" */;
+			buildPhases = (
+				05A1CAC0155AC54700699658 /* Sources */,
+				05A1CAC1155AC54700699658 /* Frameworks */,
+				05A1CAC2155AC54700699658 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = learnhexapod;
+			productName = learnhexapod;
+			productReference = 05A1CAC4155AC54700699658 /* learnhexapod */;
+			productType = "com.apple.product-type.tool";
+		};
+		05A1CAE9155AE6B300699658 /* SoftDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 05A1CAF1155AE6B400699658 /* Build configuration list for PBXNativeTarget "SoftDemo" */;
+			buildPhases = (
+				05A1CAE6155AE6B300699658 /* Sources */,
+				05A1CAE7155AE6B300699658 /* Frameworks */,
+				05A1CAE8155AE6B300699658 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SoftDemo;
+			productName = SoftDemo;
+			productReference = 05A1CAEA155AE6B300699658 /* SoftDemo */;
+			productType = "com.apple.product-type.tool";
+		};
 		05BFD5EB15531B3400D38F23 /* DynamicControlDemo */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 05BFD5F315531B3400D38F23 /* Build configuration list for PBXNativeTarget "DynamicControlDemo" */;
@@ -1613,6 +1942,12 @@
 			mainGroup = 050764E415530DCF00DEEF87;
 			productRefGroup = 050764F015530DD000DEEF87 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 051CA9F5155B370800955732 /* Products */;
+					ProjectRef = 051CA9F4155B370800955732 /* AllBulletDemos.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				050764EE15530DD000DEEF87 /* AllBulletDemos */,
@@ -1630,6 +1965,10 @@
 				055DB07E1558286D00F40D05 /* VehicleDemo */,
 				055DB08C15582A4A00F40D05 /* GenericJointDemo */,
 				055DB0B11558537400F40D05 /* ForkLiftDemo */,
+				055DB0C615586BE100F40D05 /* HelloGraphics */,
+				05A1CAC3155AC54700699658 /* learnhexapod */,
+				05A1CAE9155AE6B300699658 /* SoftDemo */,
+				053AC445155B28BC00B8EC11 /* hexapod */,
 			);
 		};
 /* End PBXProject section */
@@ -1720,6 +2059,25 @@
 				05BFD5DF155319A300D38F23 /* GlutDemoApplication.cpp in Sources */,
 				05BFD5E0155319A300D38F23 /* GlutStuff.cpp in Sources */,
 				050765841553177D00DEEF87 /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		053AC442155B28BC00B8EC11 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				053AC44A155B28BC00B8EC11 /* main.cpp in Sources */,
+				051CA9E9155B361A00955732 /* Hexapod.cpp in Sources */,
+				051CA9F7155B374800955732 /* DemoApplication.cpp in Sources */,
+				051CA9F8155B374A00955732 /* GL_DialogDynamicsWorld.cpp in Sources */,
+				051CA9F9155B374D00955732 /* GL_DialogWindow.cpp in Sources */,
+				051CA9FE155B395200955732 /* GL_ShapeDrawer.cpp in Sources */,
+				051CA9FF155B395200955732 /* GL_Simplex1to4.cpp in Sources */,
+				051CA9FA155B377300955732 /* GLDebugDrawer.cpp in Sources */,
+				051CA9FB155B377500955732 /* GLDebugFont.cpp in Sources */,
+				051CA9FC155B377A00955732 /* GlutDemoApplication.cpp in Sources */,
+				051CA9FD155B377F00955732 /* GlutStuff.cpp in Sources */,
+				051CA9EC155B36F000955732 /* HexapodSimulation.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1860,6 +2218,52 @@
 			buildActionMask = 2147483647;
 			files = (
 				055DB0B61558537400F40D05 /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		055DB0C315586BE100F40D05 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				055DB0DF15586D4B00F40D05 /* DemoApplication.cpp in Sources */,
+				055DB0E015586D4B00F40D05 /* GL_DialogDynamicsWorld.cpp in Sources */,
+				055DB0E115586D4B00F40D05 /* GL_DialogWindow.cpp in Sources */,
+				055DB0E215586D4B00F40D05 /* GL_ShapeDrawer.cpp in Sources */,
+				0534676D1558C2670017E380 /* main.cpp in Sources */,
+				055DB0E315586D4B00F40D05 /* GL_Simplex1to4.cpp in Sources */,
+				055DB0E415586D4B00F40D05 /* GLDebugDrawer.cpp in Sources */,
+				055DB0E515586D4B00F40D05 /* GLDebugFont.cpp in Sources */,
+				055DB0E615586D4B00F40D05 /* GlutDemoApplication.cpp in Sources */,
+				055DB0E715586D4B00F40D05 /* GlutStuff.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		05A1CAC0155AC54700699658 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				05A1CAD0155AC58400699658 /* MotorDemo.cpp in Sources */,
+				05A1CAD2155AC5BA00699658 /* main.cpp in Sources */,
+				05A1CADA155AC62B00699658 /* DemoApplication.cpp in Sources */,
+				05A1CADB155AC62B00699658 /* GL_DialogDynamicsWorld.cpp in Sources */,
+				05A1CADC155AC62B00699658 /* GL_DialogWindow.cpp in Sources */,
+				05A1CADD155AC62B00699658 /* GL_ShapeDrawer.cpp in Sources */,
+				05A1CADE155AC62B00699658 /* GL_Simplex1to4.cpp in Sources */,
+				05A1CADF155AC62B00699658 /* GLDebugDrawer.cpp in Sources */,
+				05A1CAE0155AC62B00699658 /* GLDebugFont.cpp in Sources */,
+				05A1CAE1155AC62B00699658 /* GlutDemoApplication.cpp in Sources */,
+				05A1CAE2155AC62B00699658 /* GlutStuff.cpp in Sources */,
+				05A1CAE5155AC7D600699658 /* Ragdoll.cpp in Sources */,
+				05A1CB04155AE99B00699658 /* Hexapod.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		05A1CAE6155AE6B300699658 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				05A1CAF9155AE6FD00699658 /* main.cpp in Sources */,
+				05A1CAFA155AE6FD00699658 /* SoftDemo.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2020,6 +2424,20 @@
 			};
 			name = Release;
 		};
+		053AC44D155B28BC00B8EC11 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		053AC44E155B28BC00B8EC11 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		053AEB8A15534B9900CB0698 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2132,6 +2550,48 @@
 			};
 			name = Release;
 		};
+		055DB0CF15586BE100F40D05 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		055DB0D015586BE100F40D05 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		05A1CACC155AC54700699658 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		05A1CACD155AC54700699658 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		05A1CAF2155AE6B400699658 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		05A1CAF3155AE6B400699658 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		05BFD5F415531B3400D38F23 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2227,6 +2687,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		053AC44F155B28BC00B8EC11 /* Build configuration list for PBXNativeTarget "hexapod" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				053AC44D155B28BC00B8EC11 /* Debug */,
+				053AC44E155B28BC00B8EC11 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		053AEB8915534B9900CB0698 /* Build configuration list for PBXNativeTarget "CcdPhysicsDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -2261,6 +2730,7 @@
 				055DB01B15581FA500F40D05 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		055DB0641558232F00F40D05 /* Build configuration list for PBXNativeTarget "MovingConcaveDemo" */ = {
 			isa = XCConfigurationList;
@@ -2269,6 +2739,7 @@
 				055DB0661558232F00F40D05 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		055DB0861558286D00F40D05 /* Build configuration list for PBXNativeTarget "VehicleDemo" */ = {
 			isa = XCConfigurationList;
@@ -2277,6 +2748,7 @@
 				055DB0881558286D00F40D05 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		055DB09415582A4A00F40D05 /* Build configuration list for PBXNativeTarget "GenericJointDemo" */ = {
 			isa = XCConfigurationList;
@@ -2285,6 +2757,7 @@
 				055DB09615582A4A00F40D05 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		055DB0B91558537400F40D05 /* Build configuration list for PBXNativeTarget "ForkLiftDemo" */ = {
 			isa = XCConfigurationList;
@@ -2293,6 +2766,34 @@
 				055DB0BB1558537400F40D05 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		055DB0CE15586BE100F40D05 /* Build configuration list for PBXNativeTarget "HelloGraphics" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				055DB0CF15586BE100F40D05 /* Debug */,
+				055DB0D015586BE100F40D05 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		05A1CACB155AC54700699658 /* Build configuration list for PBXNativeTarget "learnhexapod" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				05A1CACC155AC54700699658 /* Debug */,
+				05A1CACD155AC54700699658 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		05A1CAF1155AE6B400699658 /* Build configuration list for PBXNativeTarget "SoftDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				05A1CAF2155AE6B400699658 /* Debug */,
+				05A1CAF3155AE6B400699658 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		05BFD5F315531B3400D38F23 /* Build configuration list for PBXNativeTarget "DynamicControlDemo" */ = {
 			isa = XCConfigurationList;

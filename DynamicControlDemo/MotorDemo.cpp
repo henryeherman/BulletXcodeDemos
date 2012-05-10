@@ -76,7 +76,7 @@ void drawFrame(btTransform &tr)
 
 
 
-#define NUM_LEGS 6
+#define NUM_LEGS 8
 #define BODYPART_COUNT 2 * NUM_LEGS + 1
 #define JOINT_COUNT BODYPART_COUNT - 1
 
@@ -351,6 +351,7 @@ void MotorDemo::setMotorTargets(btScalar deltaTime)
 
 	
 }
+
 
 void MotorDemo::clientMoveAndDisplay()
 {
