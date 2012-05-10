@@ -9,9 +9,22 @@
 #define BODY_HEIGHT 0.20
 #define BODY_LENGTH 0.60
 
+
+class BodyPart 
+{
+  
+btDynamicsWorld* m_ownerWorld;
+ 
+public:
+    BodyPart(btDynamicsWorld* ownerWorld);
+    ~BodyPart();
+    btRigidBody* localCreateRigidBody (btScalar mass, const btTransform& startTransform, btCollisionShape* shape); 
+
+};
+
 class Hexapod;
 
-class Leg
+class Leg : public BodyPart
 {
     enum {
         LEG_UPPER = 0,
@@ -21,6 +34,7 @@ class Leg
     
     enum {
         JOINT_KNEE = 0,
+        JOINT_HIP,
         JOINT_COUNT
     };
     
@@ -29,18 +43,18 @@ class Leg
 	btRigidBody* m_bodies[LEG_COUNT];
 	btTypedConstraint* m_joints[JOINT_COUNT];
     Hexapod *hpod;
-    btRigidBody* localCreateRigidBody (btScalar mass, const btTransform& startTransform, btCollisionShape* shape);
     
     public:
         Leg (Hexapod *hexapod,
              btDynamicsWorld* ownerWorld,
-                 const btVector3& positionOffset,
+                 const btTransform& offset,
+                 const btTransform& bodyOffset,
                  btScalar scale_hexapod = btScalar(1.0));
         
         ~Leg ();
 };
 
-class Hexapod
+class Hexapod : public BodyPart
 {
 	enum
 	{
@@ -73,10 +87,11 @@ class Hexapod
     
 	btDynamicsWorld* m_ownerWorld;
 	btCollisionShape* m_shapes[BODYPART_COUNT];
-	btRigidBody* m_bodies[BODYPART_COUNT];
+    
+    btRigidBody* m_bodies[BODYPART_COUNT];
+	
 	btTypedConstraint* m_joints[JOINT_COUNT];
 
-	btRigidBody* localCreateRigidBody (btScalar mass, const btTransform& startTransform, btCollisionShape* shape);
 
 public:
 	Hexapod (btDynamicsWorld* ownerWorld,
@@ -84,6 +99,7 @@ public:
 				btScalar scale_hexapod = btScalar(1.0));
 
 	~Hexapod ();
+    btRigidBody* body;
 };
 
 
