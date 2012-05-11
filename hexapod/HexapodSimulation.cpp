@@ -19,6 +19,7 @@ ReWritten by: Francisco León
 
 
 
+
 #include "BulletDynamics/btBulletDynamicsCommon.h"
 #include "GlutStuff.h"
 #include "GL_ShapeDrawer.h"
@@ -80,7 +81,7 @@ void GenericJointDemo::initPhysics()
 
 void GenericJointDemo::spawnHexapod(bool random)
 {
-	Hexapod* hexapod = new Hexapod (m_dynamicsWorld, btVector3 (0,0,2),5.f);
+	Hexapod* hexapod = new Hexapod (m_dynamicsWorld, btVector3 (0,10,0),5.f);
 	m_hexapods.push_back(hexapod);
     
     //Leg* leg = new Leg (m_dynamicsWorld, btVector3 (0,0,5),5.f);
