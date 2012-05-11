@@ -31,6 +31,8 @@ class Leg
     Hexapod *hpod;
     btRigidBody* localCreateRigidBody (btScalar mass, const btTransform& startTransform, btCollisionShape* shape);
     
+    void setAsKinematicBody(btRigidBody *body);
+    
     public:
         Leg (Hexapod *hexapod,
              btDynamicsWorld* ownerWorld,
@@ -77,6 +79,8 @@ class Hexapod
 	btTypedConstraint* m_joints[JOINT_COUNT];
 
 	btRigidBody* localCreateRigidBody (btScalar mass, const btTransform& startTransform, btCollisionShape* shape);
+    
+    void setAsKinematicBody(btRigidBody *body);
 
 public:
 	Hexapod (btDynamicsWorld* ownerWorld,

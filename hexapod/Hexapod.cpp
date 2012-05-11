@@ -52,6 +52,9 @@ Leg::Leg (Hexapod *hexapod, btDynamicsWorld* ownerWorld, const btVector3& positi
 		m_bodies[i]->setDamping(0.05f, 0.85f);
 		m_bodies[i]->setDeactivationTime(0.8f);
 		m_bodies[i]->setSleepingThresholds(1.6f, 2.5f);
+        
+        // Set the legs as kinematic
+        setAsKinematicBody(m_bodies[i]);
 	}
     
     ///////////////////////////// SETTING THE CONSTRAINTS /////////////////////////////////////////////7777
@@ -124,6 +127,14 @@ btRigidBody* Leg::localCreateRigidBody (btScalar mass, const btTransform& startT
 	return body;
 }
 
+// Flags a body as kinematic
+// This should be called on any objects that requires movement
+void Leg::setAsKinematicBody(btRigidBody *body) {
+    body->setCollisionFlags(body->getCollisionFlags() | 
+                            btCollisionObject::CF_KINEMATIC_OBJECT);
+    body->setActivationState(DISABLE_DEACTIVATION);
+}
+
 
 //################## END LEG ######################//
 
@@ -193,6 +204,10 @@ Hexapod::Hexapod (btDynamicsWorld* ownerWorld, const btVector3& positionOffset,
 		m_bodies[i]->setDamping(0.05f, 0.85f);
 		m_bodies[i]->setDeactivationTime(0.8f);
 		m_bodies[i]->setSleepingThresholds(1.6f, 2.5f);
+        
+        // Set the body parts as kinematic
+        setAsKinematicBody(m_bodies[i]);
+        
 	}
 
 ///////////////////////////// SETTING THE CONSTRAINTS /////////////////////////////////////////////7777
@@ -264,6 +279,14 @@ btRigidBody* Hexapod::localCreateRigidBody (btScalar mass, const btTransform& st
 	m_ownerWorld->addRigidBody(body);
 
 	return body;
+}
+
+// Flags a body as kinematic
+// This should be called on any objects that requires movement
+void Hexapod::setAsKinematicBody(btRigidBody *body) {
+    body->setCollisionFlags(body->getCollisionFlags() | 
+                            btCollisionObject::CF_KINEMATIC_OBJECT);
+    body->setActivationState(DISABLE_DEACTIVATION);
 }
 
 //################## END HEXAPOD ######################//

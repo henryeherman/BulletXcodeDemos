@@ -23,6 +23,7 @@ ReWritten by: Francisco León
 #include "GlutStuff.h"
 #include "GL_ShapeDrawer.h"
 
+
 #include "LinearMath/btIDebugDraw.h"
 
 #include "GLDebugDrawer.h"
@@ -33,7 +34,8 @@ ReWritten by: Francisco León
 GLDebugDrawer debugDrawer;
 
 
-
+#include <iostream>
+using namespace std;
 
 
 
@@ -87,6 +89,38 @@ void GenericJointDemo::spawnHexapod(bool random)
     
 }
 
+void GenericJointDemo::setMotorTargets(btScalar deltaTime)
+{
+    
+//	float ms = deltaTime*1000000.;
+//	float minFPS = 1000000.f/60.f;
+//	if (ms > minFPS)
+//		ms = minFPS;
+//    
+//	m_Time += ms;
+//    
+//	//
+//	// set per-frame sinusoidal position targets using angular motor (hacky?)
+//	//	
+//	for (int r=0; r<m_rigs.size(); r++)
+//	{
+//		for (int i=0; i<2*NUM_LEGS; i++)
+//		{
+//			btHingeConstraint* hingeC = static_cast<btHingeConstraint*>(m_rigs[r]->GetJoints()[i]);
+//			btScalar fCurAngle      = hingeC->getHingeAngle();
+//			
+//			btScalar fTargetPercent = (int(m_Time / 1000) % int(m_fCyclePeriod)) / m_fCyclePeriod;
+//			btScalar fTargetAngle   = 0.5 * (1 + sin(2 * M_PI * fTargetPercent));
+//			btScalar fTargetLimitAngle = hingeC->getLowerLimit() + fTargetAngle * (hingeC->getUpperLimit() - hingeC->getLowerLimit());
+//			btScalar fAngleError  = fTargetLimitAngle - fCurAngle;
+//			btScalar fDesiredAngularVel = 1000000.f * fAngleError/ms;
+//			hingeC->enableAngularMotor(true, fDesiredAngularVel, m_fMuscleStrength);
+//		}
+//	}
+    
+	
+}
+
 void GenericJointDemo::clientMoveAndDisplay()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -132,7 +166,15 @@ void GenericJointDemo::keyboardCallback(unsigned char key, int x, int y)
 	case 'e':
 		spawnHexapod(true);
 		break;
-	default:
+        
+    case 'j':
+        cout << "J KEY WAS PRESSED";
+        break;
+    case 'k':
+        cout << "K KEY WAS PRESSED";
+        break;    
+        
+    default:
 		DemoApplication::keyboardCallback(key, x, y);
 	}
 
