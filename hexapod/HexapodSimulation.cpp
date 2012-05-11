@@ -31,6 +31,11 @@ ReWritten by: Francisco León
 #include "HexapodSimulation.h"
 
 
+// Debug
+#include <iostream>
+using namespace std;
+
+
 
 GLDebugDrawer debugDrawer;
 
@@ -38,7 +43,14 @@ GLDebugDrawer debugDrawer;
 #include <iostream>
 using namespace std;
 
-
+//// World Tick callback
+//void motorPreTickCallback (btDynamicsWorld *world, btScalar timeStep)
+//{
+//	GenericJointDemo* demo = (GenericJointDemo*)world->getWorldUserInfo();
+//    
+//	demo->setMotorTargets(timeStep);
+//	
+//}
 
 void GenericJointDemo::initPhysics()
 {
@@ -90,42 +102,39 @@ void GenericJointDemo::spawnHexapod(bool random)
     
 }
 
-void GenericJointDemo::setMotorTargets(btScalar deltaTime)
+
+
+void GenericJointDemo::setMotorTargets(btVector3 translation)
 {
     
-//	float ms = deltaTime*1000000.;
-//	float minFPS = 1000000.f/60.f;
-//	if (ms > minFPS)
-//		ms = minFPS;
-//    
-//	m_Time += ms;
-//    
-//	//
-//	// set per-frame sinusoidal position targets using angular motor (hacky?)
-//	//	
-//	for (int r=0; r<m_rigs.size(); r++)
-//	{
-//		for (int i=0; i<2*NUM_LEGS; i++)
-//		{
-//			btHingeConstraint* hingeC = static_cast<btHingeConstraint*>(m_rigs[r]->GetJoints()[i]);
-//			btScalar fCurAngle      = hingeC->getHingeAngle();
-//			
-//			btScalar fTargetPercent = (int(m_Time / 1000) % int(m_fCyclePeriod)) / m_fCyclePeriod;
-//			btScalar fTargetAngle   = 0.5 * (1 + sin(2 * M_PI * fTargetPercent));
-//			btScalar fTargetLimitAngle = hingeC->getLowerLimit() + fTargetAngle * (hingeC->getUpperLimit() - hingeC->getLowerLimit());
-//			btScalar fAngleError  = fTargetLimitAngle - fCurAngle;
-//			btScalar fDesiredAngularVel = 1000000.f * fAngleError/ms;
-//			hingeC->enableAngularMotor(true, fDesiredAngularVel, m_fMuscleStrength);
-//		}
-//	}
-    
-	
+    // Animate the bodies
+//    btVector3 kinTranslation(-0.01,-1,0);
+    int collision_array_size = m_dynamicsWorld->getNumCollisionObjects();
+    cout << "Collision array size: " << collision_array_size << endl;
+    if(collision_array_size > 1) {
+        for(int i = 1; i < collision_array_size; i++) {
+            btCollisionObject *colObj = m_dynamicsWorld->getCollisionObjectArray()[i];
+            if(btRigidBody::upcast(colObj) && btRigidBody::upcast(colObj)->getMotionState())
+            {
+                btTransform newTrans;
+                btRigidBody::upcast(colObj)->getMotionState()->getWorldTransform(newTrans);
+                newTrans.getOrigin()+= translation;
+                btRigidBody::upcast(colObj)->getMotionState()->setWorldTransform(newTrans);
+            }
+            else
+            {
+                m_dynamicsWorld->getCollisionObjectArray()[0]->getWorldTransform().getOrigin() += translation;
+            }
+            
+        //	cout << "DeltaTime: " << deltaTime << endl;
+        }
+    }
 }
 
 void GenericJointDemo::clientMoveAndDisplay()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+    
 	//simple dynamics world doesn't handle fixed-time-stepping
 	float ms = getDeltaTimeMicroseconds();
 
@@ -164,20 +173,32 @@ void GenericJointDemo::keyboardCallback(unsigned char key, int x, int y)
 {
 	switch (key)
 	{
-	case 'e':
-		spawnHexapod(true);
-		break;
+        case 'e':
+            spawnHexapod(true);
+            break;
         
-    case 'j':
-        cout << "J KEY WAS PRESSED";
-        break;
-    case 'k':
-        cout << "K KEY WAS PRESSED";
-        break;    
+        case 'j':
+            setMotorTargets(btVector3(0, -1, 0));
+            break;
+        case 'k':
+            setMotorTargets(btVector3(0, 1,0));
+            break;   
+        case 'l':
+            setMotorTargets(btVector3(-1, 0, 0));
+            break;
+        case 'h':
+            setMotorTargets(btVector3(1, 0, 0));
+            break;
         
-    default:
-		DemoApplication::keyboardCallback(key, x, y);
+        default:
+            DemoApplication::keyboardCallback(key, x, y);
 	}
 
 
 }
+
+//################## END HEXAPOD ######################//
+
+
+
+

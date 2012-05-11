@@ -44,7 +44,7 @@ public:
 
 	virtual void keyboardCallback(unsigned char key, int x, int y);
     
-   	void setMotorTargets(btScalar deltaTime);
+   	void setMotorTargets(btVector3 transition);
 };
 
 

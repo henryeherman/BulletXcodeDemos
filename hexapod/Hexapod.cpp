@@ -318,7 +318,6 @@ Hexapod::Hexapod (btDynamicsWorld* ownerWorld, const btVector3& positionOffset,
         localB.setOrigin(btVector3(btScalar(0.), btScalar(-0.14*scale_hexapod), btScalar(0.)));
         
         
-        
         joint6DOF = new btGeneric6DofConstraint(*m_bodies[BODY_THORAX], *m_bodies[BODYPART_HEAD], localA, localB,useLinearReferenceFrameA);
 
 
@@ -330,9 +329,7 @@ Hexapod::Hexapod (btDynamicsWorld* ownerWorld, const btVector3& positionOffset,
 	}
 /// *************************** ///
 
-
 }
-
 
 Hexapod::~Hexapod()
 {
