@@ -102,8 +102,13 @@ Leg::Leg (Hexapod *hexapod, btDynamicsWorld* ownerWorld, const btTransform& offs
     
     
     /// ******* KNEE ******** ///
+    
+    
+    
 	{
-		localA.setIdentity(); localB.setIdentity();
+
+        localA.setIdentity(); localB.setIdentity();
+        
         
 		localA.setOrigin(btVector3(btScalar(0.), btScalar((-0.5)*UPPER_LEG_LENGTH*scale_hexapod), btScalar(0.)));
 		localB.setOrigin(btVector3(btScalar(0.), btScalar((0.5)*LOWER_LEG_LENGTH*scale_hexapod), btScalar(0.)));
@@ -111,7 +116,7 @@ Leg::Leg (Hexapod *hexapod, btDynamicsWorld* ownerWorld, const btTransform& offs
         //
 
 		joint6DOF->setAngularLowerLimit(btVector3(-SIMD_EPSILON,-SIMD_EPSILON,-SIMD_EPSILON));
-		joint6DOF->setAngularUpperLimit(btVector3(SIMD_PI*0.7f,SIMD_EPSILON,SIMD_EPSILON));
+		joint6DOF->setAngularUpperLimit(btVector3(SIMD_EPSILON,SIMD_EPSILON,SIMD_PI*0.7f));
 
 		m_joints[JOINT_KNEE] = joint6DOF;
 		m_ownerWorld->addConstraint(m_joints[JOINT_KNEE], true);
@@ -122,18 +127,47 @@ Leg::Leg (Hexapod *hexapod, btDynamicsWorld* ownerWorld, const btTransform& offs
     
     /// ******* HIP ******** ///
 	{
-		localA.setIdentity(); localB.setIdentity();
+        btVector3 xaxis;
+        xaxis.setValue(btScalar(1.), btScalar(0.), btScalar(0.));
         
+        btVector3 yaxis;
+        yaxis.setValue(btScalar(0.), btScalar(1.), btScalar(0.));
+        
+        btVector3 zaxis;
+        zaxis.setValue(btScalar(0.), btScalar(0.), btScalar(1.));
+        
+        
+        btQuaternion hipRotQuat;
+        btTransform hipRotTransform; hipRotTransform.setIdentity();
+        
+        
+        //hipRotQuat.setRotation(yaxis,  btRadians(45));
+        //hipRotTransform.setRotation(hipRotQuat);
+        
+        localA.setIdentity(); localB.setIdentity();
+        
+        localB.setRotation(hipRotQuat);
         
 		localA.setOrigin(btVector3(btScalar(0.), btScalar((0.5)*UPPER_LEG_LENGTH*scale_hexapod), btScalar(0.)));
         
+        localA*=hipRotTransform;
+        
 		localB.setOrigin(bodyOffset.getOrigin());
-		
+		localB.setRotation(bodyOffset.getRotation());
+        
+        
+        
         joint6DOF =  new btGeneric6DofConstraint (*m_bodies[LEG_UPPER], *parentBody, localA, localB,useLinearReferenceFrameA);
         
         
-		joint6DOF->setAngularLowerLimit(btVector3(-SIMD_EPSILON,-SIMD_EPSILON,-SIMD_EPSILON));
-		joint6DOF->setAngularUpperLimit(btVector3(SIMD_PI*0.7f,SIMD_EPSILON,SIMD_EPSILON));
+		//joint6DOF->setAngularLowerLimit(btVector3(-SIMD_EPSILON,-SIMD_EPSILON,-SIMD_EPSILON));
+		//joint6DOF->setAngularUpperLimit(btVector3(SIMD_PI*0.7f,SIMD_EPSILON,SIMD_EPSILON));
+        
+        joint6DOF->setAngularLowerLimit(btVector3(-SIMD_EPSILON,-SIMD_EPSILON,-SIMD_EPSILON));
+		joint6DOF->setAngularUpperLimit(btVector3(SIMD_EPSILON,SIMD_PI*0.7f,SIMD_EPSILON));
+        
+        joint6DOF->setAngularLowerLimit(btVector3(-0.5*SIMD_PI,-SIMD_EPSILON,-SIMD_EPSILON));
+		joint6DOF->setAngularUpperLimit(btVector3(0.5*SIMD_PI,SIMD_EPSILON,SIMD_PI*0.7f));
         
 		m_joints[JOINT_HIP] = joint6DOF;
 		m_ownerWorld->addConstraint(m_joints[JOINT_HIP], true);
@@ -189,7 +223,6 @@ Hexapod::Hexapod (btDynamicsWorld* ownerWorld, const btVector3& positionOffset,
                                                      btScalar(scale_hexapod*BODY_HEIGHT),
                                                      btScalar(scale_hexapod*BODY_LENGTH)));
     
-    m_shapes[BODYPART_HEAD] = new btCapsuleShape(btScalar(scale_hexapod*0.10), btScalar(scale_hexapod*0.05));
     
     
     
@@ -198,7 +231,6 @@ Hexapod::Hexapod (btDynamicsWorld* ownerWorld, const btVector3& positionOffset,
     m_bodies[BODY_THORAX] = localCreateRigidBody(btScalar(1.), offset*transform, m_shapes[BODY_THORAX]);   
 	transform.setIdentity();
 	transform.setOrigin(btVector3(btScalar(0.), btScalar(scale_hexapod*1.6), btScalar(0.)));
-	m_bodies[BODYPART_HEAD] = localCreateRigidBody(btScalar(1.), offset*transform, m_shapes[BODYPART_HEAD]);
     
     body = m_bodies[BODY_THORAX];
     
@@ -222,7 +254,7 @@ Hexapod::Hexapod (btDynamicsWorld* ownerWorld, const btVector3& positionOffset,
     
     
     btQuaternion leftLegQuat, rightLegQuat;
-    leftLegQuat.setRotation(zaxis,  btRadians(0));
+    leftLegQuat.setRotation(yaxis,  btRadians(0));
     rightLegQuat.setRotation(yaxis, btRadians(180));
  
     btTransform legPosTransform, legRotTransform;
@@ -231,7 +263,7 @@ Hexapod::Hexapod (btDynamicsWorld* ownerWorld, const btVector3& positionOffset,
     legPosTransform.setRotation(leftLegQuat);
     legPosTransform.setOrigin(
         btVector3(btScalar(LEFT_SIDE*scale_hexapod*BODY_WIDTH),
-                  btScalar(BOTTOM_SIDE*scale_hexapod*BODY_HEIGHT),
+                  btScalar(BOTTOM_SIDE*scale_hexapod*BODY_HEIGHT*0.5),
                   btScalar(FRONT_SIDE*scale_hexapod*BODY_LENGTH)));
                                  
     legs[FRONT_LEFT] = new Leg(this, m_ownerWorld,offset,legPosTransform*legRotTransform,scale_hexapod);
@@ -240,7 +272,7 @@ Hexapod::Hexapod (btDynamicsWorld* ownerWorld, const btVector3& positionOffset,
     legPosTransform.setRotation(rightLegQuat);
     legPosTransform.setOrigin(
                               btVector3(btScalar(RIGHT_SIDE*scale_hexapod*BODY_WIDTH),
-                                        btScalar(BOTTOM_SIDE*scale_hexapod*BODY_HEIGHT),
+                                        btScalar(BOTTOM_SIDE*scale_hexapod*BODY_HEIGHT*0.5),
                                         btScalar(FRONT_SIDE*scale_hexapod*BODY_LENGTH)));
     
     legs[FRONT_RIGHT] = new Leg(this, m_ownerWorld,offset,legPosTransform*legRotTransform,scale_hexapod);
@@ -249,7 +281,7 @@ Hexapod::Hexapod (btDynamicsWorld* ownerWorld, const btVector3& positionOffset,
     legPosTransform.setRotation(leftLegQuat);
     legPosTransform.setOrigin(
                               btVector3(btScalar(LEFT_SIDE*scale_hexapod*BODY_WIDTH),
-                                        btScalar(BOTTOM_SIDE*scale_hexapod*BODY_HEIGHT),
+                                        btScalar(BOTTOM_SIDE*scale_hexapod*BODY_HEIGHT*0.5),
                                         btScalar(CENTER_SIDE*scale_hexapod*BODY_LENGTH)));
     
     legs[MIDDLE_LEFT] = new Leg(this, m_ownerWorld,offset,legPosTransform*legRotTransform,scale_hexapod);
@@ -258,7 +290,7 @@ Hexapod::Hexapod (btDynamicsWorld* ownerWorld, const btVector3& positionOffset,
     legPosTransform.setRotation(rightLegQuat);
     legPosTransform.setOrigin(
                               btVector3(btScalar(RIGHT_SIDE*scale_hexapod*BODY_WIDTH),
-                                        btScalar(BOTTOM_SIDE*scale_hexapod*BODY_HEIGHT),
+                                        btScalar(BOTTOM_SIDE*scale_hexapod*BODY_HEIGHT*0.5),
                                         btScalar(CENTER_SIDE*scale_hexapod*BODY_LENGTH)));
     
     legs[MIDDLE_RIGHT] = new Leg(this, m_ownerWorld,offset,legPosTransform*legRotTransform,scale_hexapod);
@@ -267,7 +299,7 @@ Hexapod::Hexapod (btDynamicsWorld* ownerWorld, const btVector3& positionOffset,
     legPosTransform.setRotation(leftLegQuat);
     legPosTransform.setOrigin(
                               btVector3(btScalar(LEFT_SIDE*scale_hexapod*BODY_WIDTH),
-                                        btScalar(BOTTOM_SIDE*scale_hexapod*BODY_HEIGHT),
+                                        btScalar(BOTTOM_SIDE*scale_hexapod*BODY_HEIGHT*0.5),
                                         btScalar(REAR_SIDE*scale_hexapod*BODY_LENGTH)));
     
     legs[REAR_LEFT] = new Leg(this, m_ownerWorld,offset,legPosTransform*legRotTransform,scale_hexapod);
@@ -275,39 +307,11 @@ Hexapod::Hexapod (btDynamicsWorld* ownerWorld, const btVector3& positionOffset,
     legPosTransform.setRotation(rightLegQuat);
     legPosTransform.setOrigin(
                               btVector3(btScalar(RIGHT_SIDE*scale_hexapod*BODY_WIDTH),
-                                        btScalar(BOTTOM_SIDE*scale_hexapod*BODY_HEIGHT),
+                                        btScalar(BOTTOM_SIDE*scale_hexapod*BODY_HEIGHT*0.5),
                                         btScalar(REAR_SIDE*scale_hexapod*BODY_LENGTH)));
     
     legs[REAR_RIGHT] = new Leg(this, m_ownerWorld,offset,legPosTransform*legRotTransform,scale_hexapod);
     
-
-
-///////////////////////////// SETTING THE CONSTRAINTS /////////////////////////////////////////////7777
-	// Now setup the constraints
-	btGeneric6DofConstraint * joint6DOF;
-	btTransform localA, localB;
-	bool useLinearReferenceFrameA = true;
-/// ******* SPINE HEAD ********       
-    {
-        localA.setIdentity(); localB.setIdentity();
-
-		localA.setOrigin(btVector3(btScalar(0.), btScalar(0.30*scale_hexapod), btScalar(0.)));     
-        
-        localB.setOrigin(btVector3(btScalar(0.), btScalar(-0.14*scale_hexapod), btScalar(0.)));
-        
-        
-        
-        joint6DOF = new btGeneric6DofConstraint(*m_bodies[BODY_THORAX], *m_bodies[BODYPART_HEAD], localA, localB,useLinearReferenceFrameA);
-
-
-		joint6DOF->setAngularLowerLimit(btVector3(-SIMD_PI*0.3f,-SIMD_EPSILON,-SIMD_PI*0.3f));
-		joint6DOF->setAngularUpperLimit(btVector3(SIMD_PI*0.5f,SIMD_EPSILON,SIMD_PI*0.3f));
-
-		m_joints[JOINT_SPINE_HEAD] = joint6DOF;
-		m_ownerWorld->addConstraint(m_joints[JOINT_SPINE_HEAD], true);
-	}
-/// *************************** ///
-
 
 }
 
