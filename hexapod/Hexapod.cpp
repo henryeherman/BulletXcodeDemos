@@ -28,7 +28,7 @@ Written by: Marten Svanfeldt
 #define BOTTOM_SIDE (-2)
 
 #define UPPER_LEG_LENGTH 0.45
-#define LOWER_LEG_LENGTH 0.37
+#define LOWER_LEG_LENGTH 0.5
 
 //################## BEGIN LEG ######################//
 
@@ -77,6 +77,8 @@ Leg::Leg (Hexapod *hexapod, btDynamicsWorld* ownerWorld, const btTransform& offs
     
     btTransform transform;
 	transform.setIdentity();
+    btQuaternion temp;
+    
 	//transform.setOrigin(btVector3(btScalar(-0.18*scale_hexapod), btScalar(0.65*scale_hexapod),                                  btScalar(0.)));
 	m_bodies[LEG_UPPER] = localCreateRigidBody(btScalar(1.), globalFrame*transform, m_shapes[LEG_UPPER]);
     
@@ -163,11 +165,11 @@ Leg::Leg (Hexapod *hexapod, btDynamicsWorld* ownerWorld, const btTransform& offs
 		//joint6DOF->setAngularLowerLimit(btVector3(-SIMD_EPSILON,-SIMD_EPSILON,-SIMD_EPSILON));
 		//joint6DOF->setAngularUpperLimit(btVector3(SIMD_PI*0.7f,SIMD_EPSILON,SIMD_EPSILON));
         
-        joint6DOF->setAngularLowerLimit(btVector3(-SIMD_EPSILON,-SIMD_EPSILON,-SIMD_EPSILON));
-		joint6DOF->setAngularUpperLimit(btVector3(SIMD_EPSILON,SIMD_PI*0.7f,SIMD_EPSILON));
+        //joint6DOF->setAngularLowerLimit(btVector3(-SIMD_EPSILON,-SIMD_EPSILON,-SIMD_EPSILON));
+		//joint6DOF->setAngularUpperLimit(btVector3(SIMD_EPSILON,SIMD_PI*0.7f,SIMD_EPSILON));
         
-        joint6DOF->setAngularLowerLimit(btVector3(-0.5*SIMD_PI,-SIMD_EPSILON,-SIMD_EPSILON));
-		joint6DOF->setAngularUpperLimit(btVector3(0.5*SIMD_PI,SIMD_EPSILON,SIMD_PI*0.7f));
+        joint6DOF->setAngularLowerLimit(btVector3(-0.01*SIMD_PI,-SIMD_EPSILON,-0.1*SIMD_PI));
+		joint6DOF->setAngularUpperLimit(btVector3(0.01*SIMD_PI,SIMD_EPSILON,0.3*SIMD_PI));
         
 		m_joints[JOINT_HIP] = joint6DOF;
 		m_ownerWorld->addConstraint(m_joints[JOINT_HIP], true);
@@ -254,8 +256,12 @@ Hexapod::Hexapod (btDynamicsWorld* ownerWorld, const btVector3& positionOffset,
     
     
     btQuaternion leftLegQuat, rightLegQuat;
+    btQuaternion upQuat;
+    upQuat.setRotation(zaxis, btRadians(90));
     leftLegQuat.setRotation(yaxis,  btRadians(0));
+    leftLegQuat*=upQuat;
     rightLegQuat.setRotation(yaxis, btRadians(180));
+    rightLegQuat*=upQuat;
  
     btTransform legPosTransform, legRotTransform;
     legPosTransform.setIdentity(); legRotTransform.setIdentity();
