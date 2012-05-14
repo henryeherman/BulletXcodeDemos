@@ -65,7 +65,6 @@ class Hexapod : public BodyPart
 	enum
 	{
 		BODY_THORAX = 0,
-		BODYPART_HEAD,
 
 		BODYPART_COUNT
 	};
@@ -73,7 +72,6 @@ class Hexapod : public BodyPart
 	enum
 	{
 		JOINT_PELVIS_SPINE = 0,
-		JOINT_SPINE_HEAD,
 
 		JOINT_COUNT
 	};
