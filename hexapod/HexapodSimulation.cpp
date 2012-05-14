@@ -38,6 +38,7 @@ GLDebugDrawer debugDrawer;
 
 
 
+
 void GenericJointDemo::initPhysics()
 {
 	setTexturing(true);

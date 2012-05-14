@@ -64,6 +64,25 @@
 		051CA9FD155B377F00955732 /* GlutStuff.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0507655E155316EE00DEEF87 /* GlutStuff.cpp */; };
 		051CA9FE155B395200955732 /* GL_ShapeDrawer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05076554155316EE00DEEF87 /* GL_ShapeDrawer.cpp */; };
 		051CA9FF155B395200955732 /* GL_Simplex1to4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05076556155316EE00DEEF87 /* GL_Simplex1to4.cpp */; };
+		05308F871561959F009F7C08 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05308F861561959F009F7C08 /* main.cpp */; };
+		05308F891561959F009F7C08 /* ConstraintDemo.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05308F881561959F009F7C08 /* ConstraintDemo.1 */; };
+		05308F901561962E009F7C08 /* ConstraintDemo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05308F8E1561962E009F7C08 /* ConstraintDemo.cpp */; };
+		05308F9115619644009F7C08 /* LinearMath.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0507653E155315C000DEEF87 /* LinearMath.framework */; };
+		05308F9215619644009F7C08 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050765071553104600DEEF87 /* OpenGL.framework */; };
+		05308F9315619644009F7C08 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050765051553103B00DEEF87 /* GLUT.framework */; };
+		05308F9415619644009F7C08 /* BulletCollision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050764FD1553102600DEEF87 /* BulletCollision.framework */; };
+		05308F9515619644009F7C08 /* BulletDynamics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050764FE1553102600DEEF87 /* BulletDynamics.framework */; };
+		05308F9615619644009F7C08 /* BulletMultiThreaded.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050764FF1553102600DEEF87 /* BulletMultiThreaded.framework */; };
+		05308F9715619644009F7C08 /* BulletSoftBody.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050765001553102600DEEF87 /* BulletSoftBody.framework */; };
+		05308F981561965D009F7C08 /* GL_DialogDynamicsWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05076550155316EE00DEEF87 /* GL_DialogDynamicsWorld.cpp */; };
+		05308F991561965D009F7C08 /* GL_DialogWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05076552155316EE00DEEF87 /* GL_DialogWindow.cpp */; };
+		05308F9A1561965D009F7C08 /* GL_ShapeDrawer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05076554155316EE00DEEF87 /* GL_ShapeDrawer.cpp */; };
+		05308F9B1561965D009F7C08 /* GL_Simplex1to4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05076556155316EE00DEEF87 /* GL_Simplex1to4.cpp */; };
+		05308F9C1561965D009F7C08 /* GLDebugDrawer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05076558155316EE00DEEF87 /* GLDebugDrawer.cpp */; };
+		05308F9D1561965D009F7C08 /* GLDebugFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0507655A155316EE00DEEF87 /* GLDebugFont.cpp */; };
+		05308F9E1561965D009F7C08 /* GlutDemoApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0507655C155316EE00DEEF87 /* GlutDemoApplication.cpp */; };
+		05308F9F1561965D009F7C08 /* GlutStuff.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0507655E155316EE00DEEF87 /* GlutStuff.cpp */; };
+		05308FA0156196B4009F7C08 /* DemoApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0507654E155316EE00DEEF87 /* DemoApplication.cpp */; };
 		0534676D1558C2670017E380 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 055DB0D215586C1300F40D05 /* main.cpp */; };
 		053AC44A155B28BC00B8EC11 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 053AC449155B28BC00B8EC11 /* main.cpp */; };
 		053AC44C155B28BC00B8EC11 /* hexapod.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 053AC44B155B28BC00B8EC11 /* hexapod.1 */; };
@@ -404,6 +423,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		05308F811561959F009F7C08 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				05308F891561959F009F7C08 /* ConstraintDemo.1 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 		053AC444155B28BC00B8EC11 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -622,6 +651,11 @@
 		051CA9EA155B36F000955732 /* HexapodSimulation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HexapodSimulation.cpp; sourceTree = "<group>"; };
 		051CA9EB155B36F000955732 /* HexapodSimulation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HexapodSimulation.h; sourceTree = "<group>"; };
 		051CA9F4155B370800955732 /* AllBulletDemos.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = AllBulletDemos.xcodeproj; sourceTree = "<group>"; };
+		05308F831561959F009F7C08 /* ConstraintDemo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ConstraintDemo; sourceTree = BUILT_PRODUCTS_DIR; };
+		05308F861561959F009F7C08 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		05308F881561959F009F7C08 /* ConstraintDemo.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = ConstraintDemo.1; sourceTree = "<group>"; };
+		05308F8E1561962E009F7C08 /* ConstraintDemo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConstraintDemo.cpp; sourceTree = "<group>"; };
+		05308F8F1561962E009F7C08 /* ConstraintDemo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConstraintDemo.h; sourceTree = "<group>"; };
 		053AC446155B28BC00B8EC11 /* hexapod */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = hexapod; sourceTree = BUILT_PRODUCTS_DIR; };
 		053AC449155B28BC00B8EC11 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		053AC44B155B28BC00B8EC11 /* hexapod.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = hexapod.1; sourceTree = "<group>"; };
@@ -856,6 +890,20 @@
 				050765891553178C00DEEF87 /* BulletDynamics.framework in Frameworks */,
 				0507658A1553178C00DEEF87 /* BulletMultiThreaded.framework in Frameworks */,
 				0507658B1553178C00DEEF87 /* BulletSoftBody.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		05308F801561959F009F7C08 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				05308F9115619644009F7C08 /* LinearMath.framework in Frameworks */,
+				05308F9215619644009F7C08 /* OpenGL.framework in Frameworks */,
+				05308F9315619644009F7C08 /* GLUT.framework in Frameworks */,
+				05308F9415619644009F7C08 /* BulletCollision.framework in Frameworks */,
+				05308F9515619644009F7C08 /* BulletDynamics.framework in Frameworks */,
+				05308F9615619644009F7C08 /* BulletMultiThreaded.framework in Frameworks */,
+				05308F9715619644009F7C08 /* BulletSoftBody.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1113,6 +1161,7 @@
 				05A1CAC4155AC54700699658 /* learnhexapod */,
 				05A1CAEA155AE6B300699658 /* SoftDemo */,
 				053AC446155B28BC00B8EC11 /* hexapod */,
+				05308F831561959F009F7C08 /* ConstraintDemo */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1120,6 +1169,7 @@
 		050764F215530DD000DEEF87 /* AllBulletDemos */ = {
 			isa = PBXGroup;
 			children = (
+				05308F851561959F009F7C08 /* ConstraintDemo */,
 				053AC448155B28BC00B8EC11 /* hexapod */,
 				05A1CAEC155AE6B300699658 /* SoftDemo */,
 				05A1CAC6155AC54700699658 /* learnhexapod */,
@@ -1223,6 +1273,18 @@
 		051CA9F5155B370800955732 /* Products */ = {
 			isa = PBXGroup;
 			name = Products;
+			sourceTree = "<group>";
+		};
+		05308F851561959F009F7C08 /* ConstraintDemo */ = {
+			isa = PBXGroup;
+			children = (
+				05308F8E1561962E009F7C08 /* ConstraintDemo.cpp */,
+				05308F8F1561962E009F7C08 /* ConstraintDemo.h */,
+				05308F861561959F009F7C08 /* main.cpp */,
+				05308F881561959F009F7C08 /* ConstraintDemo.1 */,
+			);
+			name = ConstraintDemo;
+			path = ../ConstraintDemo;
 			sourceTree = "<group>";
 		};
 		053AC448155B28BC00B8EC11 /* hexapod */ = {
@@ -1651,6 +1713,23 @@
 			productReference = 050765791553172400DEEF87 /* BasicDemo */;
 			productType = "com.apple.product-type.tool";
 		};
+		05308F821561959F009F7C08 /* ConstraintDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 05308F8C1561959F009F7C08 /* Build configuration list for PBXNativeTarget "ConstraintDemo" */;
+			buildPhases = (
+				05308F7F1561959F009F7C08 /* Sources */,
+				05308F801561959F009F7C08 /* Frameworks */,
+				05308F811561959F009F7C08 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ConstraintDemo;
+			productName = ConstraintDemo;
+			productReference = 05308F831561959F009F7C08 /* ConstraintDemo */;
+			productType = "com.apple.product-type.tool";
+		};
 		053AC445155B28BC00B8EC11 /* hexapod */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 053AC44F155B28BC00B8EC11 /* Build configuration list for PBXNativeTarget "hexapod" */;
@@ -1969,6 +2048,7 @@
 				05A1CAC3155AC54700699658 /* learnhexapod */,
 				05A1CAE9155AE6B300699658 /* SoftDemo */,
 				053AC445155B28BC00B8EC11 /* hexapod */,
+				05308F821561959F009F7C08 /* ConstraintDemo */,
 			);
 		};
 /* End PBXProject section */
@@ -2059,6 +2139,24 @@
 				05BFD5DF155319A300D38F23 /* GlutDemoApplication.cpp in Sources */,
 				05BFD5E0155319A300D38F23 /* GlutStuff.cpp in Sources */,
 				050765841553177D00DEEF87 /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		05308F7F1561959F009F7C08 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				05308F871561959F009F7C08 /* main.cpp in Sources */,
+				05308FA0156196B4009F7C08 /* DemoApplication.cpp in Sources */,
+				05308F981561965D009F7C08 /* GL_DialogDynamicsWorld.cpp in Sources */,
+				05308F991561965D009F7C08 /* GL_DialogWindow.cpp in Sources */,
+				05308F9A1561965D009F7C08 /* GL_ShapeDrawer.cpp in Sources */,
+				05308F9B1561965D009F7C08 /* GL_Simplex1to4.cpp in Sources */,
+				05308F9C1561965D009F7C08 /* GLDebugDrawer.cpp in Sources */,
+				05308F9D1561965D009F7C08 /* GLDebugFont.cpp in Sources */,
+				05308F9E1561965D009F7C08 /* GlutDemoApplication.cpp in Sources */,
+				05308F9F1561965D009F7C08 /* GlutStuff.cpp in Sources */,
+				05308F901561962E009F7C08 /* ConstraintDemo.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2424,6 +2522,20 @@
 			};
 			name = Release;
 		};
+		05308F8A1561959F009F7C08 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		05308F8B1561959F009F7C08 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		053AC44D155B28BC00B8EC11 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2686,6 +2798,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		05308F8C1561959F009F7C08 /* Build configuration list for PBXNativeTarget "ConstraintDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				05308F8A1561959F009F7C08 /* Debug */,
+				05308F8B1561959F009F7C08 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		053AC44F155B28BC00B8EC11 /* Build configuration list for PBXNativeTarget "hexapod" */ = {
 			isa = XCConfigurationList;
