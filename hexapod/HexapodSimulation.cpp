@@ -23,6 +23,7 @@ ReWritten by: Francisco León
 #include "BulletDynamics/btBulletDynamicsCommon.h"
 #include "GlutStuff.h"
 #include "GL_ShapeDrawer.h"
+#include <zmq.hpp>
 
 
 #include "LinearMath/btIDebugDraw.h"
@@ -32,23 +33,72 @@ ReWritten by: Francisco León
 
 
 // Debug
+#include <string>
 #include <iostream>
-using namespace std;
+#include <unistd.h>
+//using namespace std;
 
 
 
 GLDebugDrawer debugDrawer;
 
 
+HexapodSimulationDemo::HexapodSimulationDemo() {
+    // Initialize mutex and create pthread
+    pthread_mutex_init(&m_mutex, NULL);
+//    start_zmq_thread();
 
-//// World Tick callback
-//void motorPreTickCallback (btDynamicsWorld *world, btScalar timeStep)
-//{
-//	HexapodSimulationDemo* demo = (HexapodSimulationDemo*)world->getWorldUserInfo();
-//    
-//	demo->setMotorTargets(timeStep);
-//	
-//}
+}
+
+HexapodSimulationDemo::~HexapodSimulationDemo() {
+    pthread_mutex_destroy(&m_mutex);
+}
+
+void HexapodSimulationDemo::start_zmq_thread() {
+    pthread_create(&m_thread, NULL, &HexapodSimulationDemo::run_zmq_thread, this);
+}
+
+
+
+void *HexapodSimulationDemo::run_zmq_thread(void *obj) {
+    // Setup/Bind to Zeromq socket
+    zmq::context_t context (1);
+    zmq::socket_t socket (context, ZMQ_REP);
+    socket.bind ("tcp://*:5555");
+    
+    while(true) {
+        
+//    {
+        zmq::message_t request;
+        
+        // Wait for next request 
+        std::cout << "Before receive" << std::endl;
+//        try {
+            socket.recv(&request);
+//        } catch(int n) {
+//            std::cout << "in catch" << std::endl;
+//        }
+        
+        std::cout << "Received Hello" << std::endl;
+        
+        // Do some 'work'
+        sleep(1);
+        std::cout << "Did sleep" << std::endl;
+        
+        zmq::message_t reply(5);
+        memcpy((void *) reply.data(), "World", 5);
+        socket.send(reply);
+        
+        std::cout << "Performed Reply" << std::endl;
+
+//        sleep(1);
+//        std::cout << "HELLO" << std::endl;
+        
+//        usleep(500000);
+    }
+    return 0;
+
+}
 
 
 void HexapodSimulationDemo::initPhysics()
@@ -56,7 +106,7 @@ void HexapodSimulationDemo::initPhysics()
 	setTexturing(true);
 	setShadows(true);
 
-    
+    start_zmq_thread();
     
 	m_Time = 0;
 	m_fCyclePeriod = 1000.f; // in milliseconds
@@ -123,7 +173,7 @@ void HexapodSimulationDemo::setMotorTargets(btVector3 translation)
     // Animate the bodies
 //    btVector3 kinTranslation(-0.01,-1,0);
     int collision_array_size = m_dynamicsWorld->getNumCollisionObjects();
-    cout << "Collision array size: " << collision_array_size << endl;
+    std::cout << "Collision array size: " << collision_array_size << std::endl;
     if(collision_array_size > 1) {
         for(int i = 1; i < collision_array_size; i++) {
             btCollisionObject *colObj = m_dynamicsWorld->getCollisionObjectArray()[i];
