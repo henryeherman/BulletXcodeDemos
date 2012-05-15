@@ -40,24 +40,34 @@ using namespace std;
 GLDebugDrawer debugDrawer;
 
 
-#include <iostream>
-using namespace std;
 
 //// World Tick callback
 //void motorPreTickCallback (btDynamicsWorld *world, btScalar timeStep)
 //{
-//	GenericJointDemo* demo = (GenericJointDemo*)world->getWorldUserInfo();
+//	HexapodSimulationDemo* demo = (HexapodSimulationDemo*)world->getWorldUserInfo();
 //    
 //	demo->setMotorTargets(timeStep);
 //	
 //}
 
 
-void GenericJointDemo::initPhysics()
+void HexapodSimulationDemo::initPhysics()
 {
 	setTexturing(true);
 	setShadows(true);
 
+    
+    
+	m_Time = 0;
+	m_fCyclePeriod = 1000.f; // in milliseconds
+    
+    //	m_fMuscleStrength = 0.05f;
+	// new SIMD solver for joints clips accumulated impulse, so the new limits for the motor
+	// should be (numberOfsolverIterations * oldLimits)
+	// currently solver uses 10 iterations, so:
+	m_fMuscleStrength = 4.f;
+    
+    
 	// Setup the basic world
 
 	btDefaultCollisionConfiguration * collision_config = new btDefaultCollisionConfiguration();
@@ -72,7 +82,9 @@ void GenericJointDemo::initPhysics()
 
 
 	m_dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher,overlappingPairCache,constraintSolver,collision_config);
-
+    
+	m_dynamicsWorld->setInternalTickCallback(motorPreTickCallback,this,true);
+    
 	m_dynamicsWorld->setGravity(btVector3(0,-30,0));
 
 	m_dynamicsWorld->setDebugDrawer(&debugDrawer);
@@ -92,7 +104,7 @@ void GenericJointDemo::initPhysics()
 	clientResetScene();
 }
 
-void GenericJointDemo::spawnHexapod(bool random)
+void HexapodSimulationDemo::spawnHexapod(bool random)
 {
 	Hexapod* hexapod = new Hexapod (m_dynamicsWorld, btVector3 (0,10,0),5.f);
 	m_hexapods.push_back(hexapod);
@@ -105,7 +117,7 @@ void GenericJointDemo::spawnHexapod(bool random)
 
 
 
-void GenericJointDemo::setMotorTargets(btVector3 translation)
+void HexapodSimulationDemo::setMotorTargets(btVector3 translation)
 {
     
     // Animate the bodies
@@ -132,7 +144,7 @@ void GenericJointDemo::setMotorTargets(btVector3 translation)
     }
 }
 
-void GenericJointDemo::clientMoveAndDisplay()
+void HexapodSimulationDemo::clientMoveAndDisplay()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
@@ -157,7 +169,7 @@ void GenericJointDemo::clientMoveAndDisplay()
 	swapBuffers();
 }
 
-void GenericJointDemo::displayCallback()
+void HexapodSimulationDemo::displayCallback()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -170,7 +182,7 @@ void GenericJointDemo::displayCallback()
 	swapBuffers();
 }
 
-void GenericJointDemo::keyboardCallback(unsigned char key, int x, int y)
+void HexapodSimulationDemo::keyboardCallback(unsigned char key, int x, int y)
 {
 	switch (key)
 	{
@@ -197,6 +209,56 @@ void GenericJointDemo::keyboardCallback(unsigned char key, int x, int y)
 
 
 }
+
+
+
+void HexapodSimulationDemo::setMotorTargets(btScalar deltaTime)
+{
+    
+	float ms = deltaTime*1000000.;
+	float minFPS = 1000000.f/60.f;
+	if (ms > minFPS)
+		ms = minFPS;
+    
+	m_Time += ms;
+    
+	//
+	// set per-frame sinusoidal position targets using angular motor (hacky?)
+	//	
+	for (int r=0; r<m_hexapods.size(); r++)
+	{
+		for (int i=0; i<m_hexapods[0]->m_legs.size(); i++)
+		{
+			
+            Hexapod* hpod;
+            hpod = m_hexapods[r];
+            
+            
+            btHingeConstraint* hingeC = static_cast<btHingeConstraint*>(hpod->m_legs[i]->knee);
+			btScalar fCurAngle      = hingeC->getHingeAngle();
+			
+			btScalar fTargetPercent = (int(m_Time / 1000) % int(m_fCyclePeriod)) / m_fCyclePeriod;
+			btScalar fTargetAngle   = 0.5 * (1 + sin(2 * M_PI * fTargetPercent));
+			btScalar fTargetLimitAngle = hingeC->getLowerLimit() + fTargetAngle * (hingeC->getUpperLimit() - hingeC->getLowerLimit());
+			btScalar fAngleError  = fTargetLimitAngle - fCurAngle;
+			btScalar fDesiredAngularVel = 1000000.f * fAngleError/ms;
+			hingeC->enableAngularMotor(true, fDesiredAngularVel, m_fMuscleStrength);
+		}
+	}
+    
+	
+}
+
+
+void motorPreTickCallback (btDynamicsWorld *world, btScalar timeStep)
+{
+	HexapodSimulationDemo* hexapodDemo = (HexapodSimulationDemo*)world->getWorldUserInfo();
+    
+    std::cout << "Hello Tick" << std::endl;
+	hexapodDemo->setMotorTargets(timeStep);
+	
+}
+
 
 //################## END HEXAPOD ######################//
 

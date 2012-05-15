@@ -26,15 +26,19 @@ Written by: Marten Svanfeldt
 #include "LinearMath/btAlignedObjectArray.h"
 #include "Hexapod.h"
 
-class GenericJointDemo : public PlatformDemoApplication
+class HexapodSimulationDemo : public PlatformDemoApplication
 {
 
 	btAlignedObjectArray<class Hexapod*> m_hexapods;
     btAlignedObjectArray<class Leg*> m_legs;
     
-
+	float m_Time;
+	float m_fCyclePeriod; // in milliseconds
+	float m_fMuscleStrength;
+    
 public:
 	void initPhysics();
+    void setMotorTargets(btScalar deltaTime);
 
 	void spawnHexapod(bool random = false);
 
@@ -47,5 +51,6 @@ public:
    	void setMotorTargets(btVector3 transition);
 };
 
+void motorPreTickCallback (btDynamicsWorld *world, btScalar timeStep);
 
 #endif

@@ -36,16 +36,10 @@ class Leg : public BodyPart
         LEG_COUNT
     };
     
-    enum {
-        JOINT_KNEE = 0,
-        JOINT_HIP,
-        JOINT_COUNT
-    };
-    
     btDynamicsWorld* m_ownerWorld;
 	btCollisionShape* m_shapes[LEG_COUNT];
 	btRigidBody* m_bodies[LEG_COUNT];
-	btTypedConstraint* m_joints[JOINT_COUNT];
+	
     Hexapod *hpod;
     
 
@@ -57,6 +51,15 @@ class Leg : public BodyPart
                  const btTransform& bodyOffset,
                  btScalar scale_hexapod = btScalar(1.0));
         
+        enum {
+            JOINT_KNEE = 0,
+            JOINT_HIP,
+            JOINT_COUNT
+        };
+        
+        btHingeConstraint* knee;
+        btConeTwistConstraint* hip;
+        btTypedConstraint* m_joints[JOINT_COUNT];
         ~Leg ();
 };
 
@@ -88,7 +91,6 @@ class Hexapod : public BodyPart
     };
     
     Leg *legs[LEG_COUNT];
-    
 	btDynamicsWorld* m_ownerWorld;
 	btCollisionShape* m_shapes[BODYPART_COUNT];
     
@@ -102,6 +104,12 @@ public:
 				btScalar scale_hexapod = btScalar(1.0));
 
 	~Hexapod ();
+    
+    inline uint64_t legCount() {
+        return LEG_COUNT;
+    }
+    btAlignedObjectArray<class Leg*> m_legs;
+
     btRigidBody* body;
 };
 
