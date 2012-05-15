@@ -24,19 +24,33 @@ ReWritten by: Francisco León
 #include "GlutStuff.h"
 #include "GL_ShapeDrawer.h"
 
+
 #include "LinearMath/btIDebugDraw.h"
 
 #include "GLDebugDrawer.h"
 #include "HexapodSimulation.h"
 
 
+// Debug
+#include <iostream>
+using namespace std;
+
+
 
 GLDebugDrawer debugDrawer;
 
 
+#include <iostream>
+using namespace std;
 
-
-
+//// World Tick callback
+//void motorPreTickCallback (btDynamicsWorld *world, btScalar timeStep)
+//{
+//	GenericJointDemo* demo = (GenericJointDemo*)world->getWorldUserInfo();
+//    
+//	demo->setMotorTargets(timeStep);
+//	
+//}
 
 
 void GenericJointDemo::initPhysics()
@@ -89,10 +103,39 @@ void GenericJointDemo::spawnHexapod(bool random)
     
 }
 
+
+
+void GenericJointDemo::setMotorTargets(btVector3 translation)
+{
+    
+    // Animate the bodies
+//    btVector3 kinTranslation(-0.01,-1,0);
+    int collision_array_size = m_dynamicsWorld->getNumCollisionObjects();
+    cout << "Collision array size: " << collision_array_size << endl;
+    if(collision_array_size > 1) {
+        for(int i = 1; i < collision_array_size; i++) {
+            btCollisionObject *colObj = m_dynamicsWorld->getCollisionObjectArray()[i];
+            if(btRigidBody::upcast(colObj) && btRigidBody::upcast(colObj)->getMotionState())
+            {
+                btTransform newTrans;
+                btRigidBody::upcast(colObj)->getMotionState()->getWorldTransform(newTrans);
+                newTrans.getOrigin()+= translation;
+                btRigidBody::upcast(colObj)->getMotionState()->setWorldTransform(newTrans);
+            }
+            else
+            {
+                m_dynamicsWorld->getCollisionObjectArray()[0]->getWorldTransform().getOrigin() += translation;
+            }
+            
+        //	cout << "DeltaTime: " << deltaTime << endl;
+        }
+    }
+}
+
 void GenericJointDemo::clientMoveAndDisplay()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+    
 	//simple dynamics world doesn't handle fixed-time-stepping
 	float ms = getDeltaTimeMicroseconds();
 
@@ -131,12 +174,32 @@ void GenericJointDemo::keyboardCallback(unsigned char key, int x, int y)
 {
 	switch (key)
 	{
-	case 'e':
-		spawnHexapod(true);
-		break;
-	default:
-		DemoApplication::keyboardCallback(key, x, y);
+        case 'e':
+            spawnHexapod(true);
+            break;
+        
+        case 'j':
+            setMotorTargets(btVector3(0, -1, 0));
+            break;
+        case 'k':
+            setMotorTargets(btVector3(0, 1,0));
+            break;   
+        case 'l':
+            setMotorTargets(btVector3(-1, 0, 0));
+            break;
+        case 'h':
+            setMotorTargets(btVector3(1, 0, 0));
+            break;
+        
+        default:
+            DemoApplication::keyboardCallback(key, x, y);
 	}
 
 
 }
+
+//################## END HEXAPOD ######################//
+
+
+
+

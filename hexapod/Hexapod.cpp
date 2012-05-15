@@ -30,7 +30,10 @@ Written by: Marten Svanfeldt
 #define UPPER_LEG_LENGTH 0.45
 #define LOWER_LEG_LENGTH 0.5
 
-//################## BEGIN LEG ######################//
+#define SIMD_PI_2 ((SIMD_PI)*0.5f)
+#define SIMD_PI_4 ((SIMD_PI)*0.25f)
+
+//################## BEGIN BodyPart ######################//
 
 BodyPart::BodyPart(btDynamicsWorld* ownerWorld) : m_ownerWorld (ownerWorld){
     
@@ -57,6 +60,10 @@ btRigidBody* BodyPart::localCreateRigidBody (btScalar mass, const btTransform& s
     
 	return body;
 }
+
+
+//################## END BodyPart ######################//
+
 
 
 Leg::Leg (Hexapod *hexapod, btDynamicsWorld* ownerWorld, const btTransform& offset, const btTransform& bodyOffset,
@@ -93,6 +100,7 @@ Leg::Leg (Hexapod *hexapod, btDynamicsWorld* ownerWorld, const btTransform& offs
 		m_bodies[i]->setDamping(0.05f, 0.85f);
 		m_bodies[i]->setDeactivationTime(0.8f);
 		m_bodies[i]->setSleepingThresholds(1.6f, 2.5f);
+        
 	}
     
     ///////////////////////////// SETTING THE CONSTRAINTS /////////////////////////////////////////////7777
@@ -158,23 +166,38 @@ Leg::Leg (Hexapod *hexapod, btDynamicsWorld* ownerWorld, const btTransform& offs
         btTransform hipRotTransform; hipRotTransform.setIdentity();
         
         
-        //hipRotQuat.setRotation(yaxis,  btRadians(45));
-        //hipRotTransform.setRotation(hipRotQuat);
+        hipRotQuat.setRotation(yaxis,  btRadians(45));
+        hipRotTransform.setRotation(hipRotQuat);
         
-        localA.setIdentity(); localB.setIdentity();
+         
+
+        
         
         localB.setRotation(hipRotQuat);
+        localA.setIdentity();
+        localA.setOrigin(btVector3(btScalar(0.), btScalar((0.5)*UPPER_LEG_LENGTH*scale_hexapod), btScalar(0.)));
         
-		localA.setOrigin(btVector3(btScalar(0.), btScalar((0.5)*UPPER_LEG_LENGTH*scale_hexapod), btScalar(0.)));
+        localA*=hipRotTransform;        
+        localA.getBasis().setEulerZYX(0, 0, 0);
         
-        localA*=hipRotTransform;
-        
-		localB.setOrigin(bodyOffset.getOrigin());
+        localB.setIdentity();
+        localB.setOrigin(bodyOffset.getOrigin());
 		localB.setRotation(bodyOffset.getRotation());
         
+        btConeTwistConstraint *local_ctc = new btConeTwistConstraint(*m_bodies[LEG_UPPER], *parentBody, localA, localB);
+ 		local_ctc->setLimit(btScalar(SIMD_PI_4*0.6f), btScalar(SIMD_PI_4), btScalar(SIMD_PI) * 0.8f, 0.5f);
+		m_joints[JOINT_HIP] = local_ctc;
+        m_ownerWorld->addConstraint(m_joints[JOINT_HIP], true);
+		m_joints[JOINT_HIP]->setDbgDrawSize(btScalar(5.f));
         
         
-        joint6DOF =  new btGeneric6DofConstraint (*m_bodies[LEG_UPPER], *parentBody, localA, localB,useLinearReferenceFrameA);
+        
+        
+
+    
+        
+        
+//        joint6DOF =  new btGeneric6DofConstraint (*m_bodies[LEG_UPPER], *parentBody, localA, localB,useLinearReferenceFrameA);
         
         
 		//joint6DOF->setAngularLowerLimit(btVector3(-SIMD_EPSILON,-SIMD_EPSILON,-SIMD_EPSILON));
@@ -183,11 +206,11 @@ Leg::Leg (Hexapod *hexapod, btDynamicsWorld* ownerWorld, const btTransform& offs
         //joint6DOF->setAngularLowerLimit(btVector3(-SIMD_EPSILON,-SIMD_EPSILON,-SIMD_EPSILON));
 		//joint6DOF->setAngularUpperLimit(btVector3(SIMD_EPSILON,SIMD_PI*0.7f,SIMD_EPSILON));
         
-        joint6DOF->setAngularLowerLimit(btVector3(-0.01*SIMD_PI,-SIMD_EPSILON,-0.1*SIMD_PI));
-		joint6DOF->setAngularUpperLimit(btVector3(0.01*SIMD_PI,SIMD_EPSILON,0.3*SIMD_PI));
+//        joint6DOF->setAngularLowerLimit(btVector3(-0.01*SIMD_PI,-SIMD_EPSILON,-0.1*SIMD_PI));
+//		joint6DOF->setAngularUpperLimit(btVector3(0.01*SIMD_PI,SIMD_EPSILON,0.3*SIMD_PI));
         
-		m_joints[JOINT_HIP] = joint6DOF;
-		m_ownerWorld->addConstraint(m_joints[JOINT_HIP], true);
+//		m_joints[JOINT_HIP] = joint6DOF;
+//		m_ownerWorld->addConstraint(m_joints[JOINT_HIP], true);
 	}
     /// *************************** ///
      
@@ -216,6 +239,9 @@ Leg::~Leg()
 		delete m_shapes[i]; m_shapes[i] = 0;
 	}
 }
+
+
+
 
 
 
@@ -333,9 +359,7 @@ Hexapod::Hexapod (btDynamicsWorld* ownerWorld, const btVector3& positionOffset,
     
     legs[REAR_RIGHT] = new Leg(this, m_ownerWorld,offset,legPosTransform*legRotTransform,scale_hexapod);
     
-
 }
-
 
 Hexapod::~Hexapod()
 {

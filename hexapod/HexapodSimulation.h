@@ -43,6 +43,8 @@ public:
 	virtual void displayCallback();
 
 	virtual void keyboardCallback(unsigned char key, int x, int y);
+    
+   	void setMotorTargets(btVector3 transition);
 };
 
 

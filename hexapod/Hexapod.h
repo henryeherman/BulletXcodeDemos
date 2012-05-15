@@ -20,6 +20,10 @@ public:
     ~BodyPart();
     btRigidBody* localCreateRigidBody (btScalar mass, const btTransform& startTransform, btCollisionShape* shape); 
 
+    // Flags a body as kinematic
+    // This should be called on any objects that requires movement
+    void setAsKinematicBody(btRigidBody *body);
+
 };
 
 class Hexapod;
@@ -43,6 +47,8 @@ class Leg : public BodyPart
 	btRigidBody* m_bodies[LEG_COUNT];
 	btTypedConstraint* m_joints[JOINT_COUNT];
     Hexapod *hpod;
+    
+
     
     public:
         Leg (Hexapod *hexapod,
@@ -89,7 +95,6 @@ class Hexapod : public BodyPart
     btRigidBody* m_bodies[BODYPART_COUNT];
 	
 	btTypedConstraint* m_joints[JOINT_COUNT];
-
 
 public:
 	Hexapod (btDynamicsWorld* ownerWorld,
