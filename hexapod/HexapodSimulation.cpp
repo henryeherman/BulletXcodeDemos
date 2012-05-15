@@ -242,7 +242,6 @@ void HexapodSimulationDemo::setMotorTargets(btScalar deltaTime)
             leg->setKneeMaxStrength(m_fMuscleStrength);
             leg->setKneeTarget(fTargetAngle, 0.01);
             
-            
 		}
 	}
     
