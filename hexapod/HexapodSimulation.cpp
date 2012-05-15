@@ -202,7 +202,16 @@ void HexapodSimulationDemo::keyboardCallback(unsigned char key, int x, int y)
         case 'h':
             setMotorTargets(btVector3(1, 0, 0));
             break;
-        
+        case 's':
+            
+            if(this->getDebugMode() & (btIDebugDraw::DBG_DrawConstraints+btIDebugDraw::DBG_DrawConstraintLimits))
+            {
+                this->setDebugMode(btIDebugDraw::DBG_NoDebug);
+            } else {
+                this->setDebugMode(btIDebugDraw::DBG_DrawConstraints+btIDebugDraw::DBG_DrawConstraintLimits);
+            }
+            
+            
         default:
             DemoApplication::keyboardCallback(key, x, y);
 	}

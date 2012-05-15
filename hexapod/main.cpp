@@ -21,8 +21,7 @@ int main(int argc,char* argv[])
 //	demoApp.configDebugDrawer(&debugDrawer);
 
 	demoApp.initPhysics();
-	demoApp.setCameraDistance(btScalar(10.));
-
+	demoApp.setCameraDistance(btScalar(20.));
 	return glutmain(argc, argv,640,480,"Joint 6DOF - Sequencial Impulse Solver",&demoApp);
 
 }

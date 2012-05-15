@@ -38,6 +38,8 @@ Written by: Marten Svanfeldt
 #define SIMD_PI_2 ((SIMD_PI)*0.5f)
 #define SIMD_PI_4 ((SIMD_PI)*0.25f)
 
+#define CONSTRAINT_DEBUG_SZ 1
+
 //################## BEGIN BodyPart ######################//
 
 BodyPart::BodyPart(btDynamicsWorld* ownerWorld) : m_ownerWorld (ownerWorld){
@@ -150,7 +152,9 @@ Leg::Leg (Hexapod *hexapod, btDynamicsWorld* ownerWorld, const btTransform& offs
 
 		m_joints[JOINT_KNEE] = hingeC;
         knee = hingeC;
+        knee->setDbgDrawSize(CONSTRAINT_DEBUG_SZ);
 		m_ownerWorld->addConstraint(m_joints[JOINT_KNEE], true);
+            
 	}
     /// *************************** ///
         
@@ -181,6 +185,7 @@ Leg::Leg (Hexapod *hexapod, btDynamicsWorld* ownerWorld, const btTransform& offs
         m_ownerWorld->addConstraint(m_joints[JOINT_HIP], true);
 		m_joints[JOINT_HIP]->setDbgDrawSize(btScalar(5.f));
         hip = coneC;
+        hip->setDbgDrawSize(btScalar(CONSTRAINT_DEBUG_SZ));
 	}
     /// *************************** ///
      
