@@ -65,7 +65,7 @@ void HexapodSimulationDemo::initPhysics()
 	// new SIMD solver for joints clips accumulated impulse, so the new limits for the motor
 	// should be (numberOfsolverIterations * oldLimits)
 	// currently solver uses 10 iterations, so:
-	m_fMuscleStrength = 4.f;
+	m_fMuscleStrength = 4.5f;
     
     
 	// Setup the basic world
@@ -231,18 +231,18 @@ void HexapodSimulationDemo::setMotorTargets(btScalar deltaTime)
 		{
 			
             Hexapod* hpod;
+            Leg * leg;
             hpod = m_hexapods[r];
             
             
-            btHingeConstraint* hingeC = static_cast<btHingeConstraint*>(hpod->m_legs[i]->knee);
-			btScalar fCurAngle      = hingeC->getHingeAngle();
-			
+            leg = hpod->m_legs[i];
+            
 			btScalar fTargetPercent = (int(m_Time / 1000) % int(m_fCyclePeriod)) / m_fCyclePeriod;
-			btScalar fTargetAngle   = 0.5 * (1 + sin(2 * M_PI * fTargetPercent));
-			btScalar fTargetLimitAngle = hingeC->getLowerLimit() + fTargetAngle * (hingeC->getUpperLimit() - hingeC->getLowerLimit());
-			btScalar fAngleError  = fTargetLimitAngle - fCurAngle;
-			btScalar fDesiredAngularVel = 1000000.f * fAngleError/ms;
-			hingeC->enableAngularMotor(true, fDesiredAngularVel, m_fMuscleStrength);
+			btScalar fTargetAngle   = 1.0 * (1 + sin(2 * M_PI * fTargetPercent));
+            leg->setKneeMaxStrength(m_fMuscleStrength);
+            leg->setKneeTarget(fTargetAngle, 0.01);
+            
+            
 		}
 	}
     

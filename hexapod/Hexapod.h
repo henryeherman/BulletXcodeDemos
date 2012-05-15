@@ -61,6 +61,10 @@ class Leg : public BodyPart
         btConeTwistConstraint* hip;
         btTypedConstraint* m_joints[JOINT_COUNT];
         ~Leg ();
+        void setKneeTarget(const btQuaternion& targetAngleQ, btScalar dt);
+        void setKneeTarget(const btScalar targetAngle, btScalar dt);
+        void setKneeMaxStrength(const btScalar strength);
+        btScalar getKneeAngle();
 };
 
 class Hexapod : public BodyPart

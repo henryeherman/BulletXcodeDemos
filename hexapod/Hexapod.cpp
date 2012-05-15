@@ -143,9 +143,7 @@ Leg::Leg (Hexapod *hexapod, btDynamicsWorld* ownerWorld, const btTransform& offs
 		m_ownerWorld->addConstraint(m_joints[JOINT_KNEE], true);
 	}
     /// *************************** ///
-    
-    
-    
+        
     /// ******* HIP ******** ///
 	{
         btVector3 xaxis;
@@ -181,7 +179,7 @@ Leg::Leg (Hexapod *hexapod, btDynamicsWorld* ownerWorld, const btTransform& offs
 		localB.setRotation(bodyOffset.getRotation());
         
         coneC = new btConeTwistConstraint(*m_bodies[LEG_UPPER], *parentBody, localA, localB);
- 		coneC->setLimit(btScalar(SIMD_PI*0.2f), btScalar(SIMD_PI*0.3f), btScalar(0), 0.3f);
+ 		coneC->setLimit(btScalar(SIMD_PI*0.4f), btScalar(SIMD_PI*0.3f), btScalar(0), 0.3f);
 		m_joints[JOINT_HIP] = coneC;
         m_ownerWorld->addConstraint(m_joints[JOINT_HIP], true);
 		m_joints[JOINT_HIP]->setDbgDrawSize(btScalar(5.f));
@@ -191,6 +189,26 @@ Leg::Leg (Hexapod *hexapod, btDynamicsWorld* ownerWorld, const btTransform& offs
      
     
 }
+
+void Leg::setKneeTarget(const btQuaternion& targetAngleQ, btScalar dt=1000) {
+    knee->enableMotor(true);
+    knee->setMotorTarget(targetAngleQ, dt);    
+}
+
+void Leg::setKneeTarget(const btScalar targetAngle, btScalar dt=1000) {
+    knee->enableMotor(true);
+    knee->setMotorTarget(targetAngle, dt);
+}
+
+btScalar Leg::getKneeAngle() {
+    return knee->getHingeAngle();
+}
+
+void Leg::setKneeMaxStrength(const btScalar strength) {
+    knee->setMaxMotorImpulse(strength);
+}
+
+
 
 Leg::~Leg()
 {
