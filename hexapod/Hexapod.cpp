@@ -112,9 +112,6 @@ Leg::Leg (Hexapod *hexapod, btDynamicsWorld* ownerWorld, const btTransform& offs
     btHingeConstraint *hingeC;
     btConeTwistConstraint *coneC;
 	btTransform localA, localB;
-	
-    
-    
     
     /// ******* KNEE ******** ///
     
@@ -159,13 +156,8 @@ Leg::Leg (Hexapod *hexapod, btDynamicsWorld* ownerWorld, const btTransform& offs
         btQuaternion hipRotQuat;
         btTransform hipRotTransform; hipRotTransform.setIdentity();
         
-        
         hipRotQuat.setRotation(yaxis,  btRadians(45));
         hipRotTransform.setRotation(hipRotQuat);
-        
-         
-
-        
         
         localB.setRotation(hipRotQuat);
         localA.setIdentity();
@@ -199,6 +191,35 @@ void Leg::setKneeTarget(const btScalar targetAngle, btScalar dt=1000) {
     knee->enableMotor(true);
     knee->setMotorTarget(targetAngle, dt);
 }
+
+void Leg::setHipTarget(const btQuaternion& targetAngleQ, btScalar dt) {
+    hip->enableMotor(true);
+    hip->setMotorTarget(targetAngleQ);
+}
+
+void Leg::setHipTarget(const btScalar targetAngleX, const btScalar targetAngleY, btScalar dt) {
+    btVector3 xaxis;
+    xaxis.setValue(btScalar(1.), btScalar(0.), btScalar(0.));
+    
+    btVector3 yaxis;
+    yaxis.setValue(btScalar(0.), btScalar(1.), btScalar(0.));
+    
+    btVector3 zaxis;
+    zaxis.setValue(btScalar(0.), btScalar(0.), btScalar(1.));
+    
+    hip->enableMotor(true);
+    btQuaternion localQuatX, localQuatY;
+    localQuatX.setRotation(xaxis, targetAngleX);
+    localQuatY.setRotation(yaxis, targetAngleY);
+    localQuatX *= localQuatY;
+    
+    hip->setMotorTarget(localQuatX);
+}
+
+void Leg::setHipMaxStrength(const btScalar strength) {
+    hip->setMaxMotorImpulse(strength);
+}
+
 
 btScalar Leg::getKneeAngle() {
     return knee->getHingeAngle();
