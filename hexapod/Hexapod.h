@@ -65,6 +65,10 @@ class Leg : public BodyPart
         void setKneeTarget(const btScalar targetAngle, btScalar dt);
         void setKneeMaxStrength(const btScalar strength);
         btScalar getKneeAngle();
+    
+        void setHipTarget(const btQuaternion& targetAngleQ, btScalar dt);
+        void setHipTarget(const btScalar targetAngleA, const btScalar targetAngleB, btScalar dt);
+        void setHipMaxStrength(const btScalar strength);
 };
 
 class Hexapod : public BodyPart

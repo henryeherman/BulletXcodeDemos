@@ -241,7 +241,8 @@ void HexapodSimulationDemo::setMotorTargets(btScalar deltaTime)
 			btScalar fTargetAngle   = 1.0 * (1 + sin(2 * M_PI * fTargetPercent));
             leg->setKneeMaxStrength(m_fMuscleStrength);
             leg->setKneeTarget(fTargetAngle, 0.01);
-            
+            leg->setHipMaxStrength(m_fMuscleStrength);
+            leg->setHipTarget(fTargetAngle, fTargetAngle, 0.01);
             
 		}
 	}
