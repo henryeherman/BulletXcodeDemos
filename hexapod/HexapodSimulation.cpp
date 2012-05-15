@@ -65,7 +65,7 @@ void HexapodSimulationDemo::initPhysics()
 	// new SIMD solver for joints clips accumulated impulse, so the new limits for the motor
 	// should be (numberOfsolverIterations * oldLimits)
 	// currently solver uses 10 iterations, so:
-	m_fMuscleStrength = 4.5f;
+	m_fMuscleStrength = 3.8f;
     
     
 	// Setup the basic world
@@ -238,11 +238,11 @@ void HexapodSimulationDemo::setMotorTargets(btScalar deltaTime)
             leg = hpod->m_legs[i];
             
 			btScalar fTargetPercent = (int(m_Time / 1000) % int(m_fCyclePeriod)) / m_fCyclePeriod;
-			btScalar fTargetAngle   = 1.0 * (1 + sin(2 * M_PI * fTargetPercent));
+			btScalar fTargetAngle   = 0.5 * (1 + sin(2 * M_PI * fTargetPercent));
             leg->setKneeMaxStrength(m_fMuscleStrength);
-            leg->setKneeTarget(fTargetAngle, 0.01);
+            leg->setKneeTarget(M_PI_2-2*fTargetAngle, 0.01);
             leg->setHipMaxStrength(m_fMuscleStrength);
-            leg->setHipTarget(M_PI_2-fTargetAngle,0, 0.01);
+            leg->setHipTarget(fTargetAngle,fTargetAngle, 0.01);
             
 		}
 	}

@@ -87,11 +87,11 @@ Leg::Leg (Hexapod *hexapod, btDynamicsWorld* ownerWorld, const btTransform& offs
     
     zaxis.setValue(btScalar(0.), btScalar(0.), btScalar(1.));
     
-    //if (isLeft) {
-    //    xaxis.setValue(btScalar(0.), btScalar(-1.), btScalar(0.));
+    if (isLeft) {
+        xaxis.setValue(btScalar(-1.), btScalar(0.), btScalar(0.));
     //    yaxis.setValue(btScalar(-1.), btScalar(0), btScalar(0.));
     //    zaxis.setValue(btScalar(0.), btScalar(0.), btScalar(-1.));
-    //}
+    }
     
 	// Setup the geometry
 	m_shapes[LEG_UPPER] = new btCapsuleShape(btScalar(scale_hexapod*UPPER_LEG_THICK), btScalar(scale_hexapod*UPPER_LEG_LENGTH));
@@ -208,8 +208,8 @@ void Leg::setHipTarget(const btScalar targetAngleX, const btScalar targetAngleY,
     hip->enableMotor(true);
     btQuaternion localQuatX, localQuatY;
     localQuatX.setRotation(zaxis, targetAngleX);
-    //localQuatY.setRotation(xaxis, targetAngleY);
-    //localQuatX *= localQuatY;
+    localQuatY.setRotation(xaxis, targetAngleY);
+    localQuatX *= localQuatY;
     
     hip->setMotorTargetInConstraintSpace(localQuatX);
 }
