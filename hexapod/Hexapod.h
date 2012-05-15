@@ -41,20 +41,25 @@ class Leg : public BodyPart
 	btRigidBody* m_bodies[LEG_COUNT];
 	
     Hexapod *hpod;
+    bool isLeft;
     
-
+    btVector3 xaxis, yaxis, zaxis;
     
     public:
         Leg (Hexapod *hexapod,
              btDynamicsWorld* ownerWorld,
                  const btTransform& offset,
                  const btTransform& bodyOffset,
-                 btScalar scale_hexapod = btScalar(1.0));
+                 btScalar scale_hexapod = btScalar(1.0), bool left=false);
         
         enum {
             JOINT_KNEE = 0,
             JOINT_HIP,
             JOINT_COUNT
+        };
+        
+        inline void setLeft(bool choice) {
+            isLeft = choice;
         };
         
         btHingeConstraint* knee;
@@ -69,6 +74,7 @@ class Leg : public BodyPart
         void setHipTarget(const btQuaternion& targetAngleQ, btScalar dt);
         void setHipTarget(const btScalar targetAngleA, const btScalar targetAngleB, btScalar dt);
         void setHipMaxStrength(const btScalar strength);
+     
 };
 
 class Hexapod : public BodyPart
@@ -117,7 +123,10 @@ public:
         return LEG_COUNT;
     }
     btAlignedObjectArray<class Leg*> m_legs;
+    btAlignedObjectArray<class Leg*> m_leftLegs;
+    btAlignedObjectArray<class Leg*> m_rightlegs;
 
+    
     btRigidBody* body;
 };
 

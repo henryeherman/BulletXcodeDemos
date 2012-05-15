@@ -18,6 +18,7 @@ Written by: Marten Svanfeldt
 
 #include "Hexapod.h"
 
+
 //#define RIGID 1
 //#define BODY_SHAPE_BOX
 #define LEFT_SIDE 1
@@ -71,14 +72,26 @@ btRigidBody* BodyPart::localCreateRigidBody (btScalar mass, const btTransform& s
 
 
 Leg::Leg (Hexapod *hexapod, btDynamicsWorld* ownerWorld, const btTransform& offset, const btTransform& bodyOffset,
-                  btScalar scale_hexapod)	: m_ownerWorld (ownerWorld), BodyPart(ownerWorld)
+                  btScalar scale_hexapod, bool left)	: m_ownerWorld (ownerWorld), BodyPart(ownerWorld)
 {
+    isLeft = left;
     btRigidBody *parentBody;
     parentBody = hexapod->body;
-    
     btTransform globalFrame;
     globalFrame.setIdentity();
     globalFrame*=offset*bodyOffset;
+    
+    xaxis.setValue(btScalar(1.), btScalar(0.), btScalar(0.));
+    
+    yaxis.setValue(btScalar(0.), btScalar(1.), btScalar(0.));
+    
+    zaxis.setValue(btScalar(0.), btScalar(0.), btScalar(1.));
+    
+    //if (isLeft) {
+    //    xaxis.setValue(btScalar(0.), btScalar(-1.), btScalar(0.));
+    //    yaxis.setValue(btScalar(-1.), btScalar(0), btScalar(0.));
+    //    zaxis.setValue(btScalar(0.), btScalar(0.), btScalar(-1.));
+    //}
     
 	// Setup the geometry
 	m_shapes[LEG_UPPER] = new btCapsuleShape(btScalar(scale_hexapod*UPPER_LEG_THICK), btScalar(scale_hexapod*UPPER_LEG_LENGTH));
@@ -143,14 +156,6 @@ Leg::Leg (Hexapod *hexapod, btDynamicsWorld* ownerWorld, const btTransform& offs
         
     /// ******* HIP ******** ///
 	{
-        btVector3 xaxis;
-        xaxis.setValue(btScalar(1.), btScalar(0.), btScalar(0.));
-        
-        btVector3 yaxis;
-        yaxis.setValue(btScalar(0.), btScalar(1.), btScalar(0.));
-        
-        btVector3 zaxis;
-        zaxis.setValue(btScalar(0.), btScalar(0.), btScalar(1.));
         
         
         btQuaternion hipRotQuat;
@@ -194,26 +199,19 @@ void Leg::setKneeTarget(const btScalar targetAngle, btScalar dt=1000) {
 
 void Leg::setHipTarget(const btQuaternion& targetAngleQ, btScalar dt) {
     hip->enableMotor(true);
-    hip->setMotorTarget(targetAngleQ);
+    hip->setMotorTargetInConstraintSpace(targetAngleQ);
 }
 
 void Leg::setHipTarget(const btScalar targetAngleX, const btScalar targetAngleY, btScalar dt) {
-    btVector3 xaxis;
-    xaxis.setValue(btScalar(1.), btScalar(0.), btScalar(0.));
-    
-    btVector3 yaxis;
-    yaxis.setValue(btScalar(0.), btScalar(1.), btScalar(0.));
-    
-    btVector3 zaxis;
-    zaxis.setValue(btScalar(0.), btScalar(0.), btScalar(1.));
+
     
     hip->enableMotor(true);
     btQuaternion localQuatX, localQuatY;
-    localQuatX.setRotation(xaxis, targetAngleX);
-    localQuatY.setRotation(yaxis, targetAngleY);
-    localQuatX *= localQuatY;
+    localQuatX.setRotation(zaxis, targetAngleX);
+    //localQuatY.setRotation(xaxis, targetAngleY);
+    //localQuatX *= localQuatY;
     
-    hip->setMotorTarget(localQuatX);
+    hip->setMotorTargetInConstraintSpace(localQuatX);
 }
 
 void Leg::setHipMaxStrength(const btScalar strength) {
@@ -338,7 +336,7 @@ Hexapod::Hexapod (btDynamicsWorld* ownerWorld, const btVector3& positionOffset,
                   btScalar(BOTTOM_SIDE*scale_hexapod*BODY_HEIGHT*0.5),
                   btScalar(FRONT_SIDE*scale_hexapod*BODY_LENGTH)));
                                  
-    legs[FRONT_LEFT] = new Leg(this, m_ownerWorld,offset,legPosTransform*legRotTransform,scale_hexapod);
+    legs[FRONT_LEFT] = new Leg(this, m_ownerWorld,offset,legPosTransform*legRotTransform,scale_hexapod,true);
  
     
     legPosTransform.setRotation(rightLegQuat);
@@ -356,7 +354,7 @@ Hexapod::Hexapod (btDynamicsWorld* ownerWorld, const btVector3& positionOffset,
                                         btScalar(BOTTOM_SIDE*scale_hexapod*BODY_HEIGHT*0.5),
                                         btScalar(CENTER_SIDE*scale_hexapod*BODY_LENGTH)));
     
-    legs[MIDDLE_LEFT] = new Leg(this, m_ownerWorld,offset,legPosTransform*legRotTransform,scale_hexapod);
+    legs[MIDDLE_LEFT] = new Leg(this, m_ownerWorld,offset,legPosTransform*legRotTransform,scale_hexapod,true);
     
     
     
@@ -375,7 +373,7 @@ Hexapod::Hexapod (btDynamicsWorld* ownerWorld, const btVector3& positionOffset,
                                         btScalar(BOTTOM_SIDE*scale_hexapod*BODY_HEIGHT*0.5),
                                         btScalar(REAR_SIDE*scale_hexapod*BODY_LENGTH)));
     
-    legs[REAR_LEFT] = new Leg(this, m_ownerWorld,offset,legPosTransform*legRotTransform,scale_hexapod);
+    legs[REAR_LEFT] = new Leg(this, m_ownerWorld,offset,legPosTransform*legRotTransform,scale_hexapod,true);
     
     legPosTransform.setRotation(rightLegQuat);
     legPosTransform.setOrigin(
@@ -391,6 +389,15 @@ Hexapod::Hexapod (btDynamicsWorld* ownerWorld, const btVector3& positionOffset,
     m_legs.push_back(legs[MIDDLE_RIGHT]);
     m_legs.push_back(legs[REAR_LEFT]);
     m_legs.push_back(legs[REAR_RIGHT]);
+    
+    m_leftLegs.push_back(legs[FRONT_LEFT]);
+    m_leftLegs.push_back(legs[MIDDLE_LEFT]);
+    m_leftLegs.push_back(legs[REAR_LEFT]);
+    
+    m_rightlegs.push_back(legs[FRONT_RIGHT]);
+    m_rightlegs.push_back(legs[MIDDLE_RIGHT]);
+    m_rightlegs.push_back(legs[REAR_RIGHT]);
+    
     
 }
 
