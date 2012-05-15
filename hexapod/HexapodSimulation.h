@@ -22,6 +22,8 @@ Written by: Marten Svanfeldt
 #include "GlutDemoApplication.h"
 #define PlatformDemoApplication GlutDemoApplication
 
+#include <pthread.h>
+#include <iostream>
 
 #include "LinearMath/btAlignedObjectArray.h"
 #include "Hexapod.h"
@@ -37,6 +39,10 @@ class HexapodSimulationDemo : public PlatformDemoApplication
 	float m_fMuscleStrength;
     
 public:
+    
+    HexapodSimulationDemo();
+    ~HexapodSimulationDemo();
+    
 	void initPhysics();
     void setMotorTargets(btScalar deltaTime);
 
@@ -49,6 +55,17 @@ public:
 	virtual void keyboardCallback(unsigned char key, int x, int y);
     
    	void setMotorTargets(btVector3 transition);
+    
+private:
+    
+    // Pthread specific variables
+    volatile bool m_stoprequested; 
+    volatile bool m_running;
+    pthread_mutex_t m_mutex;
+    pthread_t m_thread;
+    
+    void start_zmq_thread();
+    static void *run_zmq_thread(void *obj);
 };
 
 void motorPreTickCallback (btDynamicsWorld *world, btScalar timeStep);

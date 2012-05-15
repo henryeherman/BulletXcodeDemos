@@ -23,6 +23,7 @@ ReWritten by: Francisco León
 #include "BulletDynamics/btBulletDynamicsCommon.h"
 #include "GlutStuff.h"
 #include "GL_ShapeDrawer.h"
+#include <zmq.hpp>
 
 
 #include "LinearMath/btIDebugDraw.h"
@@ -40,15 +41,39 @@ using namespace std;
 GLDebugDrawer debugDrawer;
 
 
+HexapodSimulationDemo::HexapodSimulationDemo() {
+    // Initialize mutex and create pthread
+    pthread_mutex_init(&m_mutex, NULL);
+    start_zmq_thread();
 
-//// World Tick callback
-//void motorPreTickCallback (btDynamicsWorld *world, btScalar timeStep)
-//{
-//	HexapodSimulationDemo* demo = (HexapodSimulationDemo*)world->getWorldUserInfo();
-//    
-//	demo->setMotorTargets(timeStep);
-//	
-//}
+}
+
+HexapodSimulationDemo::~HexapodSimulationDemo() {
+    pthread_mutex_destroy(&m_mutex);
+}
+
+void HexapodSimulationDemo::start_zmq_thread() {
+    m_running = true;
+    pthread_create(&m_thread, NULL, &HexapodSimulationDemo::run_zmq_thread, this);
+    
+//    pthread_create(&m_thread, NULL, &HexapodSimulationDemo::run_zmq_thread, this);
+}
+
+
+
+void *HexapodSimulationDemo::run_zmq_thread(void *obj) {
+    // Setup/Bind to Zeromq socket
+    zmq::context_t context (1);
+    zmq::socket_t socket (context, ZMQ_REP);
+    socket.bind ("tcp://*:5555");
+    
+    while(1) {
+        zmq::message_t request;
+        
+        // Wait for next request 
+    }
+
+}
 
 
 void HexapodSimulationDemo::initPhysics()

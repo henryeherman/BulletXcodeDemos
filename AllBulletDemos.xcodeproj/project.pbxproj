@@ -2539,6 +2539,8 @@
 		053AC44D155B28BC00B8EC11 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"LIBRARY_SEARCH_PATHS[arch=*]" = /usr/local/lib;
+				"OTHER_LDFLAGS[arch=*]" = "-lzmq";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -2546,6 +2548,8 @@
 		053AC44E155B28BC00B8EC11 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"LIBRARY_SEARCH_PATHS[arch=*]" = /usr/local/lib;
+				"OTHER_LDFLAGS[arch=*]" = "-lzmq";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -2806,6 +2810,7 @@
 				05308F8B1561959F009F7C08 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		053AC44F155B28BC00B8EC11 /* Build configuration list for PBXNativeTarget "hexapod" */ = {
 			isa = XCConfigurationList;
