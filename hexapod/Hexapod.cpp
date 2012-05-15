@@ -106,6 +106,7 @@ Leg::Leg (Hexapod *hexapod, btDynamicsWorld* ownerWorld, const btTransform& offs
     ///////////////////////////// SETTING THE CONSTRAINTS /////////////////////////////////////////////7777
 	// Now setup the constraints
 	btGeneric6DofConstraint * joint6DOF;
+    btHingeConstraint *hingeC;
 	btTransform localA, localB;
 	bool useLinearReferenceFrameA = true;
     
@@ -113,6 +114,19 @@ Leg::Leg (Hexapod *hexapod, btDynamicsWorld* ownerWorld, const btTransform& offs
     
     /// ******* KNEE ******** ///
     
+    /*{
+        localA.setIdentity(); localB.setIdentity(); localC.setIdentity();
+        localA.getBasis().setEulerZYX(0,-fAngle,0);	localA.setOrigin(btVector3(btScalar(fCos*(fBodySize+fLegLength)), btScalar(0.), btScalar(fSin*(fBodySize+fLegLength))));
+        localB = m_bodies[1+2*i]->getWorldTransform().inverse() * m_bodies[0]->getWorldTransform() * localA;
+        localC = m_bodies[2+2*i]->getWorldTransform().inverse() * m_bodies[0]->getWorldTransform() * localA;
+        hingeC = new btHingeConstraint(*m_bodies[1+2*i], *m_bodies[2+2*i], localB, localC);
+        //hingeC->setLimit(btScalar(-0.01), btScalar(0.01));
+        hingeC->setLimit(btScalar(-M_PI_8), btScalar(0.2));
+        m_joints[1+2*i] = hingeC;
+        m_ownerWorld->addConstraint(m_joints[1+2*i], true);
+    
+    }
+    */
     
     
 	{
@@ -122,13 +136,14 @@ Leg::Leg (Hexapod *hexapod, btDynamicsWorld* ownerWorld, const btTransform& offs
         
 		localA.setOrigin(btVector3(btScalar(0.), btScalar((-0.5)*UPPER_LEG_LENGTH*scale_hexapod), btScalar(0.)));
 		localB.setOrigin(btVector3(btScalar(0.), btScalar((0.5)*LOWER_LEG_LENGTH*scale_hexapod), btScalar(0.)));
-		joint6DOF =  new btGeneric6DofConstraint (*m_bodies[LEG_UPPER], *m_bodies[LEG_LOWER], localA, localB,useLinearReferenceFrameA);
-        //
+		//joint6DOF =  new btGeneric6DofConstraint (*m_bodies[LEG_UPPER], *m_bodies[LEG_LOWER], localA, localB,useLinearReferenceFrameA);
+        hingeC = new btHingeConstraint(*m_bodies[LEG_UPPER], *m_bodies[LEG_LOWER], localA, localB);
+        
+        hingeC->setLimit(-SIMD_EPSILON, SIMD_PI*0.7f);
+		//joint6DOF->setAngularLowerLimit(btVector3(-SIMD_EPSILON,-SIMD_EPSILON,-SIMD_EPSILON));
+		//joint6DOF->setAngularUpperLimit(btVector3(SIMD_EPSILON,SIMD_EPSILON,SIMD_PI*0.7f));
 
-		joint6DOF->setAngularLowerLimit(btVector3(-SIMD_EPSILON,-SIMD_EPSILON,-SIMD_EPSILON));
-		joint6DOF->setAngularUpperLimit(btVector3(SIMD_EPSILON,SIMD_EPSILON,SIMD_PI*0.7f));
-
-		m_joints[JOINT_KNEE] = joint6DOF;
+		m_joints[JOINT_KNEE] = hingeC;
 		m_ownerWorld->addConstraint(m_joints[JOINT_KNEE], true);
 	}
     /// *************************** ///
