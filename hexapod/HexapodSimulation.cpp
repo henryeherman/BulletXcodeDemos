@@ -52,6 +52,7 @@ using namespace std;
 //	
 //}
 
+
 void GenericJointDemo::initPhysics()
 {
 	setTexturing(true);
