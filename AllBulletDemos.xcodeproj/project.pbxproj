@@ -308,6 +308,8 @@
 		05A1CB00155AE70700699658 /* BulletMultiThreaded.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050764FF1553102600DEEF87 /* BulletMultiThreaded.framework */; };
 		05A1CB01155AE70700699658 /* BulletSoftBody.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050765001553102600DEEF87 /* BulletSoftBody.framework */; };
 		05A1CB04155AE99B00699658 /* Hexapod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05A1CB02155AE99B00699658 /* Hexapod.cpp */; };
+		05A6BC511563ECF3002ECBE2 /* Leg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05A6BC501563ECF3002ECBE2 /* Leg.cpp */; };
+		05A6BC531563EE1E002ECBE2 /* BodyPart.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05A6BC521563EE1E002ECBE2 /* BodyPart.cpp */; };
 		05BFD5D81553197200D38F23 /* DemoApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0507654E155316EE00DEEF87 /* DemoApplication.cpp */; };
 		05BFD5D91553197500D38F23 /* GL_DialogDynamicsWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05076550155316EE00DEEF87 /* GL_DialogDynamicsWorld.cpp */; };
 		05BFD5DA155319A300D38F23 /* GL_DialogWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05076552155316EE00DEEF87 /* GL_DialogWindow.cpp */; };
@@ -827,6 +829,10 @@
 		05A1CAF6155AE6EC00699658 /* SoftDemo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoftDemo.h; sourceTree = "<group>"; };
 		05A1CB02155AE99B00699658 /* Hexapod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Hexapod.cpp; sourceTree = "<group>"; };
 		05A1CB03155AE99B00699658 /* Hexapod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hexapod.h; sourceTree = "<group>"; };
+		05A6BC4D1563EB75002ECBE2 /* Leg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Leg.h; sourceTree = "<group>"; };
+		05A6BC4F1563EBA1002ECBE2 /* BodyPart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BodyPart.h; sourceTree = "<group>"; };
+		05A6BC501563ECF3002ECBE2 /* Leg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Leg.cpp; sourceTree = "<group>"; };
+		05A6BC521563EE1E002ECBE2 /* BodyPart.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BodyPart.cpp; sourceTree = "<group>"; };
 		05BFD5EC15531B3400D38F23 /* DynamicControlDemo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DynamicControlDemo; sourceTree = BUILT_PRODUCTS_DIR; };
 		05BFD5F815531B6400D38F23 /* DynamicControlDemo.1 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.man; path = DynamicControlDemo.1; sourceTree = "<group>"; };
 		05BFD5F915531B6400D38F23 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -1296,6 +1302,10 @@
 				051CA9E8155B361A00955732 /* Hexapod.h */,
 				053AC449155B28BC00B8EC11 /* main.cpp */,
 				053AC44B155B28BC00B8EC11 /* hexapod.1 */,
+				05A6BC4D1563EB75002ECBE2 /* Leg.h */,
+				05A6BC4F1563EBA1002ECBE2 /* BodyPart.h */,
+				05A6BC501563ECF3002ECBE2 /* Leg.cpp */,
+				05A6BC521563EE1E002ECBE2 /* BodyPart.cpp */,
 			);
 			name = hexapod;
 			path = ../hexapod;
@@ -2176,6 +2186,8 @@
 				051CA9FC155B377A00955732 /* GlutDemoApplication.cpp in Sources */,
 				051CA9FD155B377F00955732 /* GlutStuff.cpp in Sources */,
 				051CA9EC155B36F000955732 /* HexapodSimulation.cpp in Sources */,
+				05A6BC511563ECF3002ECBE2 /* Leg.cpp in Sources */,
+				05A6BC531563EE1E002ECBE2 /* BodyPart.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
