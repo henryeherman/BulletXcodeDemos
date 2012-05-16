@@ -59,8 +59,6 @@ public:
 private:
     
     // Pthread specific variables
-    volatile bool m_stoprequested; 
-    volatile bool m_running;
     pthread_mutex_t m_mutex;
     pthread_t m_thread;
     
