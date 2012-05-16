@@ -41,6 +41,8 @@ class Leg : public BodyPart
     bool isLeft;
     
     btVector3 xaxis, yaxis, zaxis;
+    btScalar angleA; // = targetAngleX;
+    btScalar angleB; // = targetAngleY;
     
 public:
     Leg (Hexapod *hexapod,
@@ -71,6 +73,8 @@ public:
     void setHipTarget(const btQuaternion& targetAngleQ, btScalar dt);
     void setHipTarget(const btScalar targetAngleA, const btScalar targetAngleB, btScalar dt);
     void setHipMaxStrength(const btScalar strength);
+    btScalar getHipAngleA();
+    btScalar getHipAngleB();
     
 };
 

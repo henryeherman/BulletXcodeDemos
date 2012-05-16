@@ -128,7 +128,7 @@ void HexapodSimulationDemo::initPhysics()
 
 void HexapodSimulationDemo::spawnHexapod(bool random)
 {
-	Hexapod* hexapod = new Hexapod (m_dynamicsWorld, btVector3 (0,10,0),5.f);
+	Hexapod* hexapod = new Hexapod (m_dynamicsWorld, btVector3 (0,2,1),5.f);
 	m_hexapods.push_back(hexapod);
     
     //Leg* leg = new Leg (m_dynamicsWorld, btVector3 (0,0,5),5.f);
@@ -224,7 +224,7 @@ void HexapodSimulationDemo::keyboardCallback(unsigned char key, int x, int y)
         case 'h':
             setMotorTargets(btVector3(1, 0, 0));
             break;
-        
+            
         default:
             DemoApplication::keyboardCallback(key, x, y);
 	}
@@ -277,7 +277,7 @@ void motorPreTickCallback (btDynamicsWorld *world, btScalar timeStep)
 {
 	HexapodSimulationDemo* hexapodDemo = (HexapodSimulationDemo*)world->getWorldUserInfo();
     
-    std::cout << "Hello Tick" << std::endl;
+    //std::cout << "Hello Tick" << std::endl;
 	hexapodDemo->setMotorTargets(timeStep);
 	
 }
