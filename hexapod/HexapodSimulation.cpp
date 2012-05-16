@@ -35,6 +35,7 @@ ReWritten by: Francisco León
 // Debug
 #include <string>
 #include <iostream>
+#include <sstream>
 #include <unistd.h>
 //using namespace std;
 
@@ -46,8 +47,7 @@ GLDebugDrawer debugDrawer;
 HexapodSimulationDemo::HexapodSimulationDemo() {
     // Initialize mutex and create pthread
     pthread_mutex_init(&m_mutex, NULL);
-//    start_zmq_thread();
-
+    start_zmq_thread();
 }
 
 HexapodSimulationDemo::~HexapodSimulationDemo() {
@@ -67,34 +67,40 @@ void *HexapodSimulationDemo::run_zmq_thread(void *obj) {
     socket.bind ("tcp://*:5555");
     
     while(true) {
-        
-//    {
         zmq::message_t request;
+        std::string operation;
         
         // Wait for next request 
-        std::cout << "Before receive" << std::endl;
-//        try {
-            socket.recv(&request);
-//        } catch(int n) {
-//            std::cout << "in catch" << std::endl;
-//        }
+        socket.recv(&request);
         
-        std::cout << "Received Hello" << std::endl;
+        std::istringstream iStrStream(static_cast<char*>(request.data()));
+        iStrStream >> operation;
+        
+        std::cout << "Operation: " << operation << std::endl;
+
+        if(operation == "setKneeTarget") {
+            
+        }
+        else if(operation == "setKneeMaxStrength") {
+            
+        }
+        else if(operation == "setHipTarget") {
+            
+        }
+        else if(operation == "setHipMaxStrength") {
+            
+        }
+        else {
+            std::cout << "Received an unrecognized operation!" << std::endl;
+        }
+                                     
         
         // Do some 'work'
         sleep(1);
-        std::cout << "Did sleep" << std::endl;
         
         zmq::message_t reply(5);
         memcpy((void *) reply.data(), "World", 5);
         socket.send(reply);
-        
-        std::cout << "Performed Reply" << std::endl;
-
-//        sleep(1);
-//        std::cout << "HELLO" << std::endl;
-        
-//        usleep(500000);
     }
     return 0;
 
@@ -106,7 +112,7 @@ void HexapodSimulationDemo::initPhysics()
 	setTexturing(true);
 	setShadows(true);
 
-    start_zmq_thread();
+    
     
 	m_Time = 0;
 	m_fCyclePeriod = 1000.f; // in milliseconds
