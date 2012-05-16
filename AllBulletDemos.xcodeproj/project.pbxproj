@@ -392,6 +392,7 @@
 		05BFD6961553498400D38F23 /* BulletDynamics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050764FE1553102600DEEF87 /* BulletDynamics.framework */; };
 		05BFD6971553498400D38F23 /* BulletMultiThreaded.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050764FF1553102600DEEF87 /* BulletMultiThreaded.framework */; };
 		05BFD6981553498400D38F23 /* BulletSoftBody.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050765001553102600DEEF87 /* BulletSoftBody.framework */; };
+		05E7E94515632A7B007CADE5 /* libzmq.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 05E7E94415632A7B007CADE5 /* libzmq.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -849,6 +850,7 @@
 		05BFD688155348D600D38F23 /* BulletDinoDemo.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = BulletDinoDemo.1; sourceTree = "<group>"; };
 		05BFD68D155348F700D38F23 /* BulletDino.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = BulletDino.c; sourceTree = "<group>"; };
 		05BFD69915534A9400D38F23 /* Bullet-C-Api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Bullet-C-Api.h"; sourceTree = "<group>"; };
+		05E7E94415632A7B007CADE5 /* libzmq.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libzmq.dylib; path = usr/local/lib/libzmq.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -911,6 +913,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05E7E94515632A7B007CADE5 /* libzmq.dylib in Frameworks */,
 				051CA9ED155B370800955732 /* LinearMath.framework in Frameworks */,
 				051CA9EE155B370800955732 /* OpenGL.framework in Frameworks */,
 				051CA9EF155B370800955732 /* GLUT.framework in Frameworks */,
@@ -1130,6 +1133,7 @@
 		050764E415530DCF00DEEF87 = {
 			isa = PBXGroup;
 			children = (
+				05E7E94415632A7B007CADE5 /* libzmq.dylib */,
 				051CA9F4155B370800955732 /* AllBulletDemos.xcodeproj */,
 				053AEBD3155410E600CB0698 /* Serialize */,
 				0507654B155316EE00DEEF87 /* OpenGL */,
@@ -2549,7 +2553,6 @@
 			buildSettings = {
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				"LIBRARY_SEARCH_PATHS[arch=*]" = /usr/local/lib;
-				"OTHER_LDFLAGS[arch=*]" = "-lzmq";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -2559,7 +2562,7 @@
 			buildSettings = {
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				"LIBRARY_SEARCH_PATHS[arch=*]" = /usr/local/lib;
-				"OTHER_LDFLAGS[arch=*]" = "-lzmq";
+				"OTHER_LDFLAGS[arch=*]" = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
