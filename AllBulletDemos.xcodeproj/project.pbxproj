@@ -310,6 +310,7 @@
 		05A1CB04155AE99B00699658 /* Hexapod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05A1CB02155AE99B00699658 /* Hexapod.cpp */; };
 		05A6BC511563ECF3002ECBE2 /* Leg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05A6BC501563ECF3002ECBE2 /* Leg.cpp */; };
 		05A6BC531563EE1E002ECBE2 /* BodyPart.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05A6BC521563EE1E002ECBE2 /* BodyPart.cpp */; };
+		05A6BC95156582A8002ECBE2 /* libzmq.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 05A6BC94156582A8002ECBE2 /* libzmq.dylib */; };
 		05BFD5D81553197200D38F23 /* DemoApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0507654E155316EE00DEEF87 /* DemoApplication.cpp */; };
 		05BFD5D91553197500D38F23 /* GL_DialogDynamicsWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05076550155316EE00DEEF87 /* GL_DialogDynamicsWorld.cpp */; };
 		05BFD5DA155319A300D38F23 /* GL_DialogWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05076552155316EE00DEEF87 /* GL_DialogWindow.cpp */; };
@@ -833,6 +834,7 @@
 		05A6BC4F1563EBA1002ECBE2 /* BodyPart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BodyPart.h; sourceTree = "<group>"; };
 		05A6BC501563ECF3002ECBE2 /* Leg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Leg.cpp; sourceTree = "<group>"; };
 		05A6BC521563EE1E002ECBE2 /* BodyPart.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BodyPart.cpp; sourceTree = "<group>"; };
+		05A6BC94156582A8002ECBE2 /* libzmq.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libzmq.dylib; path = usr/local/lib/libzmq.dylib; sourceTree = SDKROOT; };
 		05BFD5EC15531B3400D38F23 /* DynamicControlDemo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DynamicControlDemo; sourceTree = BUILT_PRODUCTS_DIR; };
 		05BFD5F815531B6400D38F23 /* DynamicControlDemo.1 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.man; path = DynamicControlDemo.1; sourceTree = "<group>"; };
 		05BFD5F915531B6400D38F23 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -917,6 +919,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05A6BC95156582A8002ECBE2 /* libzmq.dylib in Frameworks */,
 				051CA9ED155B370800955732 /* LinearMath.framework in Frameworks */,
 				051CA9EE155B370800955732 /* OpenGL.framework in Frameworks */,
 				051CA9EF155B370800955732 /* GLUT.framework in Frameworks */,
@@ -1136,6 +1139,7 @@
 		050764E415530DCF00DEEF87 = {
 			isa = PBXGroup;
 			children = (
+				05A6BC94156582A8002ECBE2 /* libzmq.dylib */,
 				051CA9F4155B370800955732 /* AllBulletDemos.xcodeproj */,
 				053AEBD3155410E600CB0698 /* Serialize */,
 				0507654B155316EE00DEEF87 /* OpenGL */,
@@ -2554,10 +2558,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				"LIBRARY_SEARCH_PATHS[arch=*]" = /usr/local/lib;
-				"OTHER_LDFLAGS[arch=*]" = (
-					"-lzmq",
-					"-lmsgpack",
-				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -2566,10 +2566,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				"LIBRARY_SEARCH_PATHS[arch=*]" = /usr/local/lib;
-				"OTHER_LDFLAGS[arch=*]" = (
-					"-lzmq",
-					"-lmsgpack",
-				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

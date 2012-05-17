@@ -15,7 +15,6 @@ subject to the following restrictions:
 Written by: Henry Herman and Jason Tsao
 */
 
-using namespace std;
 
 // atof include
 #include <stdlib.h>
