@@ -1,7 +1,6 @@
 /*
-Bullet Continuous Collision Detection and Physics Library
-Ragdoll Demo
-Copyright (c) 2007 Starbreeze Studios
+Hexapod Demo
+Copyright (c) 2012 Starbreeze Studios
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -13,10 +12,8 @@ subject to the following restrictions:
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 3. This notice may not be removed or altered from any source distribution.
 
-Originally Written by: Marten Svanfeldt
-ReWritten by: Francisco León
+Written by: Henry Herman and Jason Tsao
 */
-
 
 
 
@@ -33,12 +30,10 @@ ReWritten by: Francisco León
 
 
 // Debug
-#include <string>
 #include <iostream>
 #include <sstream>
 #include <unistd.h>
-//using namespace std;
-
+using namespace std;
 
 
 GLDebugDrawer debugDrawer;
@@ -48,6 +43,7 @@ HexapodSimulationDemo::HexapodSimulationDemo() {
     // Initialize mutex and create pthread
     pthread_mutex_init(&m_mutex, NULL);
     start_zmq_thread();
+
 }
 
 HexapodSimulationDemo::~HexapodSimulationDemo() {
@@ -55,7 +51,10 @@ HexapodSimulationDemo::~HexapodSimulationDemo() {
 }
 
 void HexapodSimulationDemo::start_zmq_thread() {
+    m_running = true;
     pthread_create(&m_thread, NULL, &HexapodSimulationDemo::run_zmq_thread, this);
+    
+//    pthread_create(&m_thread, NULL, &HexapodSimulationDemo::run_zmq_thread, this);
 }
 
 
@@ -102,7 +101,6 @@ void *HexapodSimulationDemo::run_zmq_thread(void *obj) {
         memcpy((void *) reply.data(), "World", 5);
         socket.send(reply);
     }
-    return 0;
 
 }
 
@@ -121,7 +119,7 @@ void HexapodSimulationDemo::initPhysics()
 	// new SIMD solver for joints clips accumulated impulse, so the new limits for the motor
 	// should be (numberOfsolverIterations * oldLimits)
 	// currently solver uses 10 iterations, so:
-	m_fMuscleStrength = 4.5f;
+	m_fMuscleStrength = 3.8f;
     
     
 	// Setup the basic world
@@ -179,7 +177,7 @@ void HexapodSimulationDemo::setMotorTargets(btVector3 translation)
     // Animate the bodies
 //    btVector3 kinTranslation(-0.01,-1,0);
     int collision_array_size = m_dynamicsWorld->getNumCollisionObjects();
-    std::cout << "Collision array size: " << collision_array_size << std::endl;
+    cout << "Collision array size: " << collision_array_size << endl;
     if(collision_array_size > 1) {
         for(int i = 1; i < collision_array_size; i++) {
             btCollisionObject *colObj = m_dynamicsWorld->getCollisionObjectArray()[i];
@@ -294,11 +292,11 @@ void HexapodSimulationDemo::setMotorTargets(btScalar deltaTime)
             leg = hpod->m_legs[i];
             
 			btScalar fTargetPercent = (int(m_Time / 1000) % int(m_fCyclePeriod)) / m_fCyclePeriod;
-			btScalar fTargetAngle   = 1.0 * (1 + sin(2 * M_PI * fTargetPercent));
+			btScalar fTargetAngle   = 0.5 * (1 + sin(2 * M_PI * fTargetPercent));
             leg->setKneeMaxStrength(m_fMuscleStrength);
-            leg->setKneeTarget(fTargetAngle, 0.01);
+            leg->setKneeTarget(M_PI_2-2*fTargetAngle, 0.01);
             leg->setHipMaxStrength(m_fMuscleStrength);
-            leg->setHipTarget(M_PI_2-fTargetAngle,0, 0.01);
+            leg->setHipTarget(fTargetAngle,fTargetAngle, 0.01);
             
 		}
 	}

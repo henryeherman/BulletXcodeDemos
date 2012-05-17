@@ -63,6 +63,8 @@ public:
 		
 };
 
+void renderSquareA(float x, float y, float z);
+
 void OGL_displaylist_register_shape(btCollisionShape * shape);
 void OGL_displaylist_clean();
 
