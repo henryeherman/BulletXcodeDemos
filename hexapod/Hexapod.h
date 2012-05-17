@@ -11,6 +11,23 @@
 #define BODY_WIDTH 0.30
 #define BODY_HEIGHT 0.20
 #define BODY_LENGTH 0.60
+//#define RIGID 1
+//#define BODY_SHAPE_BOX  //Otherwise Capsule!
+#define LEFT_SIDE 1
+#define RIGHT_SIDE (-1)
+#define CENTER_SIDE 0
+#define FRONT_SIDE 1
+#define REAR_SIDE (-1)
+#define BOTTOM_SIDE (-2)
+#define NUMLEGS 6
+
+#define FREEZE 1
+
+struct HpodCtrlParams { 
+    btScalar kneeAngles[NUMLEGS];
+    btScalar hipAngles[2][NUMLEGS];
+};
+
 
 
 class Hexapod : public BodyPart
@@ -64,8 +81,11 @@ public:
 
     
     btRigidBody* body;
+    
+    void setCtrlParams(const HpodCtrlParams params);
+    void getCtrlParams(HpodCtrlParams &params);
+    
+    
 };
-
-
 
 #endif // HEXAPOD_H_INCLUDED

@@ -18,16 +18,6 @@
 #include "Hexapod.h"
 
 
-//#define RIGID 1
-//#define BODY_SHAPE_BOX
-#define LEFT_SIDE 1
-#define RIGHT_SIDE (-1)
-#define CENTER_SIDE 0
-#define FRONT_SIDE 1
-#define REAR_SIDE (-1)
-#define BOTTOM_SIDE (-2)
-
-
 
 #define SIMD_PI_2 ((SIMD_PI)*0.5f)
 #define SIMD_PI_4 ((SIMD_PI)*0.25f)
@@ -74,8 +64,15 @@ Hexapod::Hexapod (btDynamicsWorld* ownerWorld, const btVector3& positionOffset,
     //rotateBodyT.setRotation(rotateBodyQ);
     
     
+    btScalar bodymass;
     
-    m_bodies[BODY_THORAX] = localCreateRigidBody(btScalar(1.), offset*transform, m_shapes[BODY_THORAX]);   
+#ifdef FREEZE
+    bodymass = 0.f;
+#else
+    bodymass = 1.f;
+#endif
+    
+    m_bodies[BODY_THORAX] = localCreateRigidBody(bodymass, offset*transform, m_shapes[BODY_THORAX]);   
 	transform.setIdentity();
 	transform.setOrigin(btVector3(btScalar(0.), btScalar(scale_hexapod*1.6), btScalar(0.)));
     
@@ -175,6 +172,23 @@ Hexapod::Hexapod (btDynamicsWorld* ownerWorld, const btVector3& positionOffset,
     
 }
 
+
+void Hexapod::setCtrlParams(const HpodCtrlParams params) {
+
+    for(int i=0;i<LEG_COUNT;i++) {
+        legs[i]->setKneeTarget(params.kneeAngles[i], 0.01);
+        legs[i]->setHipTarget(params.hipAngles[0][i], params.hipAngles[1][i], 0.01);
+    }
+}
+
+void Hexapod::getCtrlParams(HpodCtrlParams &params) {
+    for(int i=0;i<LEG_COUNT;i++) {
+        params.kneeAngles[i] = legs[i]->getKneeAngle();
+        params.hipAngles[0][i] = legs[i]->getHipAngleA();
+        params.hipAngles[1][i] = legs[i]->getHipAngleB();
+        //m_bodies[BODY_THORAX]->getWorldTransform();
+    }
+}
 
 
 Hexapod::~Hexapod()
