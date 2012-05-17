@@ -22,13 +22,10 @@ Written by: Marten Svanfeldt
 #include "GlutDemoApplication.h"
 #define PlatformDemoApplication GlutDemoApplication
 
-#include <pthread.h>
+#include <zmq.hpp>
+
 #include <iostream>
 
-
-// Messagepack includes
-#include <msgpack.hpp>
-#include <vector>
 using namespace std;
 
 #include "LinearMath/btAlignedObjectArray.h"
@@ -62,16 +59,13 @@ public:
     
    	void setMotorTargets(btVector3 transition);
     
+    
 private:
     
-    // Pthread specific variables
-    volatile bool m_stoprequested; 
-    volatile bool m_running;
-    pthread_mutex_t m_mutex;
-    pthread_t m_thread;
+    zmq::context_t zcontext;
+    zmq::socket_t  zsocket;
     
-    void start_zmq_thread();
-    static void *run_zmq_thread(void *obj);
+    
 };
 
 void motorPreTickCallback (btDynamicsWorld *world, btScalar timeStep);

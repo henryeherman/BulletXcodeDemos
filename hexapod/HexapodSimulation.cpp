@@ -15,10 +15,6 @@ subject to the following restrictions:
 Written by: Henry Herman and Jason Tsao
 */
 
-
-// Messagepack includes
-#include <msgpack.hpp>
-#include <vector>
 using namespace std;
 
 // atof include
@@ -47,66 +43,13 @@ using namespace std;
 GLDebugDrawer debugDrawer;
 
 
-HexapodSimulationDemo::HexapodSimulationDemo() {
-    // Initialize mutex and create pthread
-    pthread_mutex_init(&m_mutex, NULL);
-    start_zmq_thread();
-
+HexapodSimulationDemo::HexapodSimulationDemo(): zcontext(1), zsocket(zcontext, ZMQ_REP) {    
+    zsocket.bind("tcp://*:5555");
+    
 }
 
 HexapodSimulationDemo::~HexapodSimulationDemo() {
-    pthread_mutex_destroy(&m_mutex);
 }
-
-void HexapodSimulationDemo::start_zmq_thread() {
-    m_running = true;
-    pthread_create(&m_thread, NULL, &HexapodSimulationDemo::run_zmq_thread, this);
-    
-//    pthread_create(&m_thread, NULL, &HexapodSimulationDemo::run_zmq_thread, this);
-}
-
-
-
-void *HexapodSimulationDemo::run_zmq_thread(void *obj) {
-    // Setup/Bind to Zeromq socket
-    zmq::context_t context (1);
-    zmq::socket_t socket (context, ZMQ_REP);
-    socket.bind ("tcp://*:5555");
-    
-    while(true) {
-        zmq::message_t request;
-        std::string operation;
-        
-        request.rebuild();
-        // Wait for next request 
-        socket.recv(&request);
-        
-        HpodCtrlParams *params = (HpodCtrlParams *) request.data();
-        
-        std::cout << params->hipStrength << std::endl;
-        
-        debugCtrlParams(*params);
-        
-        for (int r=0; r< m_hexapods.size(); r++)
-        {
-            Hexapod *hpod = m_hexapods[r];
-            
-
-        }
-        //        ctrlParams.kneeAngles = kneeAngles;
-        //        ctrlParams.hipAnglesX = hipAnglesX;
-        //        ctrlParams.hipAnglesY = hipAnglesY;
-        //        hpod->setCtrlParams(ctrlParams);
-        
-        // Send reply back
-        zmq::message_t reply(3);
-        memcpy((void *) reply.data (), "ACK", 3);
-        socket.send(reply);
-  
-    }
-
-}
-
 
 void HexapodSimulationDemo::initPhysics()
 {
@@ -165,10 +108,7 @@ void HexapodSimulationDemo::spawnHexapod(bool random)
 {
 	Hexapod* hexapod = new Hexapod (m_dynamicsWorld, btVector3 (0,2,1),5.f);
 	m_hexapods.push_back(hexapod);
-    
-    //Leg* leg = new Leg (m_dynamicsWorld, btVector3 (0,0,5),5.f);
-    //delete leg;
-    //m_legs.push_back(leg);
+
     
 }
 
@@ -283,30 +223,30 @@ void HexapodSimulationDemo::setMotorTargets(btScalar deltaTime)
 	// set per-frame sinusoidal position targets using angular motor (hacky?)
 	//	
 
-	for (int r=0; r<m_hexapods.size(); r++)
-	{
-//        Hexapod *hpod = m_hexapods[r];
-//    
-//        HpodCtrlParams ctrlParams;    
-//        
-//        btScalar fTargetPercent = (int(m_Time / 1000) % int(m_fCyclePeriod)) / m_fCyclePeriod;
-//        btScalar fTargetAngle   = 0.5 * (1 + sin(2 * M_PI * fTargetPercent));
-//        
-//        ctrlParams.hipStrength = m_fMuscleStrength;
-//        ctrlParams.kneeStrength = m_fMuscleStrength;
+    zmq::message_t request;
+    if(zsocket.recv(&request, ZMQ_NOBLOCK)) {
+        HpodCtrlParams *params = (HpodCtrlParams *) request.data();
         
-//		for (int i=0; i<m_hexapods[0]->m_legs.size(); i++)
-//		{
-//            kneeAngles[i] = M_PI_2-2*fTargetAngle;
-//            hipAnglesX[i] = fTargetAngle;
-//            hipAnglesY[i] = fTargetAngle;
-//		}
-//        ctrlParams.kneeAngles = kneeAngles;
-//        ctrlParams.hipAnglesX = hipAnglesX;
-//        ctrlParams.hipAnglesY = hipAnglesY;
-//        hpod->setCtrlParams(ctrlParams);
-	}
-    
+        std::cout << params->hipStrength << std::endl;
+        
+        debugCtrlParams(*params);
+        
+        for (int r=0; r<m_hexapods.size(); r++)
+        {
+            
+            Hexapod *hpod = m_hexapods[r];
+            hpod->setCtrlParams(*params);
+        
+        }
+        
+        // Send reply back
+        zmq::message_t reply(3);
+        memcpy((void *) reply.data (), "ACK", 3);
+        zsocket.send(reply);
+    }
+    else {
+        // continue
+    }
 	
 }
 

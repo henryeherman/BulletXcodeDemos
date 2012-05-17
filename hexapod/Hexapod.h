@@ -4,11 +4,6 @@
 #include <unistd.h>
 #include <stdint.h>
 
-// Messagepack includes
-#include <msgpack.hpp>
-#include <vector>
-using namespace std;
-
 #include "LinearMath/btAlignedObjectArray.h"
 #include "BulletDynamics/btBulletDynamicsCommon.h"
 #include "BodyPart.h"
@@ -27,6 +22,7 @@ using namespace std;
 #define BOTTOM_SIDE (-2)
 #define NUMLEGS 6
 
+
 //#define FREEZE 1
 
 typedef struct HpodCtrlParams { 
@@ -37,10 +33,8 @@ typedef struct HpodCtrlParams {
     btScalar kneeStrength;
     btScalar dtKnee;
     btScalar dtHip;
-    
-//    MSGPACK_DEFINE(kneeAngles, hipAnglesX, hipAnglesY, hipStrength, kneeStrength, dtKnee, dtHip);
 
-} HypodCtrlParams;
+} HpodCtrlParams;
 
 void debugCtrlParams(HpodCtrlParams params);
 
