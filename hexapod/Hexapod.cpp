@@ -178,7 +178,10 @@ void Hexapod::setCtrlParams(const HpodCtrlParams params) {
     for(int i=0;i<LEG_COUNT;i++) {
         legs[i]->setKneeTarget(params.kneeAngles[i], 0.01);
         legs[i]->setHipTarget(params.hipAngles[0][i], params.hipAngles[1][i], 0.01);
+        legs[i]->setKneeMaxStrength(params.kneeStrength);
+        legs[i]->setHipMaxStrength(params.hipStrength);
     }
+    
 }
 
 void Hexapod::getCtrlParams(HpodCtrlParams &params) {

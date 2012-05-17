@@ -21,11 +21,15 @@
 #define BOTTOM_SIDE (-2)
 #define NUMLEGS 6
 
-#define FREEZE 1
+//#define FREEZE 1
 
 struct HpodCtrlParams { 
     btScalar kneeAngles[NUMLEGS];
     btScalar hipAngles[2][NUMLEGS];
+    btScalar hipStrength;
+    btScalar kneeStrength;
+    btScalar dtKnee;
+    btScalar dtHip;
 };
 
 
