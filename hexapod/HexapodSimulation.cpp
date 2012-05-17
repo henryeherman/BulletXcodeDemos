@@ -16,11 +16,16 @@ Written by: Henry Herman and Jason Tsao
 */
 
 
+// Messagepack includes
+#include <msgpack.hpp>
+#include <vector>
+using namespace std;
 
 #include "BulletDynamics/btBulletDynamicsCommon.h"
 #include "GlutStuff.h"
 #include "GL_ShapeDrawer.h"
 #include <zmq.hpp>
+
 
 
 #include "LinearMath/btIDebugDraw.h"
@@ -72,27 +77,29 @@ void *HexapodSimulationDemo::run_zmq_thread(void *obj) {
         // Wait for next request 
         socket.recv(&request);
         
-        std::istringstream iStrStream(static_cast<char*>(request.data()));
-        iStrStream >> operation;
-        
-        std::cout << "Operation: " << operation << std::endl;
+//        std::istringstream iStrStream(static_cast<char*>(request.data()));
+//        iStrStream >> operation;
+//        
+//        std::cout << "Operation: " << operation << std::endl;
+//
+//        if(operation == "setControlParams") {
+//            vector<HpodCtrlParams> vec;
+//            vec.push_back(
+//            msgpack::sbuffer sbuf;
+//            msgpack::pack(sbuf, vec);
+//        }
+//        else if(operation == "getControlParams") {
+//        
+//       
+//        }
+//        else {
+//            std::cout << "Received an unrecognized operation!" << std::endl;
+//        }
 
-        if(operation == "setKneeTarget") {
-            
-        }
-        else if(operation == "setKneeMaxStrength") {
-            
-        }
-        else if(operation == "setHipTarget") {
-            
-        }
-        else if(operation == "setHipMaxStrength") {
-            
-        }
-        else {
-            std::cout << "Received an unrecognized operation!" << std::endl;
-        }
-                                     
+        msgpack::unpacked msg;
+//        msgpack::unpack(&msg, request.data(), sizeo)
+        msgpack::unpack(&msg, (char *)request.data(), sizeof(HpodCtrlParams));
+        
         
         // Do some 'work'
         sleep(1);
@@ -279,36 +286,32 @@ void HexapodSimulationDemo::setMotorTargets(btScalar deltaTime)
 	//
 	// set per-frame sinusoidal position targets using angular motor (hacky?)
 	//	
+    vector<btScalar> kneeAngles (NUMLEGS);
+    vector<btScalar> hipAnglesX (NUMLEGS);
+    vector<btScalar> hipAnglesY (NUMLEGS);
+
 	for (int r=0; r<m_hexapods.size(); r++)
 	{
+        Hexapod *hpod = m_hexapods[r];
+    
+        HpodCtrlParams ctrlParams;    
+        
+        btScalar fTargetPercent = (int(m_Time / 1000) % int(m_fCyclePeriod)) / m_fCyclePeriod;
+        btScalar fTargetAngle   = 0.5 * (1 + sin(2 * M_PI * fTargetPercent));
+        
+        ctrlParams.hipStrength = m_fMuscleStrength;
+        ctrlParams.kneeStrength = m_fMuscleStrength;
+        
 		for (int i=0; i<m_hexapods[0]->m_legs.size(); i++)
 		{
-			
-            Hexapod* hpod;
-            Leg * leg;
-            hpod = m_hexapods[r];
-            
-            
-            leg = hpod->m_legs[i];
-            HpodCtrlParams ctrlParams;
-            
-            
-			btScalar fTargetPercent = (int(m_Time / 1000) % int(m_fCyclePeriod)) / m_fCyclePeriod;
-			btScalar fTargetAngle   = 0.5 * (1 + sin(2 * M_PI * fTargetPercent));
-            ctrlParams.kneeAngles[i] = M_PI_2-2*fTargetAngle;
-            ctrlParams.hipAngles[0][i] = fTargetAngle;
-            ctrlParams.hipAngles[1][i] = fTargetAngle;
-            ctrlParams.hipStrength = m_fMuscleStrength;
-            ctrlParams.kneeStrength = m_fMuscleStrength;
-            
-            hpod->setCtrlParams(ctrlParams);
-            
-            //leg->setKneeMaxStrength(m_fMuscleStrength);
-            //leg->setKneeTarget(M_PI_2-2*fTargetAngle, 0.01);
-            //leg->setHipMaxStrength(m_fMuscleStrength);
-            //leg->setHipTarget(fTargetAngle,fTargetAngle, 0.01);
-            
+            kneeAngles[i] = M_PI_2-2*fTargetAngle;
+            hipAnglesX[i] = fTargetAngle;
+            hipAnglesY[i] = fTargetAngle;
 		}
+        ctrlParams.kneeAngles = kneeAngles;
+        ctrlParams.hipAnglesX = hipAnglesX;
+        ctrlParams.hipAnglesY = hipAnglesY;
+        hpod->setCtrlParams(ctrlParams);
 	}
     
 	

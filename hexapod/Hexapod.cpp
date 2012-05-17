@@ -177,7 +177,8 @@ void Hexapod::setCtrlParams(const HpodCtrlParams params) {
 
     for(int i=0;i<LEG_COUNT;i++) {
         legs[i]->setKneeTarget(params.kneeAngles[i], 0.01);
-        legs[i]->setHipTarget(params.hipAngles[0][i], params.hipAngles[1][i], 0.01);
+        legs[i]->setHipTarget(params.hipAnglesX[i], params.hipAnglesY[i], 0.01);
+//        legs[i]->setHipTarget(params.hipAngles[0][i], params.hipAngles[1][i], 0.01);
         legs[i]->setKneeMaxStrength(params.kneeStrength);
         legs[i]->setHipMaxStrength(params.hipStrength);
     }
@@ -187,8 +188,9 @@ void Hexapod::setCtrlParams(const HpodCtrlParams params) {
 void Hexapod::getCtrlParams(HpodCtrlParams &params) {
     for(int i=0;i<LEG_COUNT;i++) {
         params.kneeAngles[i] = legs[i]->getKneeAngle();
-        params.hipAngles[0][i] = legs[i]->getHipAngleA();
-        params.hipAngles[1][i] = legs[i]->getHipAngleB();
+//        params.hipAngles[0][i] = legs[i]->getHipAngleA();
+        params.hipAnglesX[i] = legs[i]->getHipAngleA();
+        params.hipAnglesY[i] = legs[i]->getHipAngleB();
         //m_bodies[BODY_THORAX]->getWorldTransform();
     }
 }

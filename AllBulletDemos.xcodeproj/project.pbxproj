@@ -2495,6 +2495,7 @@
 		050764FA15530DD000DEEF87 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -2502,6 +2503,7 @@
 		050764FB15530DD000DEEF87 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -2552,7 +2554,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				"LIBRARY_SEARCH_PATHS[arch=*]" = /usr/local/lib;
-				"OTHER_LDFLAGS[arch=*]" = "-lzmq";
+				"OTHER_LDFLAGS[arch=*]" = (
+					"-lzmq",
+					"-lmsgpack",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -2561,7 +2566,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				"LIBRARY_SEARCH_PATHS[arch=*]" = /usr/local/lib;
-				"OTHER_LDFLAGS[arch=*]" = "-lzmq";
+				"OTHER_LDFLAGS[arch=*]" = (
+					"-lzmq",
+					"-lmsgpack",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

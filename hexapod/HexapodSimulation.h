@@ -25,6 +25,12 @@ Written by: Marten Svanfeldt
 #include <pthread.h>
 #include <iostream>
 
+
+// Messagepack includes
+#include <msgpack.hpp>
+#include <vector>
+using namespace std;
+
 #include "LinearMath/btAlignedObjectArray.h"
 #include "Hexapod.h"
 

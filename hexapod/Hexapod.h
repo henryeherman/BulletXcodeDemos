@@ -3,6 +3,12 @@
 
 #include <unistd.h>
 #include <stdint.h>
+
+// Messagepack includes
+#include <msgpack.hpp>
+#include <vector>
+using namespace std;
+
 #include "LinearMath/btAlignedObjectArray.h"
 #include "BulletDynamics/btBulletDynamicsCommon.h"
 #include "BodyPart.h"
@@ -23,14 +29,18 @@
 
 //#define FREEZE 1
 
-struct HpodCtrlParams { 
-    btScalar kneeAngles[NUMLEGS];
-    btScalar hipAngles[2][NUMLEGS];
+typedef struct HpodCtrlParams { 
+    vector<btScalar> kneeAngles;
+    vector<btScalar> hipAnglesX;
+    vector<btScalar> hipAnglesY;
     btScalar hipStrength;
     btScalar kneeStrength;
     btScalar dtKnee;
     btScalar dtHip;
-};
+    
+    MSGPACK_DEFINE(kneeAngles, hipAnglesX, hipAnglesY, hipStrength, kneeStrength, dtKnee, dtHip);
+
+} HypodCtrlParams;
 
 
 
