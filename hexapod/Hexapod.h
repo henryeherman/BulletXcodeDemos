@@ -30,19 +30,19 @@ using namespace std;
 //#define FREEZE 1
 
 typedef struct HpodCtrlParams { 
-    vector<btScalar> kneeAngles;
-    vector<btScalar> hipAnglesX;
-    vector<btScalar> hipAnglesY;
+    btScalar kneeAngles[NUMLEGS];
+    btScalar hipAnglesX[NUMLEGS];
+    btScalar hipAnglesY[NUMLEGS];
     btScalar hipStrength;
     btScalar kneeStrength;
     btScalar dtKnee;
     btScalar dtHip;
     
-    MSGPACK_DEFINE(kneeAngles, hipAnglesX, hipAnglesY, hipStrength, kneeStrength, dtKnee, dtHip);
+//    MSGPACK_DEFINE(kneeAngles, hipAnglesX, hipAnglesY, hipStrength, kneeStrength, dtKnee, dtHip);
 
 } HypodCtrlParams;
 
-
+void debugCtrlParams(HpodCtrlParams params);
 
 class Hexapod : public BodyPart
 {
@@ -98,6 +98,7 @@ public:
     
     void setCtrlParams(const HpodCtrlParams params);
     void getCtrlParams(HpodCtrlParams &params);
+
     
     
 };

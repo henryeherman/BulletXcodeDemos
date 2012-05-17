@@ -21,6 +21,9 @@ Written by: Henry Herman and Jason Tsao
 #include <vector>
 using namespace std;
 
+// atof include
+#include <stdlib.h>
+
 #include "BulletDynamics/btBulletDynamicsCommon.h"
 #include "GlutStuff.h"
 #include "GL_ShapeDrawer.h"
@@ -74,39 +77,32 @@ void *HexapodSimulationDemo::run_zmq_thread(void *obj) {
         zmq::message_t request;
         std::string operation;
         
+        request.rebuild();
         // Wait for next request 
         socket.recv(&request);
         
-//        std::istringstream iStrStream(static_cast<char*>(request.data()));
-//        iStrStream >> operation;
-//        
-//        std::cout << "Operation: " << operation << std::endl;
-//
-//        if(operation == "setControlParams") {
-//            vector<HpodCtrlParams> vec;
-//            vec.push_back(
-//            msgpack::sbuffer sbuf;
-//            msgpack::pack(sbuf, vec);
-//        }
-//        else if(operation == "getControlParams") {
-//        
-//       
-//        }
-//        else {
-//            std::cout << "Received an unrecognized operation!" << std::endl;
-//        }
+        HpodCtrlParams *params = (HpodCtrlParams *) request.data();
+        
+        std::cout << params->hipStrength << std::endl;
+        
+        debugCtrlParams(*params);
+        
+        for (int r=0; r< m_hexapods.size(); r++)
+        {
+            Hexapod *hpod = m_hexapods[r];
+            
 
-        msgpack::unpacked msg;
-//        msgpack::unpack(&msg, request.data(), sizeo)
-        msgpack::unpack(&msg, (char *)request.data(), sizeof(HpodCtrlParams));
+        }
+        //        ctrlParams.kneeAngles = kneeAngles;
+        //        ctrlParams.hipAnglesX = hipAnglesX;
+        //        ctrlParams.hipAnglesY = hipAnglesY;
+        //        hpod->setCtrlParams(ctrlParams);
         
-        
-        // Do some 'work'
-        sleep(1);
-        
-        zmq::message_t reply(5);
-        memcpy((void *) reply.data(), "World", 5);
+        // Send reply back
+        zmq::message_t reply(3);
+        memcpy((void *) reply.data (), "ACK", 3);
         socket.send(reply);
+  
     }
 
 }
@@ -286,32 +282,29 @@ void HexapodSimulationDemo::setMotorTargets(btScalar deltaTime)
 	//
 	// set per-frame sinusoidal position targets using angular motor (hacky?)
 	//	
-    vector<btScalar> kneeAngles (NUMLEGS);
-    vector<btScalar> hipAnglesX (NUMLEGS);
-    vector<btScalar> hipAnglesY (NUMLEGS);
 
 	for (int r=0; r<m_hexapods.size(); r++)
 	{
-        Hexapod *hpod = m_hexapods[r];
-    
-        HpodCtrlParams ctrlParams;    
+//        Hexapod *hpod = m_hexapods[r];
+//    
+//        HpodCtrlParams ctrlParams;    
+//        
+//        btScalar fTargetPercent = (int(m_Time / 1000) % int(m_fCyclePeriod)) / m_fCyclePeriod;
+//        btScalar fTargetAngle   = 0.5 * (1 + sin(2 * M_PI * fTargetPercent));
+//        
+//        ctrlParams.hipStrength = m_fMuscleStrength;
+//        ctrlParams.kneeStrength = m_fMuscleStrength;
         
-        btScalar fTargetPercent = (int(m_Time / 1000) % int(m_fCyclePeriod)) / m_fCyclePeriod;
-        btScalar fTargetAngle   = 0.5 * (1 + sin(2 * M_PI * fTargetPercent));
-        
-        ctrlParams.hipStrength = m_fMuscleStrength;
-        ctrlParams.kneeStrength = m_fMuscleStrength;
-        
-		for (int i=0; i<m_hexapods[0]->m_legs.size(); i++)
-		{
-            kneeAngles[i] = M_PI_2-2*fTargetAngle;
-            hipAnglesX[i] = fTargetAngle;
-            hipAnglesY[i] = fTargetAngle;
-		}
-        ctrlParams.kneeAngles = kneeAngles;
-        ctrlParams.hipAnglesX = hipAnglesX;
-        ctrlParams.hipAnglesY = hipAnglesY;
-        hpod->setCtrlParams(ctrlParams);
+//		for (int i=0; i<m_hexapods[0]->m_legs.size(); i++)
+//		{
+//            kneeAngles[i] = M_PI_2-2*fTargetAngle;
+//            hipAnglesX[i] = fTargetAngle;
+//            hipAnglesY[i] = fTargetAngle;
+//		}
+//        ctrlParams.kneeAngles = kneeAngles;
+//        ctrlParams.hipAnglesX = hipAnglesX;
+//        ctrlParams.hipAnglesY = hipAnglesY;
+//        hpod->setCtrlParams(ctrlParams);
 	}
     
 	

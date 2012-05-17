@@ -16,6 +16,8 @@
  */
 
 #include "Hexapod.h"
+#include <iostream>
+#include <string>
 
 
 
@@ -23,6 +25,34 @@
 #define SIMD_PI_4 ((SIMD_PI)*0.25f)
 
 
+void debugCtrlParams(HpodCtrlParams params) {
+    std::cout << "Knee Angles: ";
+    
+    int i;
+    for(i= 0;i< NUMLEGS;i++) {
+        std::cout << params.kneeAngles[i] << " ";
+    }
+    
+    std::cout << "\nHip AnglesX: ";
+    for(i = 0; i < NUMLEGS; i++) {
+        std::cout << params.hipAnglesX[i] << " ";
+    }
+    
+    std::cout << "\nHip AnglesY: ";
+    for(i = 0; i < NUMLEGS; i++) {
+        std::cout << params.hipAnglesY[i] << " ";
+    }
+    
+    std::cout << "\nHip Strength: " << params.hipStrength << std::endl;
+
+    std::cout << "Knee Strength: " << params.kneeStrength << std::endl;
+    
+    std::cout << "dtKnee: " << params.dtKnee << std::endl;
+    
+    std::cout << "dtHip: " << params.dtHip << std::endl;
+    
+    
+}
 
 //################## BEGIN HEXAPOD ######################//
 
