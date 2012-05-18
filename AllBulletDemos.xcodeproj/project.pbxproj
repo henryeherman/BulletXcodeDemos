@@ -837,6 +837,8 @@
 		05A6BC501563ECF3002ECBE2 /* Leg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Leg.cpp; sourceTree = "<group>"; };
 		05A6BC521563EE1E002ECBE2 /* BodyPart.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BodyPart.cpp; sourceTree = "<group>"; };
 		05A6BC94156582A8002ECBE2 /* libzmq.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libzmq.dylib; path = usr/local/lib/libzmq.dylib; sourceTree = SDKROOT; };
+		05A6BC9715658B80002ECBE2 /* hexapod.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = hexapod.py; sourceTree = "<group>"; };
+		05A6BC9815658B80002ECBE2 /* hexapodController.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = hexapodController.py; sourceTree = "<group>"; };
 		05BFD5EC15531B3400D38F23 /* DynamicControlDemo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DynamicControlDemo; sourceTree = BUILT_PRODUCTS_DIR; };
 		05BFD5F815531B6400D38F23 /* DynamicControlDemo.1 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.man; path = DynamicControlDemo.1; sourceTree = "<group>"; };
 		05BFD5F915531B6400D38F23 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -1181,6 +1183,7 @@
 		050764F215530DD000DEEF87 /* AllBulletDemos */ = {
 			isa = PBXGroup;
 			children = (
+				05A6BC9615658B80002ECBE2 /* hexapodcontroller */,
 				05308F851561959F009F7C08 /* ConstraintDemo */,
 				053AC448155B28BC00B8EC11 /* hexapod */,
 				05A1CAEC155AE6B300699658 /* SoftDemo */,
@@ -1626,6 +1629,16 @@
 			name = SoftDemo;
 			path = ../SoftDemo;
 			sourceTree = "<group>";
+		};
+		05A6BC9615658B80002ECBE2 /* hexapodcontroller */ = {
+			isa = PBXGroup;
+			children = (
+				05A6BC9715658B80002ECBE2 /* hexapod.py */,
+				05A6BC9815658B80002ECBE2 /* hexapodController.py */,
+			);
+			name = hexapodcontroller;
+			path = hexapod/hexapodcontroller;
+			sourceTree = SOURCE_ROOT;
 		};
 		05BFD5F615531B6400D38F23 /* DynamicControlDemo */ = {
 			isa = PBXGroup;

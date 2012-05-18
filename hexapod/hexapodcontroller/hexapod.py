@@ -1,7 +1,26 @@
 #!/usr/bin/env python
-
 import zmq
+import sys
 from ctypes import *
+
+
+NUMLEGS = 6
+
+class HpodCtrlParams(Structure):
+
+    _fields_ = [("kneeAngles", c_float*NUMLEGS),
+		("hipAnglesX", c_float*NUMLEGS),
+		("hipAnglesY", c_float*NUMLEGS),
+		("hipStrength", c_float),
+		("kneeStrength", c_float),
+		("dtKnee", c_float),
+		("dtHip", c_float)]
+
+
+    def toString(self):
+        return buffer(self)[:]
+
+
 
 class HexapodException(Exception):
     pass
@@ -13,7 +32,7 @@ class Joint(object):
     pass
 
 class Knee(Joint):
-    def __init__(self,angle):
+    def __init__(self,angle=0):
         self.angle = angle
     
     def _set_angle(self,angle):
@@ -45,12 +64,12 @@ class BodyPart(HexapodObject):
     pass
 
 class Leg(BodyPart):
-    FRONTLEFT = 0
-    FRONTRIGHT = 1
-    CENTERLEFT = 2
-    CENTERRIGHT = 3
-    REARLEFT = 4
-    REARRIGHT = 5
+    FRONTLEFT = "FRONT LEFT"
+    FRONTRIGHT = "FRONT RIGHT"
+    CENTERLEFT = "CENTER LEFT"
+    CENTERRIGHT = "CENTER RIGHT"
+    REARLEFT = "REAR LEFT"
+    REARRIGHT = "REAR RIGHT"
     POS = (FRONTLEFT,FRONTRIGHT,
             CENTERLEFT,CENTERRIGHT,
             REARLEFT,REARRIGHT)
@@ -62,10 +81,14 @@ class Leg(BodyPart):
             self.pos = pos
         else:
             raise HexapodException("Invalid Leg Choice")
+    def __repr__(self):
+        return "Leg('%s')" % self.pos
 
 class Thorax(BodyPart):
     def __init__(self):
         pass
+    def __repr__(self):
+        return "Thorax(%d)" % id(self) 
 
 class Hexapod(HexapodObject):
     
@@ -92,4 +115,49 @@ class Hexapod(HexapodObject):
                     self.rightCenterLeg,
                     self.leftRearLeg,
                     self.rightRearLeg)
+        
+        self.kneeStrength = 0
+        self.hipStrength = 0
+        self.dtHip = 0
+        self.dtKnee = 0
+        self.params = HpodCtrlParams()
+        
+        
+    def getParamString(self):
+
+        self.params.kneeAngles[0] = self.legs[0].knee.angle 
+        self.params.kneeAngles[1] = self.legs[1].knee.angle
+        self.params.kneeAngles[2] = self.legs[2].knee.angle
+        self.params.kneeAngles[3] = self.legs[3].knee.angle
+        self.params.kneeAngles[4] = self.legs[4].knee.angle
+        self.params.kneeAngles[5] = self.legs[5].knee.angle  
+        
+        self.params.hipAnglesX[0] = self.legs[0].hip.xangle 
+        self.params.hipAnglesX[1] = self.legs[1].hip.xangle 
+        self.params.hipAnglesX[2] = self.legs[2].hip.xangle 
+        self.params.hipAnglesX[3] = self.legs[3].hip.xangle 
+        self.params.hipAnglesX[4] = self.legs[4].hip.xangle 
+        self.params.hipAnglesX[5] = self.legs[5].hip.xangle 
+
+ 
+        self.params.hipAnglesY[0] = self.legs[0].hip.yangle 
+        self.params.hipAnglesY[1] = self.legs[1].hip.yangle 
+        self.params.hipAnglesY[2] = self.legs[2].hip.yangle 
+        self.params.hipAnglesY[3] = self.legs[3].hip.yangle 
+        self.params.hipAnglesY[4] = self.legs[4].hip.yangle 
+        self.params.hipAnglesY[5] = self.legs[5].hip.yangle 
+
+        self.params.kneeStrength = self.kneeStrength
+        self.params.hipStrength = self.hipStrength
+
+        self.params.dtKnee = self.dtKnee
+        self.params.dtHip = self.dtHip
+
+        return self.params.toString()
+
+
+    def __repr__(self):
+        return "Hexapod(%d)" % id(self)
+
+
 
