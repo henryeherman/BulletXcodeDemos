@@ -70,6 +70,14 @@ class Thorax(BodyPart):
 class Hexapod(HexapodObject):
     
     def __init__(self):
+        
+        # zmq context server
+        context = zmq.Context()
+        #  Socket to talk to server
+        socket = context.socket(zmq.REQ)
+        socket.connect ("tcp://localhost:5555")
+        
+        # Setup Hexapod body parts
         self.thorax = Thorax()
         self.leftFrontLeg = Leg(Leg.FRONTLEFT)
         self.rightFrontLeg = Leg(Leg.FRONTRIGHT)

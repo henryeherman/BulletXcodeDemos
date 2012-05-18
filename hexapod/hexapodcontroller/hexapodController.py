@@ -3,7 +3,6 @@
 #   Connects REQ socket to tcp://localhost:5555
 #
 import zmq
-import msgpack
 from ctypes import *
 
 NUMLEGS = 6

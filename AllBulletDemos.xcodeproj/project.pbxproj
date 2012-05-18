@@ -649,6 +649,8 @@
 		05076566155316EE00DEEF87 /* Win32DemoApplication.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Win32DemoApplication.cpp; sourceTree = "<group>"; };
 		05076567155316EE00DEEF87 /* Win32DemoApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Win32DemoApplication.h; sourceTree = "<group>"; };
 		050765791553172400DEEF87 /* BasicDemo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BasicDemo; sourceTree = BUILT_PRODUCTS_DIR; };
+		051485501566601E00835CD4 /* hexapod.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = hexapod.py; path = hexapodcontroller/hexapod.py; sourceTree = "<group>"; };
+		051485511566602600835CD4 /* hexapodController.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = hexapodController.py; path = hexapodcontroller/hexapodController.py; sourceTree = "<group>"; };
 		051CA9E7155B361A00955732 /* Hexapod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Hexapod.cpp; sourceTree = "<group>"; };
 		051CA9E8155B361A00955732 /* Hexapod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hexapod.h; sourceTree = "<group>"; };
 		051CA9EA155B36F000955732 /* HexapodSimulation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HexapodSimulation.cpp; sourceTree = "<group>"; };
@@ -1300,6 +1302,8 @@
 		053AC448155B28BC00B8EC11 /* hexapod */ = {
 			isa = PBXGroup;
 			children = (
+				051485501566601E00835CD4 /* hexapod.py */,
+				051485511566602600835CD4 /* hexapodController.py */,
 				051CA9EA155B36F000955732 /* HexapodSimulation.cpp */,
 				051CA9EB155B36F000955732 /* HexapodSimulation.h */,
 				051CA9E7155B361A00955732 /* Hexapod.cpp */,
