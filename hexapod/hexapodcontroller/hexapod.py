@@ -95,10 +95,10 @@ class Hexapod(HexapodObject):
     def __init__(self):
         
         # zmq context server
-        context = zmq.Context()
+        self.context = zmq.Context()
         #  Socket to talk to server
-        socket = context.socket(zmq.REQ)
-        socket.connect ("tcp://localhost:5555")
+        self.socket = self.context.socket(zmq.REQ)
+        self.socket.connect ("tcp://localhost:5555")
         
         # Setup Hexapod body parts
         self.thorax = Thorax()
@@ -155,9 +155,12 @@ class Hexapod(HexapodObject):
 
         return self.params.toString()
 
-
+    def send(self):
+        self.socket.send(self.send_string)
+        message = self.socket.recv()
+        
     def __repr__(self):
         return "Hexapod(%d)" % id(self)
 
-
+    send_string = property(getParamString)
 
