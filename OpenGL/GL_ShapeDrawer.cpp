@@ -19,7 +19,6 @@ subject to the following restrictions:
 #include "GLDebugFont.h"
 
 
-
 #include "GlutStuff.h"
 #include "GL_ShapeDrawer.h"
 #include <BulletCollision/CollisionShapes/btPolyhedralConvexShape.h>

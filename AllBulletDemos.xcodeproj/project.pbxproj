@@ -310,6 +310,7 @@
 		05A1CB04155AE99B00699658 /* Hexapod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05A1CB02155AE99B00699658 /* Hexapod.cpp */; };
 		05A6BC511563ECF3002ECBE2 /* Leg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05A6BC501563ECF3002ECBE2 /* Leg.cpp */; };
 		05A6BC531563EE1E002ECBE2 /* BodyPart.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05A6BC521563EE1E002ECBE2 /* BodyPart.cpp */; };
+		05A6BC95156582A8002ECBE2 /* libzmq.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 05A6BC94156582A8002ECBE2 /* libzmq.dylib */; };
 		05BFD5D81553197200D38F23 /* DemoApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0507654E155316EE00DEEF87 /* DemoApplication.cpp */; };
 		05BFD5D91553197500D38F23 /* GL_DialogDynamicsWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05076550155316EE00DEEF87 /* GL_DialogDynamicsWorld.cpp */; };
 		05BFD5DA155319A300D38F23 /* GL_DialogWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05076552155316EE00DEEF87 /* GL_DialogWindow.cpp */; };
@@ -394,6 +395,7 @@
 		05BFD6961553498400D38F23 /* BulletDynamics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050764FE1553102600DEEF87 /* BulletDynamics.framework */; };
 		05BFD6971553498400D38F23 /* BulletMultiThreaded.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050764FF1553102600DEEF87 /* BulletMultiThreaded.framework */; };
 		05BFD6981553498400D38F23 /* BulletSoftBody.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 050765001553102600DEEF87 /* BulletSoftBody.framework */; };
+		05E7E94515632A7B007CADE5 /* libzmq.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 05E7E94415632A7B007CADE5 /* libzmq.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -648,6 +650,8 @@
 		05076566155316EE00DEEF87 /* Win32DemoApplication.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Win32DemoApplication.cpp; sourceTree = "<group>"; };
 		05076567155316EE00DEEF87 /* Win32DemoApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Win32DemoApplication.h; sourceTree = "<group>"; };
 		050765791553172400DEEF87 /* BasicDemo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BasicDemo; sourceTree = BUILT_PRODUCTS_DIR; };
+		051485501566601E00835CD4 /* hexapod.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = hexapod.py; path = hexapodcontroller/hexapod.py; sourceTree = "<group>"; };
+		051485511566602600835CD4 /* hexapodController.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = hexapodController.py; path = hexapodcontroller/hexapodController.py; sourceTree = "<group>"; };
 		051CA9E7155B361A00955732 /* Hexapod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Hexapod.cpp; sourceTree = "<group>"; };
 		051CA9E8155B361A00955732 /* Hexapod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hexapod.h; sourceTree = "<group>"; };
 		051CA9EA155B36F000955732 /* HexapodSimulation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HexapodSimulation.cpp; sourceTree = "<group>"; };
@@ -833,6 +837,9 @@
 		05A6BC4F1563EBA1002ECBE2 /* BodyPart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BodyPart.h; sourceTree = "<group>"; };
 		05A6BC501563ECF3002ECBE2 /* Leg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Leg.cpp; sourceTree = "<group>"; };
 		05A6BC521563EE1E002ECBE2 /* BodyPart.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BodyPart.cpp; sourceTree = "<group>"; };
+		05A6BC94156582A8002ECBE2 /* libzmq.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libzmq.dylib; path = usr/local/lib/libzmq.dylib; sourceTree = SDKROOT; };
+		05A6BC9715658B80002ECBE2 /* hexapod.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = hexapod.py; sourceTree = "<group>"; };
+		05A6BC9815658B80002ECBE2 /* hexapodController.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = hexapodController.py; sourceTree = "<group>"; };
 		05BFD5EC15531B3400D38F23 /* DynamicControlDemo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DynamicControlDemo; sourceTree = BUILT_PRODUCTS_DIR; };
 		05BFD5F815531B6400D38F23 /* DynamicControlDemo.1 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.man; path = DynamicControlDemo.1; sourceTree = "<group>"; };
 		05BFD5F915531B6400D38F23 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -855,6 +862,7 @@
 		05BFD688155348D600D38F23 /* BulletDinoDemo.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = BulletDinoDemo.1; sourceTree = "<group>"; };
 		05BFD68D155348F700D38F23 /* BulletDino.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = BulletDino.c; sourceTree = "<group>"; };
 		05BFD69915534A9400D38F23 /* Bullet-C-Api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Bullet-C-Api.h"; sourceTree = "<group>"; };
+		05E7E94415632A7B007CADE5 /* libzmq.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libzmq.dylib; path = usr/local/lib/libzmq.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -917,6 +925,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05A6BC95156582A8002ECBE2 /* libzmq.dylib in Frameworks */,
+
 				051CA9ED155B370800955732 /* LinearMath.framework in Frameworks */,
 				051CA9EE155B370800955732 /* OpenGL.framework in Frameworks */,
 				051CA9EF155B370800955732 /* GLUT.framework in Frameworks */,
@@ -1136,6 +1146,7 @@
 		050764E415530DCF00DEEF87 = {
 			isa = PBXGroup;
 			children = (
+				05E7E94415632A7B007CADE5 /* libzmq.dylib */,
 				051CA9F4155B370800955732 /* AllBulletDemos.xcodeproj */,
 				053AEBD3155410E600CB0698 /* Serialize */,
 				0507654B155316EE00DEEF87 /* OpenGL */,
@@ -1175,6 +1186,7 @@
 		050764F215530DD000DEEF87 /* AllBulletDemos */ = {
 			isa = PBXGroup;
 			children = (
+				05A6BC9615658B80002ECBE2 /* hexapodcontroller */,
 				05308F851561959F009F7C08 /* ConstraintDemo */,
 				053AC448155B28BC00B8EC11 /* hexapod */,
 				05A1CAEC155AE6B300699658 /* SoftDemo */,
@@ -1296,6 +1308,8 @@
 		053AC448155B28BC00B8EC11 /* hexapod */ = {
 			isa = PBXGroup;
 			children = (
+				051485501566601E00835CD4 /* hexapod.py */,
+				051485511566602600835CD4 /* hexapodController.py */,
 				051CA9EA155B36F000955732 /* HexapodSimulation.cpp */,
 				051CA9EB155B36F000955732 /* HexapodSimulation.h */,
 				051CA9E7155B361A00955732 /* Hexapod.cpp */,
@@ -1618,6 +1632,16 @@
 			name = SoftDemo;
 			path = ../SoftDemo;
 			sourceTree = "<group>";
+		};
+		05A6BC9615658B80002ECBE2 /* hexapodcontroller */ = {
+			isa = PBXGroup;
+			children = (
+				05A6BC9715658B80002ECBE2 /* hexapod.py */,
+				05A6BC9815658B80002ECBE2 /* hexapodController.py */,
+			);
+			name = hexapodcontroller;
+			path = hexapod/hexapodcontroller;
+			sourceTree = SOURCE_ROOT;
 		};
 		05BFD5F615531B6400D38F23 /* DynamicControlDemo */ = {
 			isa = PBXGroup;
@@ -2554,10 +2578,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				"LIBRARY_SEARCH_PATHS[arch=*]" = /usr/local/lib;
-				"OTHER_LDFLAGS[arch=*]" = (
-					"-lzmq",
-					"-lmsgpack",
-				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -2566,10 +2586,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				"LIBRARY_SEARCH_PATHS[arch=*]" = /usr/local/lib;
-				"OTHER_LDFLAGS[arch=*]" = (
-					"-lzmq",
-					"-lmsgpack",
-				);
+				"OTHER_LDFLAGS[arch=*]" = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
