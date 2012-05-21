@@ -67,7 +67,7 @@ void debugSimCtrl(const HpodSimCtrl ctrl) {
 
 HexapodSimulationDemo::HexapodSimulationDemo(): zcontext(1), zsocket(zcontext, ZMQ_REP) {    
     zsocket.bind("tcp://*:5555");
-    
+    state = RUN;
 }
 
 HexapodSimulationDemo::~HexapodSimulationDemo() {
@@ -229,21 +229,93 @@ void HexapodSimulationDemo::keyboardCallback(unsigned char key, int x, int y)
 
 }
 
+void HexapodSimulationDemo::processCommand(HpodSimCtrl cmd,HpodCtrlParams *params,unsigned long size) {
+    switch (cmd) {
+        case SIMPAUSE:
+#ifdef DEBUG_CMD
+            cout << "CMD:PAUSE"<<endl;
+#endif
+            state = PAUSE;
+            setIdle(true);
+            break;
+        case SIMCONTINUE:
+#ifdef DEBUG_CMD
+            cout << "CMD:CONT"<<endl;
+#endif
+            setIdle(false);
+            state=RUN;
+            break;
+        case SIMSTART:
+#ifdef DEBUG_CMD
+            cout << "CMD:START"<<endl;
+#endif
+            clientResetScene();
+            setIdle(false);
+            state=RUN;
+            break;
+        case SIMRESET:
+#ifdef DEBUG_CMD
+            cout << "CMD:RESET"<<endl;
+#endif
+            clientResetScene();
+            setIdle(true);
+            state=RUN;
+            break;
+        case SIMLOAD:
+#ifdef DEBUG_CMD
+            cout << "CMD:LOAD"<<endl;
+#endif
+            clientResetScene();
+            setIdle(true);
+            for (int r=0; r<m_hexapods.size(); r++)
+            {
+                Hexapod *hpod = m_hexapods[r];
+                hpod->clearCtrlParams();
+                hpod->loadCtrlParams(params, size);
+            }
+            state = PAUSE;
+        case SIMLOADIMM:
+#ifdef DEBUG_CMD
+            cout << "CMD:LOADIMM"<<endl;
+#endif
+            for (int r=0; r<m_hexapods.size(); r++)
+            {
+                Hexapod *hpod = m_hexapods[r];
+                hpod->setCtrlParams(*params);            
+            }
+            break;
+        case SIMRUNEXP:
+#ifdef DEBUG_CMD
+            cout << "CMD:RUNEXP"<<endl;
+#endif
+            setIdle(false);
+            for (int r=0; r<m_hexapods.size(); r++)
+            {
+                Hexapod *hpod = m_hexapods[r];
+                hpod->step();            
+            }
+            state=RUN;
+            break;
+        case SIMRESETEXP:
+#ifdef DEBUG_CMD
+            cout << "CMD:RESEREXP"<<endl;
+#endif
+            setIdle(true);
+            clientResetScene();
+            for (int r=0; r<m_hexapods.size(); r++)
+            {
+                Hexapod *hpod = m_hexapods[r];
+                hpod->reset();            
+            }
+        default:
+            break;
+    }
+}
 
 
 void HexapodSimulationDemo::setMotorTargets(btScalar deltaTime)
 {
     
-	float ms = deltaTime*1000000.;
-	float minFPS = 1000000.f/60.f;
-	if (ms > minFPS)
-		ms = minFPS;
-    
-	m_Time += ms;
-    
-	//
-	// set per-frame sinusoidal position targets using angular motor (hacky?)
-	//	
     HpodSimCtrl ctrlParam;
     HpodCtrlParams *params;
     
@@ -262,7 +334,7 @@ void HexapodSimulationDemo::setMotorTargets(btScalar deltaTime)
 #ifdef DEBUG_SIM_CTRL_PARAM
         debugSimCtrl(ctrlParam);
 #endif
-
+        
         request.rebuild();
         try {
             zsocket.recv(&request);
@@ -272,20 +344,14 @@ void HexapodSimulationDemo::setMotorTargets(btScalar deltaTime)
         
         params = (HpodCtrlParams *) request.data();
         
-        
         unsigned long numpkts= request.size()/sizeof(HpodCtrlParams);
+#ifdef DEBUG_ZMQ_COM
         cout << "Num Pkts:" << numpkts << endl;
+#endif
         
 #ifdef DEBUG_HPOD_CTRL_PARAMS
         debugCtrlParams(*params);
 #endif
-        for (int r=0; r<m_hexapods.size(); r++)
-        {
-            
-            Hexapod *hpod = m_hexapods[r];
-            hpod->setCtrlParams(*params);
-        
-        }
         
         // Send reply back
         try
@@ -298,8 +364,24 @@ void HexapodSimulationDemo::setMotorTargets(btScalar deltaTime)
         {
             cout << "ZMQ Reply 2:" << e.what() << endl;
         }
-    }
-    else {
+    
+        
+        processCommand(ctrlParam, params, numpkts);
+        
+        
+        /*
+        for (int r=0; r<m_hexapods.size(); r++)
+        {
+            
+            Hexapod *hpod = m_hexapods[r];
+            hpod->clearCtrlParams();
+            hpod->loadCtrlParams(params, numpkts);
+            //hpod->setCtrlParams(*params);
+        }
+        */
+    
+        
+    } else {
         // continue
     }
 	

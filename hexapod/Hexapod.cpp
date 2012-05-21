@@ -59,7 +59,8 @@ void debugCtrlParams(HpodCtrlParams params) {
 Hexapod::Hexapod (btDynamicsWorld* ownerWorld, const btVector3& positionOffset,
 	btScalar scale_hexapod)	: m_ownerWorld (ownerWorld), BodyPart(ownerWorld)
 {
-  
+
+    param_idx = 0;
    
     
     btVector3 xaxis;
@@ -218,11 +219,22 @@ void Hexapod::setCtrlParams(const HpodCtrlParams params) {
 void Hexapod::getCtrlParams(HpodCtrlParams &params) {
     for(int i=0;i<LEG_COUNT;i++) {
         params.kneeAngles[i] = legs[i]->getKneeAngle();
-//        params.hipAngles[0][i] = legs[i]->getHipAngleA();
         params.hipAnglesX[i] = legs[i]->getHipAngleA();
         params.hipAnglesY[i] = legs[i]->getHipAngleB();
         //m_bodies[BODY_THORAX]->getWorldTransform();
     }
+}
+
+
+void Hexapod::loadCtrlParams(HpodCtrlParams *params, unsigned long size) {
+    for (int i=0;i<size;i++) {
+        m_ctrlParams.push_back(*(params+i));
+    }
+}
+
+
+void Hexapod::clearCtrlParams(){
+        m_ctrlParams.clear();    
 }
 
 void Hexapod::wake() {
@@ -231,6 +243,22 @@ void Hexapod::wake() {
         legs[i]->wake();
     } 
     
+}
+
+void Hexapod::step() {
+    if (m_ctrlParams.size() < 1) 
+        return;
+    
+    if (param_idx < m_ctrlParams.size()) {
+        
+        setCtrlParams(m_ctrlParams[param_idx]);
+        param_idx++;
+    }
+
+}
+
+void Hexapod::reset() {
+    param_idx = 0;
 }
 
 
