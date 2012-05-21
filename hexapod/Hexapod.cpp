@@ -206,8 +206,8 @@ Hexapod::Hexapod (btDynamicsWorld* ownerWorld, const btVector3& positionOffset,
 void Hexapod::setCtrlParams(const HpodCtrlParams params) {
 
     for(int i=0;i<LEG_COUNT;i++) {
-        legs[i]->setKneeTarget(params.kneeAngles[i], 0.01);
-        legs[i]->setHipTarget(params.hipAnglesX[i], params.hipAnglesY[i], 0.01);
+        legs[i]->setKneeTarget(params.kneeAngles[i], params.dtKnee);
+        legs[i]->setHipTarget(params.hipAnglesX[i], params.hipAnglesY[i], params.dtHip);
 //        legs[i]->setHipTarget(params.hipAngles[0][i], params.hipAngles[1][i], 0.01);
         legs[i]->setKneeMaxStrength(params.kneeStrength);
         legs[i]->setHipMaxStrength(params.hipStrength);
@@ -223,6 +223,14 @@ void Hexapod::getCtrlParams(HpodCtrlParams &params) {
         params.hipAnglesY[i] = legs[i]->getHipAngleB();
         //m_bodies[BODY_THORAX]->getWorldTransform();
     }
+}
+
+void Hexapod::wake() {
+    m_bodies[BODY_THORAX]->activate();
+    for(int i=0;i<LEG_COUNT;i++) {
+        legs[i]->wake();
+    } 
+    
 }
 
 

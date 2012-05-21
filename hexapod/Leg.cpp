@@ -40,6 +40,7 @@ Leg::Leg (Hexapod *hexapod, btDynamicsWorld* ownerWorld, const btTransform& offs
 	m_shapes[LEG_UPPER] = new btCapsuleShape(btScalar(scale_hexapod*UPPER_LEG_THICK), btScalar(scale_hexapod*UPPER_LEG_LENGTH));
 	m_shapes[LEG_LOWER] = new btCapsuleShape(btScalar(scale_hexapod*LOWER_LEG_THICK), btScalar(scale_hexapod*LOWER_LEG_LENGTH));
     
+    
 	// Setup all the rigid bodies
     
     btTransform transform;
@@ -52,14 +53,15 @@ Leg::Leg (Hexapod *hexapod, btDynamicsWorld* ownerWorld, const btTransform& offs
 	transform.setIdentity();
 	transform.setOrigin(btVector3(btScalar(0*scale_hexapod), btScalar((-1)*LOWER_LEG_LENGTH*scale_hexapod), btScalar(0.)));
 	m_bodies[LEG_LOWER] = localCreateRigidBody(btScalar(1.), globalFrame*transform, m_shapes[LEG_LOWER]);
-    
+
     
 	// Setup some damping on the m_bodies
 	for (int i = 0; i < LEG_COUNT; ++i)
 	{
 		m_bodies[i]->setDamping(0.05f, 0.85f);
 		m_bodies[i]->setDeactivationTime(0.8f);
-		m_bodies[i]->setSleepingThresholds(1.6f, 2.5f);
+		//m_bodies[i]->setSleepingThresholds(1.6f, 2.5f);
+        m_bodies[i]->setSleepingThresholds(0.0f, 0.0f);
         
 	}
     
@@ -132,12 +134,12 @@ Leg::Leg (Hexapod *hexapod, btDynamicsWorld* ownerWorld, const btTransform& offs
     
 }
 
-void Leg::setKneeTarget(const btQuaternion& targetAngleQ, btScalar dt=1000) {
+void Leg::setKneeTarget(const btQuaternion& targetAngleQ, btScalar dt) {
     knee->enableMotor(true);
     knee->setMotorTarget(targetAngleQ, dt);    
 }
 
-void Leg::setKneeTarget(const btScalar targetAngle, btScalar dt=1000) {
+void Leg::setKneeTarget(const btScalar targetAngle, btScalar dt) {
     knee->enableMotor(true);
     knee->setMotorTarget(targetAngle, dt);
 }
@@ -186,6 +188,10 @@ btScalar Leg::getHipAngleB(){
     return angleB;
 }
 
+void Leg::wake() {
+    m_bodies[LEG_UPPER]->activate();
+    m_bodies[LEG_LOWER]->activate();
+}
 
 Leg::~Leg()
 {
@@ -202,7 +208,6 @@ Leg::~Leg()
 	for (i = 0; i < LEG_COUNT; ++i)
 	{
 		m_ownerWorld->removeRigidBody(m_bodies[i]);
-        
 		delete m_bodies[i]->getMotionState();
         
 		delete m_bodies[i]; m_bodies[i] = 0;

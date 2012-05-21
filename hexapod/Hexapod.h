@@ -89,7 +89,7 @@ public:
 
     
     btRigidBody* body;
-    
+    void wake();
     void setCtrlParams(const HpodCtrlParams params);
     void getCtrlParams(HpodCtrlParams &params);
 

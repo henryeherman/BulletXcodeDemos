@@ -31,6 +31,21 @@ using namespace std;
 #include "LinearMath/btAlignedObjectArray.h"
 #include "Hexapod.h"
 
+#define SETBIT(x, b)   ((x) |= (b))
+#define CLEARBIT(x, b) ((x) &= ~(b))
+#define TESTBIT(x, b)  ((x) & (b))
+
+#define SIMPAUSE       0
+#define SIMRESET       1
+#define SIMCONTINUE    2
+#define SIMSTART       3
+
+
+typedef unsigned int HpodSimCtrl;
+
+void debugSimCtrl(HpodSimCtrl);
+
+
 class HexapodSimulationDemo : public PlatformDemoApplication
 {
 

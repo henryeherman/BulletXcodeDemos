@@ -42,6 +42,27 @@ using namespace std;
 GLDebugDrawer debugDrawer;
 
 
+void debugSimCtrl(const HpodSimCtrl ctrl) {
+    switch (ctrl) {
+        case SIMPAUSE:
+            cout << "Pause" << endl;
+            break;
+        case SIMRESET:
+            cout << "Reset" << endl;
+            break;
+        case SIMCONTINUE:
+            cout << "Continue" << endl;
+            break;
+        case SIMSTART:
+            cout << "Start" << endl;
+            break;
+        default:
+            cout << "Unknown Command" << endl;
+            break;
+    }
+}
+
+
 HexapodSimulationDemo::HexapodSimulationDemo(): zcontext(1), zsocket(zcontext, ZMQ_REP) {    
     zsocket.bind("tcp://*:5555");
     
@@ -221,14 +242,48 @@ void HexapodSimulationDemo::setMotorTargets(btScalar deltaTime)
 	//
 	// set per-frame sinusoidal position targets using angular motor (hacky?)
 	//	
-
+    HpodSimCtrl ctrlParam;
+    HpodCtrlParams *params;
+    
     zmq::message_t request;
-    if(zsocket.recv(&request, ZMQ_NOBLOCK)) {
-        HpodCtrlParams *params = (HpodCtrlParams *) request.data();
+    request.rebuild();
+    bool result = false;
+    try {
+        result = zsocket.recv(&request, ZMQ_NOBLOCK);
+    } catch (zmq::error_t e) {
+        cout << "ZMQ First Pkt:" << e.what() << endl;
+    }
+    
+    if(result) {
+        /*
+        try
+        {
+            zmq::message_t reply(3);
+            memcpy((void *) reply.data (), "ACK", 3);
+            zsocket.send(reply);
+        }
+        catch (zmq::error_t e)
+        {
+            cout << "ZMQ Reply 1:" << e.what() << endl;
+        }
+         */
+        ctrlParam = *((HpodSimCtrl *) request.data());
+        debugSimCtrl(ctrlParam);
         
-        std::cout << params->hipStrength << std::endl;
+        request.rebuild();
+        try {
+            zsocket.recv(&request);
+        } catch (zmq::error_t e) {
+            cout << "ZMQ Second Pkt:" << e.what() << endl;
+        }
         
-        debugCtrlParams(*params);
+        params = (HpodCtrlParams *) request.data();
+        
+        
+        unsigned long numpkts= request.size()/sizeof(HpodCtrlParams);
+        cout << "Num Pkts:" << numpkts << endl;
+        
+        //debugCtrlParams(*params);
         
         for (int r=0; r<m_hexapods.size(); r++)
         {
@@ -239,9 +294,16 @@ void HexapodSimulationDemo::setMotorTargets(btScalar deltaTime)
         }
         
         // Send reply back
-        zmq::message_t reply(3);
-        memcpy((void *) reply.data (), "ACK", 3);
-        zsocket.send(reply);
+        try
+        {
+         zmq::message_t reply(3);
+         memcpy((void *) reply.data (), "ACK", 3);
+         zsocket.send(reply);
+        }
+        catch (zmq::error_t e)
+        {
+            cout << "ZMQ Reply 2:" << e.what() << endl;
+        }
     }
     else {
         // continue
