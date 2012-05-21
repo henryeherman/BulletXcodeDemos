@@ -43,23 +43,25 @@ GLDebugDrawer debugDrawer;
 
 
 void debugSimCtrl(const HpodSimCtrl ctrl) {
+    cout << "DEBUG:SIMSTAT:";
     switch (ctrl) {
         case SIMPAUSE:
-            cout << "Pause" << endl;
+            cout << "PAUSECMD";
             break;
         case SIMRESET:
-            cout << "Reset" << endl;
+            cout << "RESETCMD";
             break;
         case SIMCONTINUE:
-            cout << "Continue" << endl;
+            cout << "CONTCMD";
             break;
         case SIMSTART:
-            cout << "Start" << endl;
+            cout << "STARTCMD";
             break;
         default:
-            cout << "Unknown Command" << endl;
+            cout << "UNKNCMD";
             break;
     }
+    cout << endl;
 }
 
 
@@ -251,30 +253,21 @@ void HexapodSimulationDemo::setMotorTargets(btScalar deltaTime)
     try {
         result = zsocket.recv(&request, ZMQ_NOBLOCK);
     } catch (zmq::error_t e) {
-        cout << "ZMQ First Pkt:" << e.what() << endl;
+        cout << "ZMQ Pkt #1:" << e.what() << endl;
     }
     
     if(result) {
-        /*
-        try
-        {
-            zmq::message_t reply(3);
-            memcpy((void *) reply.data (), "ACK", 3);
-            zsocket.send(reply);
-        }
-        catch (zmq::error_t e)
-        {
-            cout << "ZMQ Reply 1:" << e.what() << endl;
-        }
-         */
         ctrlParam = *((HpodSimCtrl *) request.data());
+
+#ifdef DEBUG_SIM_CTRL_PARAM
         debugSimCtrl(ctrlParam);
-        
+#endif
+
         request.rebuild();
         try {
             zsocket.recv(&request);
         } catch (zmq::error_t e) {
-            cout << "ZMQ Second Pkt:" << e.what() << endl;
+            cout << "ZMQ Pkt #2:" << e.what() << endl;
         }
         
         params = (HpodCtrlParams *) request.data();
@@ -283,8 +276,9 @@ void HexapodSimulationDemo::setMotorTargets(btScalar deltaTime)
         unsigned long numpkts= request.size()/sizeof(HpodCtrlParams);
         cout << "Num Pkts:" << numpkts << endl;
         
-        //debugCtrlParams(*params);
-        
+#ifdef DEBUG_HPOD_CTRL_PARAMS
+        debugCtrlParams(*params);
+#endif
         for (int r=0; r<m_hexapods.size(); r++)
         {
             

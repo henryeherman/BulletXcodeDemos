@@ -41,6 +41,9 @@ using namespace std;
 #define SIMSTART       3
 
 
+//#define DEBUG_HPOD_CTRL_PARAMS
+//#define DEBUG_SIM_CTRL_PARAM
+
 typedef unsigned int HpodSimCtrl;
 
 void debugSimCtrl(HpodSimCtrl);
