@@ -31,6 +31,30 @@ using namespace std;
 #include "LinearMath/btAlignedObjectArray.h"
 #include "Hexapod.h"
 
+#define SETBIT(x, b)   ((x) |= (b))
+#define CLEARBIT(x, b) ((x) &= ~(b))
+#define TESTBIT(x, b)  ((x) & (b))
+
+#define SIMPAUSE       0
+#define SIMRESET       1
+#define SIMCONTINUE    2
+#define SIMSTART       3
+#define SIMLOAD        4
+#define SIMLOADIMM     5
+#define SIMRUNEXP      6
+#define SIMRESETEXP    7
+
+#define DEBUG_CMD
+//#define DEBUG_HPOD_CTRL_PARAMS
+//#define DEBUG_SIM_CTRL_PARAM
+//#define DEBUG_ZMQ_COM
+
+typedef unsigned int HpodSimCtrl;
+
+void debugSimCtrl(HpodSimCtrl);
+
+
+
 class HexapodSimulationDemo : public PlatformDemoApplication
 {
 
@@ -40,6 +64,14 @@ class HexapodSimulationDemo : public PlatformDemoApplication
 	float m_Time;
 	float m_fCyclePeriod; // in milliseconds
 	float m_fMuscleStrength;
+    
+    enum
+    {  
+        RUN=0,
+        PAUSE,
+        LOAD,
+        RESET
+    } state;
     
 public:
     
@@ -59,6 +91,7 @@ public:
     
    	void setMotorTargets(btVector3 transition);
     
+    void processCommand(HpodSimCtrl cmd,HpodCtrlParams *params, unsigned long size);
     
 private:
     

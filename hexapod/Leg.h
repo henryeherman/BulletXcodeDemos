@@ -75,6 +75,7 @@ public:
     void setHipMaxStrength(const btScalar strength);
     btScalar getHipAngleA();
     btScalar getHipAngleB();
+    void wake();
     
 };
 

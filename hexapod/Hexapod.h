@@ -25,16 +25,16 @@
 
 //#define FREEZE 1
 
-typedef struct HpodCtrlParams { 
-    btScalar kneeAngles[NUMLEGS];
-    btScalar hipAnglesX[NUMLEGS];
-    btScalar hipAnglesY[NUMLEGS];
-    btScalar hipStrength;
-    btScalar kneeStrength;
-    btScalar dtKnee;
-    btScalar dtHip;
-
-} HpodCtrlParams;
+class HpodCtrlParams {
+    public:
+        btScalar kneeAngles[NUMLEGS];
+        btScalar hipAnglesX[NUMLEGS];
+        btScalar hipAnglesY[NUMLEGS];
+        btScalar hipStrength;
+        btScalar kneeStrength;
+        btScalar dtKnee;
+        btScalar dtHip;
+};
 
 void debugCtrlParams(HpodCtrlParams params);
 
@@ -72,6 +72,8 @@ class Hexapod : public BodyPart
     btRigidBody* m_bodies[BODYPART_COUNT];
 	
 	btTypedConstraint* m_joints[JOINT_COUNT];
+    
+    unsigned int param_idx;
 
 public:
 	Hexapod (btDynamicsWorld* ownerWorld,
@@ -86,10 +88,16 @@ public:
     btAlignedObjectArray<class Leg*> m_legs;
     btAlignedObjectArray<class Leg*> m_leftLegs;
     btAlignedObjectArray<class Leg*> m_rightlegs;
-
+    btAlignedObjectArray<HpodCtrlParams> m_ctrlParams;
+    
+    void loadCtrlParams(HpodCtrlParams *params, unsigned long size);
+    void clearCtrlParams();
+    
+    void step();
+    void reset();
     
     btRigidBody* body;
-    
+    void wake();
     void setCtrlParams(const HpodCtrlParams params);
     void getCtrlParams(HpodCtrlParams &params);
 

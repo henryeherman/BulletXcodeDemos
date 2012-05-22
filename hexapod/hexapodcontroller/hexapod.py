@@ -6,6 +6,13 @@ from ctypes import *
 
 NUMLEGS = 6
 
+class HpodSimCtrlParam(c_uint):
+    PAUSE=0
+    RESET=1
+    CONTINUE=2
+    START=3
+    OPTS = (PAUSE, RESET, CONTINUE, START)
+
 class HpodCtrlParams(Structure):
 
     _fields_ = [("kneeAngles", c_float*NUMLEGS),
@@ -19,6 +26,7 @@ class HpodCtrlParams(Structure):
 
     def toString(self):
         return buffer(self)[:]
+                       
 
 
 
@@ -122,8 +130,17 @@ class Hexapod(HexapodObject):
         self.dtKnee = 0
         self.params = HpodCtrlParams()
         
+        self._paramsArray = []
+        self.setControl()
+    
+    def setControl(self, ctrl=None):
+        if ctrl in HpodSimCtrlParam.OPTS:
+            self.msg = [buffer(HpodSimCtrlParam(ctrl))[:]]
+            return
+        self.msg = [buffer(HpodSimCtrlParam(HpodSimCtrlParam.CONTINUE))[:]]
         
-    def getParamString(self):
+    
+    def loadParam(self):
 
         self.params.kneeAngles[0] = self.legs[0].knee.angle 
         self.params.kneeAngles[1] = self.legs[1].knee.angle
@@ -152,15 +169,43 @@ class Hexapod(HexapodObject):
 
         self.params.dtKnee = self.dtKnee
         self.params.dtHip = self.dtHip
+        
+    def clearParamArray(self):
+        self._paramsArray =[]
 
+    def getParamString(self):
+        self.loadParam()
         return self.params.toString()
 
     def send(self):
-        self.socket.send(self.send_string)
+        self.msg.append(self.sendString)
+        self.socket.send_multipart(self.msg)
         message = self.socket.recv()
-        
-    def __repr__(self):
-        return "Hexapod(%d)" % id(self)
+        self.msg = []
+    
+    def sendArray(self):
+        self.msg.append(self.sendStringArray)
+        self.socket.send_multipart(self.msg)
+        message = self.socket.recv()
+        self.msg = []
 
-    send_string = property(getParamString)
+    def addParam(self):
+        self.loadParam()
+        self._paramsArray.append(self.params)
+    
+    def _getParamsArray(self):
+        self.m_HpodCtrlParams = HpodCtrlParams*len(self._paramsArray)
+        return self.m_HpodCtrlParams(*self._paramsArray)
+        
+    def _getParamsArrayString(self):
+        return buffer(self.paramsArray)[:]
+
+    paramsArray = property(_getParamsArray)
+    sendStringArray = property(_getParamsArrayString)
+    
+    def __repr__(self):
+        return "Hexapod(id='%d')" % id(self)
+
+    sendString = property(getParamString)
+
 
