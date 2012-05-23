@@ -47,7 +47,7 @@ using namespace std;
 #define DEBUG_CMD
 //#define DEBUG_HPOD_CTRL_PARAMS
 //#define DEBUG_SIM_CTRL_PARAM
-//#define DEBUG_ZMQ_COM
+#define DEBUG_ZMQ_COM
 
 typedef unsigned int HpodSimCtrl;
 
@@ -65,13 +65,25 @@ class HexapodSimulationDemo : public PlatformDemoApplication
 	float m_fCyclePeriod; // in milliseconds
 	float m_fMuscleStrength;
     
+    HpodSimCtrl ctrlParam;
+    HpodCtrlParams *params;
+    HpodCtrlParams immParams;
+    unsigned int param_count;
+    
     enum
     {  
         RUN=0,
         PAUSE,
         LOAD,
-        RESET
+        RESET,
+        RUNEXP,
+        RUNIMM,
+        START,
+        RESETEXP
     } state;
+    
+    bool isDirty;
+    
     
 public:
     
@@ -92,6 +104,10 @@ public:
    	void setMotorTargets(btVector3 transition);
     
     void processCommand(HpodSimCtrl cmd,HpodCtrlParams *params, unsigned long size);
+    
+    void zmqRecv();
+    
+    btAlignedObjectArray<HpodCtrlParams> m_ctrlParams;
     
 private:
     

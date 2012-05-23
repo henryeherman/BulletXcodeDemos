@@ -68,6 +68,7 @@ void debugSimCtrl(const HpodSimCtrl ctrl) {
 HexapodSimulationDemo::HexapodSimulationDemo(): zcontext(1), zsocket(zcontext, ZMQ_REP) {    
     zsocket.bind("tcp://*:5555");
     state = RUN;
+    isDirty=false;
 }
 
 HexapodSimulationDemo::~HexapodSimulationDemo() {
@@ -129,11 +130,63 @@ void HexapodSimulationDemo::initPhysics()
 void HexapodSimulationDemo::spawnHexapod(bool random)
 {
 	Hexapod* hexapod = new Hexapod (m_dynamicsWorld, btVector3 (0,2,1),5.f);
-	m_hexapods.push_back(hexapod);
-
-    
+	m_hexapods.push_back(hexapod);    
 }
 
+void HexapodSimulationDemo::zmqRecv() {
+    
+    zmq::message_t request;
+    request.rebuild();
+    bool result = false;
+    try {
+        result = zsocket.recv(&request, ZMQ_NOBLOCK);
+    } catch (zmq::error_t e) {
+        cout << "ZMQ Pkt #1:" << e.what() << endl;
+    }
+    
+    if(result) {
+        ctrlParam = *((HpodSimCtrl *) request.data());
+        
+#ifdef DEBUG_SIM_CTRL_PARAM
+        debugSimCtrl(ctrlParam);
+#endif
+        
+        request.rebuild();
+        try {
+            zsocket.recv(&request);
+        } catch (zmq::error_t e) {
+            cout << "ZMQ Pkt #2:" << e.what() << endl;
+        }
+        
+        params = (HpodCtrlParams *) request.data();
+        
+        param_count= (unsigned int)request.size()/sizeof(HpodCtrlParams);
+        
+        
+        
+#ifdef DEBUG_ZMQ_COM
+        cout << "Num Pkts:" << param_count << endl;
+#endif
+        
+#ifdef DEBUG_HPOD_CTRL_PARAMS
+        debugCtrlParams(*params);
+#endif
+        
+        // Send reply back
+        try
+        {
+            zmq::message_t reply(3);
+            memcpy((void *) reply.data (), "ACK", 3);
+            zsocket.send(reply);
+        }
+        catch (zmq::error_t e)
+        {
+            cout << "ZMQ Reply 1:" << e.what() << endl;
+        }
+        processCommand(ctrlParam, params, param_count);
+    }
+    
+}
 
 
 void HexapodSimulationDemo::setMotorTargets(btVector3 translation)
@@ -165,6 +218,9 @@ void HexapodSimulationDemo::setMotorTargets(btVector3 translation)
 
 void HexapodSimulationDemo::clientMoveAndDisplay()
 {
+    if (!isDirty) {
+        zmqRecv();
+    }
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
 	//simple dynamics world doesn't handle fixed-time-stepping
@@ -190,6 +246,9 @@ void HexapodSimulationDemo::clientMoveAndDisplay()
 
 void HexapodSimulationDemo::displayCallback()
 {
+    if (!isDirty) {
+        zmqRecv();
+    }
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	if (m_dynamicsWorld)
@@ -230,7 +289,9 @@ void HexapodSimulationDemo::keyboardCallback(unsigned char key, int x, int y)
 }
 
 void HexapodSimulationDemo::processCommand(HpodSimCtrl cmd,HpodCtrlParams *params,unsigned long size) {
+    isDirty=true;
     switch (cmd) {
+            
         case SIMPAUSE:
 #ifdef DEBUG_CMD
             cout << "CMD:PAUSE"<<endl;
@@ -238,6 +299,7 @@ void HexapodSimulationDemo::processCommand(HpodSimCtrl cmd,HpodCtrlParams *param
             state = PAUSE;
             setIdle(true);
             break;
+            
         case SIMCONTINUE:
 #ifdef DEBUG_CMD
             cout << "CMD:CONT"<<endl;
@@ -245,14 +307,20 @@ void HexapodSimulationDemo::processCommand(HpodSimCtrl cmd,HpodCtrlParams *param
             setIdle(false);
             state=RUN;
             break;
+            
         case SIMSTART:
 #ifdef DEBUG_CMD
             cout << "CMD:START"<<endl;
 #endif
-            clientResetScene();
+            if(state==START)
+                state=RUN;
+            else {
+                clientResetScene();
+                state=START;
+            }
             setIdle(false);
-            state=RUN;
             break;
+            
         case SIMRESET:
 #ifdef DEBUG_CMD
             cout << "CMD:RESET"<<endl;
@@ -261,52 +329,40 @@ void HexapodSimulationDemo::processCommand(HpodSimCtrl cmd,HpodCtrlParams *param
             setIdle(true);
             state=RUN;
             break;
+            
         case SIMLOAD:
 #ifdef DEBUG_CMD
             cout << "CMD:LOAD"<<endl;
-#endif
+#endif    
             clientResetScene();
             setIdle(true);
-            for (int r=0; r<m_hexapods.size(); r++)
-            {
-                Hexapod *hpod = m_hexapods[r];
-                hpod->clearCtrlParams();
-                hpod->loadCtrlParams(params, size);
-            }
-            state = PAUSE;
+            state = LOAD;
+            break;
+            
         case SIMLOADIMM:
 #ifdef DEBUG_CMD
             cout << "CMD:LOADIMM"<<endl;
 #endif
-            for (int r=0; r<m_hexapods.size(); r++)
-            {
-                Hexapod *hpod = m_hexapods[r];
-                hpod->setCtrlParams(*params);            
-            }
+            immParams = *params;
+            state=RUNIMM;
+            setIdle(false);
             break;
+            
         case SIMRUNEXP:
 #ifdef DEBUG_CMD
             cout << "CMD:RUNEXP"<<endl;
 #endif
             setIdle(false);
-            for (int r=0; r<m_hexapods.size(); r++)
-            {
-                Hexapod *hpod = m_hexapods[r];
-                hpod->step();            
-            }
-            state=RUN;
+            state=RUNEXP;
             break;
+            
         case SIMRESETEXP:
 #ifdef DEBUG_CMD
             cout << "CMD:RESEREXP"<<endl;
 #endif
-            setIdle(true);
             clientResetScene();
-            for (int r=0; r<m_hexapods.size(); r++)
-            {
-                Hexapod *hpod = m_hexapods[r];
-                hpod->reset();            
-            }
+            state=RESETEXP;
+            
         default:
             break;
     }
@@ -315,76 +371,50 @@ void HexapodSimulationDemo::processCommand(HpodSimCtrl cmd,HpodCtrlParams *param
 
 void HexapodSimulationDemo::setMotorTargets(btScalar deltaTime)
 {
-    
-    HpodSimCtrl ctrlParam;
-    HpodCtrlParams *params;
-    
-    zmq::message_t request;
-    request.rebuild();
-    bool result = false;
-    try {
-        result = zsocket.recv(&request, ZMQ_NOBLOCK);
-    } catch (zmq::error_t e) {
-        cout << "ZMQ Pkt #1:" << e.what() << endl;
-    }
-    
-    if(result) {
-        ctrlParam = *((HpodSimCtrl *) request.data());
-
-#ifdef DEBUG_SIM_CTRL_PARAM
-        debugSimCtrl(ctrlParam);
-#endif
-        
-        request.rebuild();
-        try {
-            zsocket.recv(&request);
-        } catch (zmq::error_t e) {
-            cout << "ZMQ Pkt #2:" << e.what() << endl;
-        }
-        
-        params = (HpodCtrlParams *) request.data();
-        
-        unsigned long numpkts= request.size()/sizeof(HpodCtrlParams);
-#ifdef DEBUG_ZMQ_COM
-        cout << "Num Pkts:" << numpkts << endl;
-#endif
-        
-#ifdef DEBUG_HPOD_CTRL_PARAMS
-        debugCtrlParams(*params);
-#endif
-        
-        // Send reply back
-        try
-        {
-         zmq::message_t reply(3);
-         memcpy((void *) reply.data (), "ACK", 3);
-         zsocket.send(reply);
-        }
-        catch (zmq::error_t e)
-        {
-            cout << "ZMQ Reply 2:" << e.what() << endl;
-        }
-    
-        
-        processCommand(ctrlParam, params, numpkts);
-        
-        
-        /*
-        for (int r=0; r<m_hexapods.size(); r++)
-        {
+    switch (state) {
+        case LOAD:
+            cout<<"In Load"<<endl;
+            for(int r=0; r<m_hexapods.size();r++)
+            {
+                Hexapod* hpod= m_hexapods[r];
+                hpod->loadCtrlParams(params, param_count);
+            }
+            break;
             
-            Hexapod *hpod = m_hexapods[r];
-            hpod->clearCtrlParams();
-            hpod->loadCtrlParams(params, numpkts);
-            //hpod->setCtrlParams(*params);
-        }
-        */
-    
-        
-    } else {
-        // continue
+        case RUNEXP:
+            for (int r=0; r<m_hexapods.size(); r++) {
+                Hexapod* hpod= m_hexapods[r];
+                hpod->step();
+            }
+            break;
+            
+        case RESETEXP:
+            for (int r=0; r<m_hexapods.size(); r++) {
+                Hexapod* hpod=m_hexapods[r];
+                hpod->reset();
+            }
+            break;
+            
+        case RUNIMM:
+            for (int r=0; r<m_hexapods.size(); r++) {
+                Hexapod* hpod=m_hexapods[r];
+                hpod->setCtrlParams(immParams);
+            }
+            break;
+            
+        case RUN:
+        default:
+            break;
     }
-	
+    isDirty=false;
+    /*
+    for (int r=0; r<m_hexapods.size(); r++)
+    {
+        Hexapod *hpod = m_hexapods[r];
+        hpod->reset();            
+    } 
+     */
+ //Set motor shiznit here	
 }
 
 

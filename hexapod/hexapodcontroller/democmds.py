@@ -69,17 +69,9 @@ pod.clearParamArray()
 time.sleep(5)
 
 
-try:
-    for x in xs[::1]: 
-            for i in np.arange(0,2,.1):
-                for leg in pod.legs:
-                    leg.knee.angle=x*2
-                    leg.hip.yangle=2*x-1
-                    leg.hip.xangle=2*x-1
-                pod.addParam()
-                pod.setControl(HpodSimCtrlParam.LOADIMM)
-                pod.sendArray()
-                pod.clearParamArray()
-except (KeyboardInterrupt,):
-    print "Exit Hexapod Client"
-    sys.exit(0)
+pod.setControl( HpodSimCtrlParam.CONTINUE)
+pod.addParam()
+pod.sendArray()
+pod.clearParamArray()
+
+print "Complete"
