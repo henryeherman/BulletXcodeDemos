@@ -3,6 +3,7 @@
 
 #include <unistd.h>
 #include <stdint.h>
+#include <vector>
 
 #include "LinearMath/btAlignedObjectArray.h"
 #include "BulletDynamics/btBulletDynamicsCommon.h"
@@ -88,7 +89,7 @@ public:
     btAlignedObjectArray<class Leg*> m_legs;
     btAlignedObjectArray<class Leg*> m_leftLegs;
     btAlignedObjectArray<class Leg*> m_rightlegs;
-    btAlignedObjectArray<HpodCtrlParams> m_ctrlParams;
+    std::vector<HpodCtrlParams> m_ctrlParams;
     
     void loadCtrlParams(HpodCtrlParams *params, unsigned long size);
     void clearCtrlParams();

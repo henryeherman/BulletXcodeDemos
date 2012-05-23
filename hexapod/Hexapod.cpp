@@ -57,11 +57,22 @@ void debugCtrlParams(HpodCtrlParams params) {
 //################## BEGIN HEXAPOD ######################//
 
 Hexapod::Hexapod (btDynamicsWorld* ownerWorld, const btVector3& positionOffset,
-	btScalar scale_hexapod)	: m_ownerWorld (ownerWorld), BodyPart(ownerWorld)
+	btScalar scale_hexapod)	: m_ownerWorld (ownerWorld), 
+                            BodyPart(ownerWorld),
+                            m_ctrlParams(),
+                            m_legs(),
+                            m_rightlegs(),
+                            m_shapes(),
+                            m_bodies(),
+                            m_joints(),
+                            m_leftLegs()
 {
-
+    
     param_idx = 0;
-   
+    HpodCtrlParams empty;
+    std::vector<HpodCtrlParams> m_ctrlParams;
+    m_ctrlParams.push_back(empty);
+    m_ctrlParams.clear();
     
     btVector3 xaxis;
     xaxis.setValue(btScalar(1.), btScalar(0.), btScalar(0.));
@@ -227,14 +238,20 @@ void Hexapod::getCtrlParams(HpodCtrlParams &params) {
 
 
 void Hexapod::loadCtrlParams(HpodCtrlParams *params, unsigned long size) {
+    unsigned int count = 0;
+    if (!m_ctrlParams.empty()) {
+        m_ctrlParams.clear();
+    }
     for (int i=0;i<size;i++) {
+        count++;
         m_ctrlParams.push_back(*(params+i));
     }
+    std::cout << "Size Added: " << m_ctrlParams.size() << std::endl;
 }
 
 
 void Hexapod::clearCtrlParams(){
-        m_ctrlParams.clear();    
+        m_ctrlParams.clear();
 }
 
 void Hexapod::wake() {
@@ -242,17 +259,29 @@ void Hexapod::wake() {
     for(int i=0;i<LEG_COUNT;i++) {
         legs[i]->wake();
     } 
-    
 }
 
 void Hexapod::step() {
+    //std::cout << "Array sz: " << m_ctrlParams.size() << std::endl;  
+    static  bool showComplete = true;
+    
+    if (param_idx==1) {
+        showComplete=true;
+    }
+    
     if (m_ctrlParams.size() < 1) 
         return;
     
     if (param_idx < m_ctrlParams.size()) {
-        
+        std::cout << "Stepping: "<< param_idx << std::endl;
         setCtrlParams(m_ctrlParams[param_idx]);
+        debugCtrlParams(m_ctrlParams[param_idx]);
         param_idx++;
+    } else {
+        if(showComplete) {
+            std::cout << "Complete" << std::endl;
+            showComplete=false;
+        }
     }
 
 }

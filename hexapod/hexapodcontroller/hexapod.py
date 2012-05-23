@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import copy
 import zmq
 import sys
 from ctypes import *
@@ -11,7 +12,15 @@ class HpodSimCtrlParam(c_uint):
     RESET=1
     CONTINUE=2
     START=3
-    OPTS = (PAUSE, RESET, CONTINUE, START)
+    LOAD=4
+    LOADIMM=5
+    RUNEXP=6
+    RESETEXP=7
+    OPTS = (PAUSE, RESET, 
+            CONTINUE, START,
+            LOAD,LOADIMM,
+            RUNEXP, RESETEXP)
+
 
 class HpodCtrlParams(Structure):
 
@@ -191,7 +200,8 @@ class Hexapod(HexapodObject):
 
     def addParam(self):
         self.loadParam()
-        self._paramsArray.append(self.params)
+        tempParam = copy.copy(self.params)
+        self._paramsArray.append(tempParam)
     
     def _getParamsArray(self):
         self.m_HpodCtrlParams = HpodCtrlParams*len(self._paramsArray)
