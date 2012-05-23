@@ -93,10 +93,10 @@ Leg::Leg (Hexapod *hexapod, btDynamicsWorld* ownerWorld, const btTransform& offs
         
         hingeC->setLimit(-SIMD_EPSILON, SIMD_PI*0.7f);
         
-		m_joints[JOINT_KNEE] = hingeC;
+		m_joints.push_back(hingeC);
         knee = hingeC;
         knee->setDbgDrawSize(btScalar(1.f));
-		m_ownerWorld->addConstraint(m_joints[JOINT_KNEE], true);
+		m_ownerWorld->addConstraint(knee, true);
 	}
     /// *************************** ///
     
@@ -123,9 +123,10 @@ Leg::Leg (Hexapod *hexapod, btDynamicsWorld* ownerWorld, const btTransform& offs
         
         coneC = new btConeTwistConstraint(*m_bodies[LEG_UPPER], *parentBody, localA, localB);
  		coneC->setLimit(btScalar(SIMD_PI*0.4f), btScalar(SIMD_PI*0.3f), btScalar(0), 0.3f);
-		m_joints[JOINT_HIP] = coneC;
-        m_ownerWorld->addConstraint(m_joints[JOINT_HIP], true);
-		m_joints[JOINT_HIP]->setDbgDrawSize(btScalar(1.f));
+		m_joints.push_back(coneC);
+        //m_joints[JOINT_HIP] = coneC;
+        m_ownerWorld->addConstraint(coneC, true);
+		coneC->setDbgDrawSize(btScalar(1.f));
         hip = coneC;
         
 	}
@@ -193,16 +194,18 @@ void Leg::wake() {
     m_bodies[LEG_LOWER]->activate();
 }
 
+
 Leg::~Leg()
 {
 	int i;
     
-	// Remove all constraints
-	for (i = 0; i < JOINT_COUNT; ++i)
+	//Remove all constraints
+    for (i = 0; i < m_joints.size(); ++i)
 	{
 		m_ownerWorld->removeConstraint(m_joints[i]);
-		delete m_joints[i]; m_joints[i] = 0;
+        delete m_joints[i];
 	}
+    //m_joints.clear();
     
 	// Remove all bodies and shapes
 	for (i = 0; i < LEG_COUNT; ++i)

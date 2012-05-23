@@ -842,7 +842,8 @@
 		05B1FE7F1569DDE4002FD23F /* demo.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = demo.py; sourceTree = "<group>"; };
 		05B1FE801569DDE4002FD23F /* hexapod.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = hexapod.py; sourceTree = "<group>"; };
 		05B1FE811569DDE4002FD23F /* hexapod.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = hexapod.pyc; sourceTree = "<group>"; };
-		05B1FE821569DDE4002FD23F /* test.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = test.py; sourceTree = "<group>"; };
+		05B1FE83156D6108002FD23F /* demoarr.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = demoarr.py; sourceTree = "<group>"; };
+		05B1FE84156D6110002FD23F /* democmds.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = democmds.py; sourceTree = "<group>"; };
 		05BFD5EC15531B3400D38F23 /* DynamicControlDemo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DynamicControlDemo; sourceTree = BUILT_PRODUCTS_DIR; };
 		05BFD5F815531B6400D38F23 /* DynamicControlDemo.1 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.man; path = DynamicControlDemo.1; sourceTree = "<group>"; };
 		05BFD5F915531B6400D38F23 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -1649,10 +1650,11 @@
 		05B1FE7E1569DDE4002FD23F /* hexapodcontroller */ = {
 			isa = PBXGroup;
 			children = (
+				05B1FE83156D6108002FD23F /* demoarr.py */,
+				05B1FE84156D6110002FD23F /* democmds.py */,
 				05B1FE7F1569DDE4002FD23F /* demo.py */,
 				05B1FE801569DDE4002FD23F /* hexapod.py */,
 				05B1FE811569DDE4002FD23F /* hexapod.pyc */,
-				05B1FE821569DDE4002FD23F /* test.py */,
 			);
 			path = hexapodcontroller;
 			sourceTree = "<group>";

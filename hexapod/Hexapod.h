@@ -37,6 +37,7 @@ class HpodCtrlParams {
         btScalar dtHip;
 };
 
+void debugPos(btVector3 pos);
 void debugCtrlParams(HpodCtrlParams params);
 
 class Hexapod : public BodyPart
@@ -72,7 +73,7 @@ class Hexapod : public BodyPart
     
     btRigidBody* m_bodies[BODYPART_COUNT];
 	
-	btTypedConstraint* m_joints[JOINT_COUNT];
+	btAlignedObjectArray<btTypedConstraint*> m_joints;
     
     unsigned int param_idx;
 
@@ -91,19 +92,22 @@ public:
     btAlignedObjectArray<class Leg*> m_rightlegs;
     std::vector<HpodCtrlParams> m_ctrlParams;
     
+    btAlignedObjectArray<btVector3> m_forces;
+    
     void loadCtrlParams(HpodCtrlParams *params, unsigned long size);
     void clearCtrlParams();
     
     void step();
     void reset();
     
+    void getForces();
+    
     btRigidBody* body;
     void wake();
     void setCtrlParams(const HpodCtrlParams params);
     void getCtrlParams(HpodCtrlParams &params);
+    btVector3 getPosition();
 
-    
-    
 };
 
 #endif // HEXAPOD_H_INCLUDED

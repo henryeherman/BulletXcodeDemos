@@ -407,6 +407,12 @@ void HexapodSimulationDemo::setMotorTargets(btScalar deltaTime)
             break;
     }
     isDirty=false;
+    
+    for (int r=0; r<m_hexapods.size(); r++) {
+        Hexapod* hpod=m_hexapods[r];
+        debugPos(hpod->getPosition());
+    }
+    
     /*
     for (int r=0; r<m_hexapods.size(); r++)
     {
