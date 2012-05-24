@@ -24,6 +24,9 @@
 #define SIMD_PI_2 ((SIMD_PI)*0.5f)
 #define SIMD_PI_4 ((SIMD_PI)*0.25f)
 
+void debugPos(btVector3 pos) {
+    std::cout << "Pos:X<" << pos.x() << ">, Y<" << pos.y() << ">, Z<" << pos.z() << ">" << std::endl; 
+}
 
 void debugCtrlParams(HpodCtrlParams params) {
     std::cout << "Knee Angles: ";
@@ -65,14 +68,19 @@ Hexapod::Hexapod (btDynamicsWorld* ownerWorld, const btVector3& positionOffset,
                             m_shapes(),
                             m_bodies(),
                             m_joints(),
-                            m_leftLegs()
+                            m_leftLegs(),
+                            m_forces()
 {
     
     param_idx = 0;
-    HpodCtrlParams empty;
-    std::vector<HpodCtrlParams> m_ctrlParams;
+    HpodCtrlParams empty;    
     m_ctrlParams.push_back(empty);
     m_ctrlParams.clear();
+    
+    std::vector<HpodCtrlParams> m_ctrlParams;
+    m_forces.push_back(btVector3(0.f,0.f,0.f));
+    m_forces.clear();
+
     
     btVector3 xaxis;
     xaxis.setValue(btScalar(1.), btScalar(0.), btScalar(0.));
@@ -286,8 +294,18 @@ void Hexapod::step() {
 
 }
 
+void Hexapod::getForces() {
+    
+    
+}
 void Hexapod::reset() {
     param_idx = 0;
+}
+
+btVector3 Hexapod::getPosition() {
+    btTransform temp = body->getWorldTransform();
+    btVector3 pos = temp.getOrigin();
+    return pos;
 }
 
 

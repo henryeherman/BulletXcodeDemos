@@ -20,6 +20,7 @@ pod.setControl(HpodSimCtrlParam.RESETEXP)
 pod.send()
 pod.setControl(HpodSimCtrlParam.CONTINUE)
 pod.send()
+
 pod.setControl(HpodSimCtrlParam.LOAD)
 
 
@@ -31,7 +32,6 @@ try:
             leg.knee.angle=x*2
             leg.hip.yangle=2*x-1
             leg.hip.xangle=2*x-1
-        print pod.rightRearLeg.knee.angle
         pod.addParam()
         print "Add Param %f" % x
     print "Array Built... sending"
