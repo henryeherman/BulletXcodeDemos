@@ -49,13 +49,12 @@ Leg::Leg (Hexapod *hexapod, btDynamicsWorld* ownerWorld, const btTransform& offs
     btQuaternion temp;
     
 	//transform.setOrigin(btVector3(btScalar(-0.18*scale_hexapod), btScalar(0.65*scale_hexapod),                                  btScalar(0.)));
-	m_bodies[LEG_UPPER] = localCreateRigidBody(btScalar(1.), globalFrame*transform, m_shapes[LEG_UPPER]);
-    upperleg = m_bodies[LEG_UPPER];
+	m_bodies[LEG_UPPER] = localCreateRigidBody(btScalar(5.), globalFrame*transform, m_shapes[LEG_UPPER]);
     
 	transform.setIdentity();
 	transform.setOrigin(btVector3(btScalar(0*scale_hexapod), btScalar((-1)*LOWER_LEG_LENGTH*scale_hexapod), btScalar(0.)));
-	m_bodies[LEG_LOWER] = localCreateRigidBody(btScalar(1.), globalFrame*transform, m_shapes[LEG_LOWER]);
-    lowerleg = m_bodies[LEG_LOWER];
+	m_bodies[LEG_LOWER] = localCreateRigidBody(btScalar(5.), globalFrame*transform, m_shapes[LEG_LOWER]);
+
     
 	// Setup some damping on the m_bodies
 	for (int i = 0; i < LEG_COUNT; ++i)

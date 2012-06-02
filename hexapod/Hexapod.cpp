@@ -128,7 +128,7 @@ Hexapod::Hexapod ( btDynamicsWorld* ownerWorld, const btVector3& positionOffset,
 #ifdef FREEZE
     bodymass = 0.f;
 #else
-    bodymass = 1.f;
+    bodymass = 10.f;
 #endif
     
     m_bodies[BODY_THORAX] = localCreateRigidBody(bodymass, offset*transform, m_shapes[BODY_THORAX]);   
