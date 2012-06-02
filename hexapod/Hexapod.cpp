@@ -59,8 +59,10 @@ void debugCtrlParams(HpodCtrlParams params) {
 
 //################## BEGIN HEXAPOD ######################//
 
-Hexapod::Hexapod (btDynamicsWorld* ownerWorld, const btVector3& positionOffset,
-	btScalar scale_hexapod)	: m_ownerWorld (ownerWorld), 
+
+
+Hexapod::Hexapod ( btDynamicsWorld* ownerWorld, const btVector3& positionOffset,
+	btScalar scale_hexapod,unsigned int _podid)	: m_ownerWorld (ownerWorld), 
                             BodyPart(ownerWorld),
                             m_ctrlParams(),
                             m_legs(),
@@ -69,18 +71,25 @@ Hexapod::Hexapod (btDynamicsWorld* ownerWorld, const btVector3& positionOffset,
                             m_bodies(),
                             m_joints(),
                             m_leftLegs(),
-                            m_forces()
+                            m_forces(),
+                            m_replys()
 {
-    
+    podid = _podid;
     param_idx = 0;
-    HpodCtrlParams empty;    
-    m_ctrlParams.push_back(empty);
-    m_ctrlParams.clear();
+    stepping = false;
+    //HpodCtrlParams empty;    
+    //m_ctrlParams.push_back(empty);
+    //m_ctrlParams.clear();
     
-    std::vector<HpodCtrlParams> m_ctrlParams;
-    m_forces.push_back(btVector3(0.f,0.f,0.f));
-    m_forces.clear();
+    //std::vector<HpodCtrlParams> m_ctrlParams;
+    //m_forces.push_back(btVector3(0.f,0.f,0.f));
+    //m_forces.clear();
 
+    //HpodReply empty_reply;
+    //std::vector<HpodReply> m_replys;
+    //m_replys.push_back(empty_reply);
+    //m_replys.clear();
+    
     
     btVector3 xaxis;
     xaxis.setValue(btScalar(1.), btScalar(0.), btScalar(0.));
@@ -273,7 +282,7 @@ void Hexapod::step() {
     //std::cout << "Array sz: " << m_ctrlParams.size() << std::endl;  
     static  bool showComplete = true;
     
-    if (param_idx==1) {
+    if (param_idx==0) {
         showComplete=true;
     }
     
@@ -284,14 +293,20 @@ void Hexapod::step() {
         std::cout << "Stepping: "<< param_idx << std::endl;
         setCtrlParams(m_ctrlParams[param_idx]);
         debugCtrlParams(m_ctrlParams[param_idx]);
+        storeReply();
+        stepping=true;
         param_idx++;
     } else {
         if(showComplete) {
             std::cout << "Complete" << std::endl;
             showComplete=false;
+            stepping=false;
         }
     }
+}
 
+bool Hexapod::isStepping() {
+    return stepping;
 }
 
 void Hexapod::getForces() {
@@ -300,12 +315,29 @@ void Hexapod::getForces() {
 }
 void Hexapod::reset() {
     param_idx = 0;
+    m_replys.clear();
 }
 
 btVector3 Hexapod::getPosition() {
     btTransform temp = body->getWorldTransform();
     btVector3 pos = temp.getOrigin();
     return pos;
+}
+
+void Hexapod::storeReply() {
+    HpodReply reply;
+    reply.podid = podid;
+    btVector3 pos = getPosition();
+    reply.xpos = pos.x();
+    reply.ypos = pos.y();
+    reply.zpos = pos.z();
+    
+    for(int i = 0; i<NUMLEGS; i++) {
+        reply.upperlegforce[i] =  m_legs[i]->hip->getAppliedImpulse();
+        reply.lowerlegforce[i] = m_legs[i]->knee->getAppliedImpulse();
+    }
+    m_replys.push_back(reply);
+    std::cout<<"Store reply:"<<m_replys.size()<<std::endl;
 }
 
 

@@ -43,6 +43,7 @@ using namespace std;
 #define SIMLOADIMM     5
 #define SIMRUNEXP      6
 #define SIMRESETEXP    7
+#define SIMCHKBUSY     8
 
 #define DEBUG_CMD
 //#define DEBUG_HPOD_CTRL_PARAMS
@@ -79,9 +80,11 @@ class HexapodSimulationDemo : public PlatformDemoApplication
         RUNEXP,
         RUNIMM,
         START,
-        RESETEXP
-    } state;
+        RESETEXP,
+        CHKBUSY
+    } state, previousState;
     
+    bool isRunningExp;
     bool isDirty;
     
     
@@ -106,6 +109,8 @@ public:
     void processCommand(HpodSimCtrl cmd,HpodCtrlParams *params, unsigned long size);
     
     void zmqRecv();
+    
+    bool isBusySim();
     
     btAlignedObjectArray<HpodCtrlParams> m_ctrlParams;
     

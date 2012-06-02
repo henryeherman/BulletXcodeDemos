@@ -37,6 +37,16 @@ class HpodCtrlParams {
         btScalar dtHip;
 };
 
+class HpodReply {
+    public:
+        unsigned int podid;
+        btScalar xpos;
+        btScalar ypos;
+        btScalar zpos;
+        btScalar upperlegforce[NUMLEGS];
+        btScalar lowerlegforce[NUMLEGS];
+};
+
 void debugPos(btVector3 pos);
 void debugCtrlParams(HpodCtrlParams params);
 
@@ -76,12 +86,17 @@ class Hexapod : public BodyPart
 	btAlignedObjectArray<btTypedConstraint*> m_joints;
     
     unsigned int param_idx;
+    
+    unsigned int podid;
+    
+    bool stepping;
 
 public:
-	Hexapod (btDynamicsWorld* ownerWorld,
-				const btVector3& positionOffset,
-				btScalar scale_hexapod = btScalar(1.0));
 
+    Hexapod (btDynamicsWorld* ownerWorld,
+             const btVector3& positionOffset,
+             btScalar scale_hexapod = btScalar(1.0), unsigned int _podid=0);
+    
 	~Hexapod ();
     
     inline uint64_t legCount() {
@@ -91,6 +106,8 @@ public:
     btAlignedObjectArray<class Leg*> m_leftLegs;
     btAlignedObjectArray<class Leg*> m_rightlegs;
     std::vector<HpodCtrlParams> m_ctrlParams;
+    std::vector<HpodReply> m_replys;
+    
     
     btAlignedObjectArray<btVector3> m_forces;
     
@@ -100,7 +117,9 @@ public:
     void step();
     void reset();
     
+    void storeReply();
     void getForces();
+    bool isStepping();
     
     btRigidBody* body;
     void wake();

@@ -13,7 +13,7 @@ pod.hipStrength=4
 pod.dtKnee = 0.1
 pod.dtHip = 0.1
 
-t = np.arange(0,25,0.01)
+t = np.arange(0,5,0.01)
 w = 1
 xs = abs(np.sin(2*np.pi*t/5))
 pod.setControl(HpodSimCtrlParam.RESETEXP)
@@ -41,9 +41,14 @@ try:
     pod.send()
     pod.clearParamArray()
     #time.sleep(10)
-    #pod.setControl(HpodSimCtrlParam.PAUSE)
-    #pod.send()
-    
+    s = ""
+    time.sleep(1)
+    while s!="NO":
+        pod.setControl(HpodSimCtrlParam.CHKBUSY)
+        s = pod.send()
+        s = s[:-1]  
+        time.sleep(1)
+        print "RECV: %s" % s
     print "Sent %d packets" % len(xs)
 
 except (KeyboardInterrupt,):

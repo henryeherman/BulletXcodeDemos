@@ -63,9 +63,12 @@ public:
     
     btHingeConstraint* knee;
     btConeTwistConstraint* hip;
+    btRigidBody *upperleg;
+    btRigidBody *lowerleg;
     //btTypedConstraint* m_joints[JOINT_COUNT];
     btAlignedObjectArray<btTypedConstraint *> m_joints; 
     //btTypedConstraint* m_joints[JOINT_COUNT];
+
     
     ~Leg ();
     void setKneeTarget(const btQuaternion& targetAngleQ, btScalar dt);

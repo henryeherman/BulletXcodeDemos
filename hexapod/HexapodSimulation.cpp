@@ -69,6 +69,7 @@ HexapodSimulationDemo::HexapodSimulationDemo(): zcontext(1), zsocket(zcontext, Z
     zsocket.bind("tcp://*:5555");
     state = RUN;
     isDirty=false;
+    isRunningExp=false;
 }
 
 HexapodSimulationDemo::~HexapodSimulationDemo() {
@@ -121,7 +122,7 @@ void HexapodSimulationDemo::initPhysics()
 		localCreateRigidBody(btScalar(0.),groundTransform,groundShape);
 	}
 
-	// Spawn one ragdoll
+	// Spawn one Hexapod
 	spawnHexapod();
 
 	clientResetScene();
@@ -129,7 +130,8 @@ void HexapodSimulationDemo::initPhysics()
 
 void HexapodSimulationDemo::spawnHexapod(bool random)
 {
-	Hexapod* hexapod = new Hexapod (m_dynamicsWorld, btVector3 (0,2,1),5.f);
+    unsigned int podid =m_hexapods.size();
+	Hexapod* hexapod = new Hexapod (m_dynamicsWorld, btVector3 (0,2,1),5.f, podid);
 	m_hexapods.push_back(hexapod);    
 }
 
@@ -172,11 +174,23 @@ void HexapodSimulationDemo::zmqRecv() {
         debugCtrlParams(*params);
 #endif
         
+        
         // Send reply back
         try
         {
-            zmq::message_t reply(3);
-            memcpy((void *) reply.data (), "ACK", 3);
+            zmq::message_t reply;
+            if (ctrlParam==SIMCHKBUSY) {
+                if(isBusySim()) {
+                    reply.rebuild(4);
+                    memcpy((void *) reply.data (), "YES", 4);
+                } else {
+                    reply.rebuild(3);
+                    memcpy((void *) reply.data (), "NO", 3);
+                }
+            } else {
+                reply.rebuild(4);
+                memcpy((void *) reply.data (), "ACK", 4);
+            }
             zsocket.send(reply);
         }
         catch (zmq::error_t e)
@@ -362,7 +376,10 @@ void HexapodSimulationDemo::processCommand(HpodSimCtrl cmd,HpodCtrlParams *param
 #endif
             clientResetScene();
             state=RESETEXP;
-            
+            break;
+        case SIMCHKBUSY:
+            cout << "CMD:CHKBUSY"<<endl;
+            //Do NOTHING Dealt with in zmqRec
         default:
             break;
     }
@@ -401,7 +418,7 @@ void HexapodSimulationDemo::setMotorTargets(btScalar deltaTime)
                 hpod->setCtrlParams(immParams);
             }
             break;
-            
+        case CHKBUSY:
         case RUN:
         default:
             break;
@@ -413,16 +430,17 @@ void HexapodSimulationDemo::setMotorTargets(btScalar deltaTime)
         debugPos(hpod->getPosition());
     }
     
-    /*
-    for (int r=0; r<m_hexapods.size(); r++)
-    {
-        Hexapod *hpod = m_hexapods[r];
-        hpod->reset();            
-    } 
-     */
  //Set motor shiznit here	
 }
 
+bool HexapodSimulationDemo::isBusySim() {
+    for (int r=0; r<m_hexapods.size(); r++) {
+        Hexapod* hpod=m_hexapods[r];
+        if(hpod->isStepping())
+            return true;
+    }
+    return false;
+}
 
 void motorPreTickCallback (btDynamicsWorld *world, btScalar timeStep)
 {

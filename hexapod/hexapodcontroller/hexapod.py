@@ -16,10 +16,11 @@ class HpodSimCtrlParam(c_uint):
     LOADIMM=5
     RUNEXP=6
     RESETEXP=7
+    CHKBUSY=8
     OPTS = (PAUSE, RESET, 
             CONTINUE, START,
             LOAD,LOADIMM,
-            RUNEXP, RESETEXP)
+            RUNEXP, RESETEXP,CHKBUSY)
 
 
 class HpodCtrlParams(Structure):
@@ -190,13 +191,17 @@ class Hexapod(HexapodObject):
         self.msg.append(self.sendString)
         self.socket.send_multipart(self.msg)
         message = self.socket.recv()
+        #print "Received: %s" % str(message)
         self.msg = []
+        return message
     
     def sendArray(self):
         self.msg.append(self.sendStringArray)
         self.socket.send_multipart(self.msg)
         message = self.socket.recv()
+        #print "Received: %s" % str(message)
         self.msg = []
+        return message
 
     def addParam(self):
         self.loadParam()
