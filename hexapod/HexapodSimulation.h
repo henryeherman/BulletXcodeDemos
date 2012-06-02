@@ -92,7 +92,8 @@ public:
     
     HexapodSimulationDemo();
     ~HexapodSimulationDemo();
-    
+    btVector3 newCamPos;
+    void cameraFollow();
 	void initPhysics();
     void setMotorTargets(btScalar deltaTime);
 
@@ -111,6 +112,8 @@ public:
     void zmqRecv();
     
     bool isBusySim();
+    
+    bool followHexapod;
     
     btAlignedObjectArray<HpodCtrlParams> m_ctrlParams;
     

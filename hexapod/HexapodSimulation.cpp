@@ -79,8 +79,8 @@ void HexapodSimulationDemo::initPhysics()
 {
 	setTexturing(true);
 	setShadows(true);
-
-    
+    newCamPos.setZero();
+    followHexapod = true;
     
 	m_Time = 0;
 	m_fCyclePeriod = 1000.f; // in milliseconds
@@ -250,7 +250,15 @@ void HexapodSimulationDemo::clientMoveAndDisplay()
 		//optional but useful: debug drawing
 		m_dynamicsWorld->debugDrawWorld();
 	}
-
+    
+    if (followHexapod) {
+        if (m_hexapods.size() > 0) {
+            btVector3 pos =  m_hexapods[0]->getPosition(); 
+            m_cameraTargetPosition.setX(pos.x());
+            m_cameraTargetPosition.setZ(pos.z());
+            updateCamera();
+        }
+    }
 	renderme();
 
 	glFlush();
@@ -294,12 +302,98 @@ void HexapodSimulationDemo::keyboardCallback(unsigned char key, int x, int y)
         case 'h':
             setMotorTargets(btVector3(1, 0, 0));
             break;
+        
+        case 'F':
+            followHexapod = !followHexapod;
+            if (!followHexapod) {
+                m_cameraTargetPosition.setValue(0, 4, -4);
+            }
+            break;
             
         default:
             DemoApplication::keyboardCallback(key, x, y);
 	}
 
 
+}
+
+
+void HexapodSimulationDemo::cameraFollow() {
+        
+        
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        btScalar rele = m_ele * btScalar(0.01745329251994329547);// rads per deg
+        btScalar razi = m_azi * btScalar(0.01745329251994329547);// rads per deg
+        
+        
+        btQuaternion rot(m_cameraUp,razi);
+        
+        eyePos[m_forwardAxis] = -m_cameraDistance;
+        
+        btVector3 forward(eyePos[0],eyePos[1],eyePos[2]);
+        if (forward.length2() < SIMD_EPSILON)
+        {
+            forward.setValue(1.f,0.f,0.f);
+        }
+        btVector3 right = m_cameraUp.cross(forward);
+        btQuaternion roll(right,-rele);
+        
+        eyePos = btMatrix3x3(rot) * btMatrix3x3(roll) * eyePos;
+        
+        m_cameraPosition[0] = eyePos.getX();
+        m_cameraPosition[1] = eyePos.getY();
+        m_cameraPosition[2] = eyePos.getZ();
+        m_cameraPosition += m_cameraTargetPosition;
+        
+        if (m_glutScreenWidth == 0 && m_glutScreenHeight == 0)
+            return;
+        
+        btScalar aspect;
+        btVector3 extents;
+        
+        if (m_glutScreenWidth > m_glutScreenHeight) 
+        {
+            aspect = m_glutScreenWidth / (btScalar)m_glutScreenHeight;
+            extents.setValue(aspect * 1.0f, 1.0f,0);
+        } else 
+        {
+            aspect = m_glutScreenHeight / (btScalar)m_glutScreenWidth;
+            extents.setValue(1.0f, aspect*1.f,0);
+        }
+        
+        
+        if (m_ortho)
+        {
+            // reset matrix
+            glLoadIdentity();
+            
+            
+            extents *= m_cameraDistance;
+            btVector3 lower = m_cameraTargetPosition - extents;
+            btVector3 upper = m_cameraTargetPosition + extents;
+            //gluOrtho2D(lower.x, upper.x, lower.y, upper.y);
+            glOrtho(lower.getX(), upper.getX(), lower.getY(), upper.getY(),-1000,1000);
+            
+            glMatrixMode(GL_MODELVIEW);
+            glLoadIdentity();
+            //glTranslatef(100,210,0);
+        } else
+        {
+            if (m_glutScreenWidth > m_glutScreenHeight) 
+            {
+                glFrustum (-aspect, aspect, -1.0, 1.0, 1.0, 10000.0);
+            } else 
+            {
+                glFrustum (-1.0, 1.0, -aspect, aspect, 1.0, 10000.0);
+            }
+            glMatrixMode(GL_MODELVIEW);
+            glLoadIdentity();
+            gluLookAt(m_cameraPosition[0], m_cameraPosition[1], m_cameraPosition[2], 
+                      m_cameraTargetPosition[0], m_cameraTargetPosition[1], m_cameraTargetPosition[2], 
+                      m_cameraUp.getX(),m_cameraUp.getY(),m_cameraUp.getZ());
+        }
+        
 }
 
 void HexapodSimulationDemo::processCommand(HpodSimCtrl cmd,HpodCtrlParams *params,unsigned long size) {

@@ -63,13 +63,14 @@ protected:
 	float m_ele;
 	float m_azi;
 	btVector3 m_cameraPosition;
-	btVector3 m_cameraTargetPosition;//look at
-
+	
 	int	m_mouseOldX;
 	int	m_mouseOldY;
 	int	m_mouseButtons;
 public:
+    btVector3 m_cameraTargetPosition;//look at
 	int	m_modifierKeys;
+    btVector3 eyePos;
 protected:
 
 	float m_scaleBottom;

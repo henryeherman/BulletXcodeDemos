@@ -149,6 +149,8 @@ void DemoApplication::myinit(void)
 	glDepthFunc(GL_LESS);
 
 	glClearColor(btScalar(0.7),btScalar(0.7),btScalar(0.7),btScalar(0));
+    
+    eyePos.setX(0);eyePos.setY(0);eyePos.setZ(0);
 
 	//  glEnable(GL_CULL_FACE);
 	//  glCullFace(GL_BACK);
@@ -181,7 +183,7 @@ void DemoApplication::toggleIdle() {
 
 void DemoApplication::updateCamera() {
 
-
+    
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	btScalar rele = m_ele * btScalar(0.01745329251994329547);// rads per deg
@@ -190,8 +192,6 @@ void DemoApplication::updateCamera() {
 
 	btQuaternion rot(m_cameraUp,razi);
 
-
-	btVector3 eyePos(0,0,0);
 	eyePos[m_forwardAxis] = -m_cameraDistance;
 
 	btVector3 forward(eyePos[0],eyePos[1],eyePos[2]);
