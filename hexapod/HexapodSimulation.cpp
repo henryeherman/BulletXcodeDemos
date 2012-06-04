@@ -173,7 +173,10 @@ void HexapodSimulationDemo::zmqRecv() {
 #ifdef DEBUG_HPOD_CTRL_PARAMS
         debugCtrlParams(*params);
 #endif
-        
+
+#ifdef DEBUG_CMD
+        cout << "CMD:" << ctrlParam <<endl;
+#endif
         
         // Send reply back
         try
@@ -183,15 +186,37 @@ void HexapodSimulationDemo::zmqRecv() {
                 if(isBusySim()) {
                     reply.rebuild(4);
                     memcpy((void *) reply.data (), "YES", 4);
+                    zsocket.send(reply);
                 } else {
                     reply.rebuild(3);
                     memcpy((void *) reply.data (), "NO", 3);
+                    zsocket.send(reply);
                 }
+            } else if(ctrlParam==SIMGETREPLY) {
+                //reply.rebuild(4);
+                //memcpy((void *) reply.data (), "REP", 4);
+                //zsocket.send(reply);
+                for (int r=0; r<m_hexapods.size(); r++) {
+                    Hexapod *pod = m_hexapods[r];
+                    for(int q=0;q<pod->m_replys.size();q++) {
+                        HpodReply podreply = pod->m_replys[q];
+                        reply.rebuild(sizeof(HpodReply));
+                        memcpy((void *) reply.data (), &podreply, sizeof(HpodReply));
+                        if (r==(m_hexapods.size()-1) && q==(pod->m_replys.size()-1)) 
+                        zsocket.send(reply);
+                        else {
+                            zsocket.send(reply, ZMQ_SNDMORE);
+                        }
+                    }
+                 
+                }	
+                    
             } else {
                 reply.rebuild(4);
                 memcpy((void *) reply.data (), "ACK", 4);
+                zsocket.send(reply);
             }
-            zsocket.send(reply);
+            
         }
         catch (zmq::error_t e)
         {
@@ -521,7 +546,9 @@ void HexapodSimulationDemo::setMotorTargets(btScalar deltaTime)
     
     for (int r=0; r<m_hexapods.size(); r++) {
         Hexapod* hpod=m_hexapods[r];
-        debugPos(hpod->getPosition());
+#ifdef DEBUGP_POS
+        //debugPos(hpod->getPosition());
+#endif
     }
     
  //Set motor shiznit here	

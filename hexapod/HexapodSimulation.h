@@ -44,11 +44,13 @@ using namespace std;
 #define SIMRUNEXP      6
 #define SIMRESETEXP    7
 #define SIMCHKBUSY     8
+#define SIMGETREPLY    9
 
 #define DEBUG_CMD
 //#define DEBUG_HPOD_CTRL_PARAMS
 //#define DEBUG_SIM_CTRL_PARAM
 #define DEBUG_ZMQ_COM
+//#define DEBUG_POS
 
 typedef unsigned int HpodSimCtrl;
 

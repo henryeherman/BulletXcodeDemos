@@ -3,9 +3,60 @@ import copy
 import zmq
 import sys
 from ctypes import *
-
+import time
+from StringIO import StringIO
 
 NUMLEGS = 6
+
+class HpodReplies(list):
+
+    def __init__(self, arrbuf):
+        replies = [HpodSimStep(HpodReply.from_buffer_copy(buf))
+                for buf in arrbuf]
+        list.__init__(self,replies)
+        
+    def getzpos(self):
+        return [r.zpos for r in self]
+
+    zpos = property(getzpos)
+
+    def getxpos(self):
+        return [r.xpos for r in self]
+
+    xpos = property(getxpos)
+
+    def getypos(self):
+        return [r.ypos for r in self]
+
+    ypos = property(getypos)
+
+        
+class HpodSimStep(object):
+    
+    def __init__(self, reply):
+        self.reply = reply
+        
+    def getxpos(self):
+        return float(self.reply.xpos)
+        
+    def getypos(self):
+        return float(self.reply.ypos)
+        
+    def getzpos(self):
+        return float(self.reply.zpos)
+    
+    def getlowerlegforces(self):
+        return [float(f) for f in self.reply.lowerlegforce]
+
+    def getupperlegforces(self):
+        return [float(f) for f in self.reply.upperlegforce]
+
+    xpos = property(getxpos)
+    ypos = property(getypos)
+    zpos = property(getzpos)
+    upperlegforce = property(getupperlegforces)
+    lowerlegforce = property(getlowerlegforces)
+
 
 class HpodSimCtrlParam(c_uint):
     PAUSE=0
@@ -17,10 +68,21 @@ class HpodSimCtrlParam(c_uint):
     RUNEXP=6
     RESETEXP=7
     CHKBUSY=8
+    GETREPLY=9
     OPTS = (PAUSE, RESET, 
             CONTINUE, START,
             LOAD,LOADIMM,
-            RUNEXP, RESETEXP,CHKBUSY)
+            RUNEXP, RESETEXP,CHKBUSY,
+            GETREPLY)
+
+class HpodReply(Structure):
+
+    _fields_ = [("podid", c_uint),
+                ("xpos", c_float),
+                ("ypos", c_float),
+                ("zpos", c_float),
+                ("upperlegforce", c_float*NUMLEGS),
+                ("lowerlegforce", c_float*NUMLEGS)]
 
 
 class HpodCtrlParams(Structure):
@@ -202,6 +264,58 @@ class Hexapod(HexapodObject):
         #print "Received: %s" % str(message)
         self.msg = []
         return message
+
+    def getReply(self):
+        print "Calling get reply: %d" % HpodSimCtrlParam.GETREPLY
+        self.clearParamArray()
+        self.setControl( HpodSimCtrlParam.GETREPLY )
+        self.socket.send_multipart(self.msg)
+        message = self.socket.recv_multipart()
+        self.msg = []
+        return message
+
+    def checkIsBusy(self):
+        time.sleep(0.1)
+        self.clearParamArray()
+        self.setControl(HpodSimCtrlParam.CHKBUSY)
+        s = self.send()
+        s = s[:-1]
+        if s=="NO":
+            return False
+        else:
+            return True
+    
+    def startexp(self):
+        self.clearParamArray()
+        self.setControl(HpodSimCtrlParam.RUNEXP)
+        self.send()
+        self.clearParamArray()
+
+    def runexp(self):
+        sys.stdout.write("Send %d positions\r\n" % len(self.paramsArray))
+        self.startexp()
+        while self.checkIsBusy():
+            sys.stdout.write("Waiting...\r")
+        msg = self.getReply()
+        sys.stdout.write("Received %d replies\r\n" % len(msg))
+        return HpodReplies(msg)
+
+    def readyLoad(self):
+        self.setControl(HpodSimCtrlParam.LOAD)
+
+    def load(self):
+        self.readyLoad()
+        self.sendArray()
+
+    def resetExp(self):
+        self.clearParamArray()
+        self.setControl(HpodSimCtrlParam.RESET)
+        self.send()
+
+    def cont(self):
+        self.clearParamArray()
+        self.setControl(HpodSimCtrlParam.CONTINUE)
+        self.send()
 
     def addParam(self):
         self.loadParam()

@@ -1148,11 +1148,11 @@
 		050764E415530DCF00DEEF87 = {
 			isa = PBXGroup;
 			children = (
-				05E7E94415632A7B007CADE5 /* libzmq.dylib */,
 				051CA9F4155B370800955732 /* AllBulletDemos.xcodeproj */,
 				053AEBD3155410E600CB0698 /* Serialize */,
 				0507654B155316EE00DEEF87 /* OpenGL */,
 				050764F215530DD000DEEF87 /* AllBulletDemos */,
+				0563C27A157C07C800558423 /* Libraries */,
 				050764FC15530DEC00DEEF87 /* Frameworks */,
 				050764F015530DD000DEEF87 /* Products */,
 			);
@@ -1606,6 +1606,15 @@
 			);
 			name = HelloGraphics;
 			path = ../HelloGraphics;
+			sourceTree = "<group>";
+		};
+		0563C27A157C07C800558423 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				05E7E94415632A7B007CADE5 /* libzmq.dylib */,
+			);
+			name = Libraries;
+			path = AllBulletDemos;
 			sourceTree = "<group>";
 		};
 		05A1CAC6155AC54700699658 /* learnhexapod */ = {

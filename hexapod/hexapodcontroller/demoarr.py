@@ -2,9 +2,11 @@
 
 import time
 import hexapod
-from hexapod import HpodSimCtrlParam
+from hexapod import HpodSimCtrlParam, HpodReplies
 import numpy as np
 import sys
+
+from matplotlib import pyplot
 
 pod = hexapod.Hexapod()
 
@@ -16,12 +18,9 @@ pod.dtHip = 0.1
 t = np.arange(0,5,0.01)
 w = 1
 xs = abs(np.sin(2*np.pi*t/5))
-pod.setControl(HpodSimCtrlParam.RESETEXP)
-pod.send()
-pod.setControl(HpodSimCtrlParam.CONTINUE)
-pod.send()
 
-pod.setControl(HpodSimCtrlParam.LOAD)
+pod.resetExp()
+pod.cont()
 
 
 print "Begin Exp"
@@ -35,23 +34,14 @@ try:
         pod.addParam()
         print "Add Param %f" % x
     print "Array Built... sending"
-    pod.sendArray()
-    pod.clearParamArray()
-    pod.setControl(HpodSimCtrlParam.RUNEXP)
-    pod.send()
-    pod.clearParamArray()
-    #time.sleep(10)
-    s = ""
-    time.sleep(1)
-    while s!="NO":
-        pod.setControl(HpodSimCtrlParam.CHKBUSY)
-        s = pod.send()
-        s = s[:-1]  
-        time.sleep(1)
-        print "RECV: %s" % s
-    print "Sent %d packets" % len(xs)
+    pod.load()
+    results = pod.runexp()
 
 except (KeyboardInterrupt,):
 
     print "Exit Hexapod Client"
     sys.exit(0)
+
+
+pyplot.plot(results.zpos)
+pyplot.show()
