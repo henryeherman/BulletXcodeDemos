@@ -14,7 +14,7 @@ class HpodReplies(list):
         replies = [HpodSimStep(HpodReply.from_buffer_copy(buf))
                 for buf in arrbuf]
         list.__init__(self,replies)
-        
+
     def getzpos(self):
         return [r.zpos for r in self]
 
@@ -30,21 +30,21 @@ class HpodReplies(list):
 
     ypos = property(getypos)
 
-        
+
 class HpodSimStep(object):
-    
+
     def __init__(self, reply):
         self.reply = reply
-        
+
     def getxpos(self):
         return float(self.reply.xpos)
-        
+
     def getypos(self):
         return float(self.reply.ypos)
-        
+
     def getzpos(self):
         return float(self.reply.zpos)
-    
+
     def getlowerlegforces(self):
         return [float(f) for f in self.reply.lowerlegforce]
 
@@ -69,7 +69,7 @@ class HpodSimCtrlParam(c_uint):
     RESETEXP=7
     CHKBUSY=8
     GETREPLY=9
-    OPTS = (PAUSE, RESET, 
+    OPTS = (PAUSE, RESET,
             CONTINUE, START,
             LOAD,LOADIMM,
             RUNEXP, RESETEXP,CHKBUSY,
@@ -98,7 +98,7 @@ class HpodCtrlParams(Structure):
 
     def toString(self):
         return buffer(self)[:]
-                       
+
 
 
 
@@ -114,10 +114,10 @@ class Joint(object):
 class Knee(Joint):
     def __init__(self,angle=0):
         self.angle = angle
-    
+
     def _set_angle(self,angle):
         self._angle = angle
-    
+
     def _get_angle(self):
         return self._angle
     angle = property(_get_angle, _set_angle)
@@ -125,18 +125,18 @@ class Knee(Joint):
 class Hip(Joint):
     def __init__(self, angles = [0,0]):
         self.angles = angles
-    
+
     def set_angles(self, xangle, yangle):
         self.xangle = 0
         self.yangle = 0
-    
+
     def _get_angles(self):
         return [self.xangle, self.yangle]
-    
+
     def _set_angles(self, angles):
         self.xangle = angles[0]
         self.yangle = angles[1]
-    
+
     angles = property(_get_angles, _set_angles)
 
 
@@ -153,7 +153,7 @@ class Leg(BodyPart):
     POS = (FRONTLEFT,FRONTRIGHT,
             CENTERLEFT,CENTERRIGHT,
             REARLEFT,REARRIGHT)
-    
+
     def __init__(self, pos):
         self.knee = Knee()
         self.hip = Hip()
@@ -168,19 +168,10 @@ class Thorax(BodyPart):
     def __init__(self):
         pass
     def __repr__(self):
-        return "Thorax(%d)" % id(self) 
+        return "Thorax(%d)" % id(self)
 
-class Hexapod(HexapodObject):
-    
+class HexapodBody:
     def __init__(self):
-        
-        # zmq context server
-        self.context = zmq.Context()
-        #  Socket to talk to server
-        self.socket = self.context.socket(zmq.REQ)
-        self.socket.connect ("tcp://localhost:5555")
-        
-        # Setup Hexapod body parts
         self.thorax = Thorax()
         self.leftFrontLeg = Leg(Leg.FRONTLEFT)
         self.rightFrontLeg = Leg(Leg.FRONTRIGHT)
@@ -188,60 +179,73 @@ class Hexapod(HexapodObject):
         self.rightCenterLeg = Leg(Leg.CENTERRIGHT)
         self.leftRearLeg = Leg(Leg.REARLEFT)
         self.rightRearLeg = Leg(Leg.REARRIGHT)
-        
+
         self.legs = ( self.leftFrontLeg,
                     self.rightFrontLeg,
                     self.leftCenterLeg,
                     self.rightCenterLeg,
                     self.leftRearLeg,
                     self.rightRearLeg)
-        
+
         self.kneeStrength = 0
         self.hipStrength = 0
         self.dtHip = 0
         self.dtKnee = 0
         self.params = HpodCtrlParams()
-        
+
+class Hexapod(HexapodObject, HexapodBody):
+
+    def __init__(self):
+
+        # zmq context server
+        self.context = zmq.Context()
+        #  Socket to talk to server
+        self.socket = self.context.socket(zmq.REQ)
+        self.socket.connect ("tcp://localhost:5555")
+
+        # Setup Hexapod body parts
+        HexapodBody.__init__(self)
+
         self._paramsArray = []
         self.setControl()
-    
+
     def setControl(self, ctrl=None):
         if ctrl in HpodSimCtrlParam.OPTS:
             self.msg = [buffer(HpodSimCtrlParam(ctrl))[:]]
             return
         self.msg = [buffer(HpodSimCtrlParam(HpodSimCtrlParam.CONTINUE))[:]]
-        
-    
+
+
     def loadParam(self):
 
-        self.params.kneeAngles[0] = self.legs[0].knee.angle 
+        self.params.kneeAngles[0] = self.legs[0].knee.angle
         self.params.kneeAngles[1] = self.legs[1].knee.angle
         self.params.kneeAngles[2] = self.legs[2].knee.angle
         self.params.kneeAngles[3] = self.legs[3].knee.angle
         self.params.kneeAngles[4] = self.legs[4].knee.angle
-        self.params.kneeAngles[5] = self.legs[5].knee.angle  
-        
-        self.params.hipAnglesX[0] = self.legs[0].hip.xangle 
-        self.params.hipAnglesX[1] = self.legs[1].hip.xangle 
-        self.params.hipAnglesX[2] = self.legs[2].hip.xangle 
-        self.params.hipAnglesX[3] = self.legs[3].hip.xangle 
-        self.params.hipAnglesX[4] = self.legs[4].hip.xangle 
-        self.params.hipAnglesX[5] = self.legs[5].hip.xangle 
+        self.params.kneeAngles[5] = self.legs[5].knee.angle
 
- 
-        self.params.hipAnglesY[0] = self.legs[0].hip.yangle 
-        self.params.hipAnglesY[1] = self.legs[1].hip.yangle 
-        self.params.hipAnglesY[2] = self.legs[2].hip.yangle 
-        self.params.hipAnglesY[3] = self.legs[3].hip.yangle 
-        self.params.hipAnglesY[4] = self.legs[4].hip.yangle 
-        self.params.hipAnglesY[5] = self.legs[5].hip.yangle 
+        self.params.hipAnglesX[0] = self.legs[0].hip.xangle
+        self.params.hipAnglesX[1] = self.legs[1].hip.xangle
+        self.params.hipAnglesX[2] = self.legs[2].hip.xangle
+        self.params.hipAnglesX[3] = self.legs[3].hip.xangle
+        self.params.hipAnglesX[4] = self.legs[4].hip.xangle
+        self.params.hipAnglesX[5] = self.legs[5].hip.xangle
+
+
+        self.params.hipAnglesY[0] = self.legs[0].hip.yangle
+        self.params.hipAnglesY[1] = self.legs[1].hip.yangle
+        self.params.hipAnglesY[2] = self.legs[2].hip.yangle
+        self.params.hipAnglesY[3] = self.legs[3].hip.yangle
+        self.params.hipAnglesY[4] = self.legs[4].hip.yangle
+        self.params.hipAnglesY[5] = self.legs[5].hip.yangle
 
         self.params.kneeStrength = self.kneeStrength
         self.params.hipStrength = self.hipStrength
 
         self.params.dtKnee = self.dtKnee
         self.params.dtHip = self.dtHip
-        
+
     def clearParamArray(self):
         self._paramsArray =[]
 
@@ -256,7 +260,7 @@ class Hexapod(HexapodObject):
         #print "Received: %s" % str(message)
         self.msg = []
         return message
-    
+
     def sendArray(self):
         self.msg.append(self.sendStringArray)
         self.socket.send_multipart(self.msg)
@@ -284,7 +288,7 @@ class Hexapod(HexapodObject):
             return False
         else:
             return True
-    
+
     def startexp(self):
         self.clearParamArray()
         self.setControl(HpodSimCtrlParam.RUNEXP)
@@ -321,17 +325,17 @@ class Hexapod(HexapodObject):
         self.loadParam()
         tempParam = copy.copy(self.params)
         self._paramsArray.append(tempParam)
-    
+
     def _getParamsArray(self):
         self.m_HpodCtrlParams = HpodCtrlParams*len(self._paramsArray)
         return self.m_HpodCtrlParams(*self._paramsArray)
-        
+
     def _getParamsArrayString(self):
         return buffer(self.paramsArray)[:]
 
     paramsArray = property(_getParamsArray)
     sendStringArray = property(_getParamsArrayString)
-    
+
     def __repr__(self):
         return "Hexapod(id='%d')" % id(self)
 
