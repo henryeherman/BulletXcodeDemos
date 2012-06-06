@@ -35,13 +35,12 @@ class HexapodSimulator():
         self.pod.dtHip = 0.1
 
         # Includes sinusoids for all configurations
-        self.hexapodConfigurations = []
+        self.hexapodConfigs = []
 
-        self.calculateTotalStates()
         self.createParamVectors()
 
-    def calculateTotalStates(self):
-        self.total_states = 0
+    #def calculateTotalStates(self):
+        #self.total_states = 0
 
         #total_frequencies = (1+self.config.max_freq - self.config.min_freq)/self.config.step_freq
         #total_amplitudes = (1+self.config.max_ampl - self.config.min_ampl)/self.config.step_ampl
@@ -70,18 +69,42 @@ class HexapodSimulator():
 
     def createAllConfigurations(self):
 
+        iteration = 0
+        total_states = 0
+        print "Total states: " + str(len(self.frequencies)*len(self.amplitudes)*len(self.phases))
+
+        pod = hexapod.HexapodBody()
+        time = np.arange(0, self.config.total_time, 0.01)
+        xs = np.sin(2*np.pi*time/freq)
+        xc = np.cos(1*np.pi*time/freq)
+
+        xs_half = -(np.sin(1*np.pi*time/freq))
+        xc_half = -(np.cos(1*np.pi*time/freq))
         for freq in self.frequencies:
             for ampl in self.amplitudes:
 
-                pod = hexapod.HexapodBody()
-                time = np.arange(0, self.config.total_time, 0.01)
-                #xs = ampl*np.sin()
 
-                for leg_index, leg in enumerate(pod.legs):
-                    leg.knee.angle = np.pi/2
-                    #leg.hip.yangle =
+                for pos_index, sin_pos in enumerate(xs[::1]):
+                    cos_pos = xc[pos_index]
+                    sin_pos_half = xs_half[pos_index]
+                    cos_pos_half = xc_half[pos_index]
+
+                    for leg_index, leg in enumerate(pod.legs):
+                        leg.knee.angle = np.pi/2
+                        leg.hip.yangle = -ampl * sin_pos
+                        leg.hip.xangle = ampl* abs(sin_pos_half)
+
+                    total_states += 1
+                    self.hexapodConfigs.append(pod)
+
+            print "Frequency counter: " + str(iteration)
+            iteration += 1
 
                 #for phase in self.phases:
+
+        #print str(self.hexapodConfigs)
+        print total_states
+
 
 
 
@@ -129,8 +152,12 @@ def main():
     # Initialize Simulator with config
     sim = HexapodSimulator(config)
 
+    # Create All Configurations
+    sim.createAllConfigurations()
+
     # Run Simulation
     sim.runSimulation()
+
 
 
 if __name__ == "__main__":
