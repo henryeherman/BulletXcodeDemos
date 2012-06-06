@@ -14,7 +14,11 @@ pod.hipStrength=4
 pod.dtKnee = 0.5
 pod.dtHip = 0.5
 
+<<<<<<< HEAD
 t = np.arange(0,10,0.01)
+=======
+t = np.arange(0,15,0.01)
+>>>>>>> 4567152be8d5075f0d77051d37232af915449436
 w = 1
 xs = abs(np.sin(2*np.pi*t/5))
 

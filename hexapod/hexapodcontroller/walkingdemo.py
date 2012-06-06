@@ -2,9 +2,11 @@
 
 import time
 import hexapod
-from hexapod import HpodSimCtrlParam
+from hexapod import HpodSimCtrlParam, HpodReplies
 import numpy as np
 import sys
+
+from matplotlib import pyplot
 
 pod = hexapod.Hexapod()
 
@@ -13,7 +15,7 @@ pod.hipStrength=30
 pod.dtKnee = 0.1
 pod.dtHip = 0.1
 
-t = np.arange(0,50,0.01)
+t = np.arange(0,10,0.01)
 w = 1
 xs = np.sin(2*np.pi*t/1)
 xc = np.cos(2*np.pi*t/1)
@@ -21,12 +23,9 @@ xc = np.cos(2*np.pi*t/1)
 xs_half = -(np.sin(1*np.pi*t/1))
 xc_half = -(np.cos(1*np.pi*t/1))
 
-pod.setControl(HpodSimCtrlParam.RESETEXP)
-pod.send()
-pod.setControl(HpodSimCtrlParam.CONTINUE)
-pod.send()
 
-pod.setControl(HpodSimCtrlParam.LOAD)
+pod.resetExp()
+pod.cont()
 
 print "Begin Exp"
 try:
@@ -54,12 +53,9 @@ try:
         pod.addParam()
 
         print "Add Param %f" % sin_pos
-    print "Array Built... sending"
-    pod.sendArray()
-    pod.clearParamArray()
-    pod.setControl(HpodSimCtrlParam.RUNEXP)
-    pod.send()
-    pod.clearParamArray()
+        print "Array Built... sending"
+    pod.load()
+    results = pod.runexp()
 
     print "Sent %d packets" % len(xs)
 
@@ -67,3 +63,6 @@ except (KeyboardInterrupt,):
 
     print "Exit Hexapod Client"
     sys.exit(0)
+
+pyplot.plot(results.zpos)
+pyplot.show()

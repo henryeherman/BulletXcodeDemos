@@ -50,11 +50,6 @@ ActionValueNetwork for continuous actions. Our maze uses discrete
 actions, so we need a table:
 """
 
-num_frequencies =
-num_phases =
-num_amplitudes =
-num_legs = 6
-num_joints_per_leg = 3
 
 num_states = config.num_frequencies * config.num_phases *
              config.num_amplitudes  * config.num_legs   *
