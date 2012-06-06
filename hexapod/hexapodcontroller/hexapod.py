@@ -193,6 +193,26 @@ class HexapodBody:
         self.dtKnee = 0
         self.params = HpodCtrlParams()
 
+    def __str__(self):
+        ret_string = []
+        for leg in self.legs:
+            leg_string = str(leg) + ", kneeAngle: " + str(leg.knee.angle) +\
+                    ", hipAngleX: " + str(leg.hip.xangle) + ", hipAngleY: " +\
+                    str(leg.hip.yangle) + "\n"
+            ret_string.append(leg_string)
+            
+        return " ".join(ret_string)
+
+    def __repr__(self):
+        ret_string = []
+        for leg in self.legs:
+            leg_string = str(leg) + ", kneeAngle: " + str(leg.knee.angle) +\
+                    ", hipAngleX: " + str(leg.hip.xangle) + ", hipAngleY: " +\
+                    str(leg.hip.yangle) + "\n"
+            ret_string.append(leg_string)
+            
+        return " ".join(ret_string)
+
 class Hexapod(HexapodObject, HexapodBody):
 
     def __init__(self):

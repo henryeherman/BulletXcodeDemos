@@ -74,35 +74,41 @@ class HexapodSimulator():
         print "Total states: " + str(len(self.frequencies)*len(self.amplitudes)*len(self.phases))
 
         pod = hexapod.HexapodBody()
-        time = np.arange(0, self.config.total_time, 0.01)
-        xs = np.sin(2*np.pi*time/freq)
-        xc = np.cos(1*np.pi*time/freq)
 
-        xs_half = -(np.sin(1*np.pi*time/freq))
-        xc_half = -(np.cos(1*np.pi*time/freq))
-        for freq in self.frequencies:
-            for ampl in self.amplitudes:
+        for leg_index, leg in enumerate(pod.legs):
+            for freq in self.frequencies:
+                for ampl in self.amplitudes:
+                    for phase in self.phases:
+                        #print "Freq: " + str(freq)
+                        #print "Ampl: " + str(ampl)
+                        #print "Phase: " + str(phase)
+                        time = np.arange(0, self.config.total_time, 0.01)
+                        xs = np.sin(2*np.pi*time/freq)
+                        xc = np.cos(1*np.pi*time/freq)
+                        xs_half = -(np.sin(1*np.pi*time/freq))
+                        xc_half = -(np.cos(1*np.pi*time/freq))
 
+                        for pos_index, sin_pos in enumerate(xs[::1]):
+                            cos_pos = xc[pos_index]
+                            sin_pos_half = xs_half[pos_index]
+                            cos_pos_half = xc_half[pos_index]
 
-                for pos_index, sin_pos in enumerate(xs[::1]):
-                    cos_pos = xc[pos_index]
-                    sin_pos_half = xs_half[pos_index]
-                    cos_pos_half = xc_half[pos_index]
+                            leg.knee.angle = np.pi/2
 
-                    for leg_index, leg in enumerate(pod.legs):
-                        leg.knee.angle = np.pi/2
-                        leg.hip.yangle = -ampl * sin_pos
-                        leg.hip.xangle = ampl* abs(sin_pos_half)
+                            leg.hip.yangle = -ampl * sin_pos
+                            leg.hip.xangle = ampl* abs(sin_pos_half)
 
-                    total_states += 1
-                    self.hexapodConfigs.append(pod)
+                            total_states += 1
+                            self.hexapodConfigs.append(pod)
 
-            print "Frequency counter: " + str(iteration)
-            iteration += 1
+                    print "Frequency counter: " + str(iteration)
+                    iteration += 1
 
                 #for phase in self.phases:
 
         #print str(self.hexapodConfigs)
+        for hexpod in self.hexapodConfigs:
+           print hexpod
         print total_states
 
 
