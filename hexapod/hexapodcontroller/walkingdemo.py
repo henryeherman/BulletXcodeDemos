@@ -6,6 +6,8 @@ from hexapod import HpodSimCtrlParam, HpodReplies
 import numpy as np
 import sys
 
+import demoarr
+
 from matplotlib import pyplot
 
 pod = hexapod.Hexapod()
@@ -64,5 +66,6 @@ except (KeyboardInterrupt,):
     print "Exit Hexapod Client"
     sys.exit(0)
 
-pyplot.plot(results.zpos)
-pyplot.show()
+#pyplot.plot(results.zpos)
+#pyplot.show()
+demoarr.plotResults(results)

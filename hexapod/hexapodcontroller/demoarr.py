@@ -7,43 +7,47 @@ import sys
 
 import matplotlib.pyplot as plt
 
-pod = hexapod.Hexapod()
 
-pod.kneeStrength=4
-pod.hipStrength=4
-pod.dtKnee = 0.5
-pod.dtHip = 0.5
+def main():
+    pod = hexapod.Hexapod()
 
-t = np.arange(0,10,0.01)
-w = 1
-xs = abs(np.sin(2*np.pi*t/5))
+    pod.kneeStrength=4
+    pod.hipStrength=4
+    pod.dtKnee = 0.5
+    pod.dtHip = 0.5
 
-pod.resetExp()
-pod.cont()
+    t = np.arange(0,10,0.01)
+    w = 1
+    xs = abs(np.sin(2*np.pi*t/5))
 
-
-print "Begin Exp"
-try:
-    print "Build Array"
-    for x in xs[::1]: 
-        for leg in pod.legs:
-            leg.knee.angle=x*2
-            leg.hip.yangle=2*x-1
-            leg.hip.xangle=2*x-1
-        pod.addParam()
-        print "Add Param %f" % x
-    print "Array Built... sending"
-    pod.load()
-    pod.loadDefault()
-    results = pod.runexp()
-
-except (KeyboardInterrupt,):
-
-    print "Exit Hexapod Client"
-    sys.exit(0)
+    pod.resetExp()
+    pod.cont()
 
 
-def plotResults():
+    print "Begin Exp"
+    try:
+        print "Build Array"
+        for x in xs[::1]: 
+            for leg in pod.legs:
+                leg.knee.angle=x*2
+                leg.hip.yangle=2*x-1
+                leg.hip.xangle=2*x-1
+            pod.addParam()
+            print "Add Param %f" % x
+        print "Array Built... sending"
+        pod.load()
+        pod.loadDefault()
+        results = pod.runexp()
+
+    except (KeyboardInterrupt,):
+
+        print "Exit Hexapod Client"
+        sys.exit(0)
+
+    return results
+
+
+def plotResults(results):
     plt.interactive(True)
     plt.subplot(131)
     plt.plot(results.xpos, color='b',label='X Position')
@@ -71,4 +75,7 @@ def plotResults():
         plt.draw()
         time.sleep(0.01)
 
-plotResults()
+if __name__ == "__main__":
+    results = main()
+    plotResults(results)
+
