@@ -64,10 +64,10 @@ def plotResults():
         pt[0].set_xdata(t)
         ax1 = plt.subplot(132)
         ax1.clear()
-        plt.bar(range(6), results[t].lowerlegforce)
+        plt.bar(range(6), results[t].lowerleglinearmag)
         ax2 = plt.subplot(133)
         ax2.clear()
-        plt.bar(range(6), results[t].upperlegforce)
+        plt.bar(range(6), results[t].upperleglinearmag)
         plt.draw()
         time.sleep(0.01)
 
