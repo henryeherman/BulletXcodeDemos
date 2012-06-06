@@ -22,7 +22,7 @@
 #define REAR_SIDE (-1)
 #define BOTTOM_SIDE (-2)
 #define NUMLEGS 6
-
+#define DIMENSIONS 3
 
 //#define FREEZE 1
 
@@ -45,6 +45,10 @@ class HpodReply {
         btScalar zpos;
         btScalar upperlegforce[NUMLEGS];
         btScalar lowerlegforce[NUMLEGS];
+        btScalar upperLegVelocities[NUMLEGS][DIMENSIONS];
+        btScalar upperLegAngularVelocities[NUMLEGS][DIMENSIONS];
+        btScalar lowerLegVelocities[NUMLEGS][DIMENSIONS];
+        btScalar lowerLegAngularVelocities[NUMLEGS][DIMENSIONS];
 };
 
 void debugPos(btVector3 pos);
@@ -110,6 +114,7 @@ public:
     
     
     btAlignedObjectArray<btVector3> m_forces;
+    
     
     void loadCtrlParams(HpodCtrlParams *params, unsigned long size);
     void clearCtrlParams();
