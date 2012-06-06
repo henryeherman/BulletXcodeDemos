@@ -2,20 +2,19 @@
 
 import time
 import hexapod
-from hexapod import HpodSimCtrlParam, HpodReplies
 import numpy as np
 import sys
 
-from matplotlib import pyplot
+import matplotlib.pyplot as plt
 
 pod = hexapod.Hexapod()
 
 pod.kneeStrength=4
 pod.hipStrength=4
-pod.dtKnee = 0.1
-pod.dtHip = 0.1
+pod.dtKnee = 0.5
+pod.dtHip = 0.5
 
-t = np.arange(0,15,0.01)
+t = np.arange(0,10,0.01)
 w = 1
 xs = abs(np.sin(2*np.pi*t/5))
 
@@ -35,6 +34,7 @@ try:
         print "Add Param %f" % x
     print "Array Built... sending"
     pod.load()
+    pod.loadDefault()
     results = pod.runexp()
 
 except (KeyboardInterrupt,):
@@ -43,5 +43,15 @@ except (KeyboardInterrupt,):
     sys.exit(0)
 
 
-pyplot.plot(results.zpos)
-pyplot.show()
+def plotResults():
+    plt.plot(results.xpos, color='b',label='X Position')
+    plt.plot(results.ypos, linestyle='--', color='r', label='Y Position')
+    plt.plot(results.zpos, linestyle='-', color='y', label='Z Position')
+    plt.xlabel('Time')
+    plt.ylabel('Distance')
+    plt.title('Distance Traveled')
+    plt.legend()
+    plt.show()
+
+
+plotResults()

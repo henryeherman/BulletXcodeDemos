@@ -15,6 +15,8 @@
 #include "BulletDynamics/btBulletDynamicsCommon.h"
 #include "BodyPart.h"
 
+#define UPPER_LEG_MASS 1.0
+#define LOWER_LEG_MASS 1.0
 
 
 #define UPPER_LEG_LENGTH 0.45

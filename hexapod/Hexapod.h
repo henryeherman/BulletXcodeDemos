@@ -116,10 +116,12 @@ public:
     
     void step();
     void reset();
+    void reset_idx();
     
     void storeReply();
     void getForces();
     bool isStepping();
+    void goDefaultPos();
     
     btRigidBody* body;
     void wake();

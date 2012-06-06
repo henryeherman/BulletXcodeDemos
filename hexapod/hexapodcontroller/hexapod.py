@@ -269,18 +269,21 @@ class Hexapod(HexapodObject, HexapodBody):
         self.msg = []
         return message
 
-    def getReply(self):
-        print "Calling get reply: %d" % HpodSimCtrlParam.GETREPLY
-        self.clearParamArray()
-        self.setControl( HpodSimCtrlParam.GETREPLY )
+    def recvMulti(self):
+        self.msg.append(self.sendString)
         self.socket.send_multipart(self.msg)
         message = self.socket.recv_multipart()
-        self.msg = []
+        msg = []
         return message
 
+    def getReply(self):
+        print "Calling get reply: %d" % HpodSimCtrlParam.GETREPLY
+        self.setControl( HpodSimCtrlParam.GETREPLY )
+        message = self.recvMulti()
+        return HpodReplies(message[:-1])
+
     def checkIsBusy(self):
-        time.sleep(0.1)
-        self.clearParamArray()
+        time.sleep(0.3)
         self.setControl(HpodSimCtrlParam.CHKBUSY)
         s = self.send()
         s = s[:-1]
@@ -290,35 +293,54 @@ class Hexapod(HexapodObject, HexapodBody):
             return True
 
     def startexp(self):
-        self.clearParamArray()
         self.setControl(HpodSimCtrlParam.RUNEXP)
         self.send()
-        self.clearParamArray()
 
     def runexp(self):
-        sys.stdout.write("Send %d positions\r\n" % len(self.paramsArray))
         self.startexp()
         while self.checkIsBusy():
             sys.stdout.write("Waiting...\r")
         msg = self.getReply()
         sys.stdout.write("Received %d replies\r\n" % len(msg))
-        return HpodReplies(msg)
+        return msg
+
+    def loadImm(self):
+        self.setControl(HpodSimCtrlParam.LOADIMM)
+        self.send()
+
+    def loadFirst(self):
+        if len(self._paramsArray) > 0:
+            self.param=self._paramsArray[0]
+            self.loadImm()
 
     def readyLoad(self):
         self.setControl(HpodSimCtrlParam.LOAD)
 
+
     def load(self):
         self.readyLoad()
         self.sendArray()
+        self.cont()
+
+    def loadDefault(self):
+        for l in self.legs:
+            l.knee.angle=2.5;l.hip.yangle=0;l.hip.xangle=.75
+        self.loadImm()
 
     def resetExp(self):
-        self.clearParamArray()
+        self.setControl(HpodSimCtrlParam.RESETEXP)
+        self.send()
+    
+    def reset(self):
         self.setControl(HpodSimCtrlParam.RESET)
         self.send()
 
     def cont(self):
-        self.clearParamArray()
         self.setControl(HpodSimCtrlParam.CONTINUE)
+        self.send()
+    
+    def pause(self):
+        self.setControl(HpodSimCtrlParam.PAUSE)
         self.send()
 
     def addParam(self):
