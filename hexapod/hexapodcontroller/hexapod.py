@@ -5,8 +5,10 @@ import sys
 from ctypes import *
 import time
 from StringIO import StringIO
+import numpy as np
 
 NUMLEGS = 6
+DIMS = 3
 
 class HpodReplies(list):
 
@@ -51,11 +53,50 @@ class HpodSimStep(object):
     def getupperlegforces(self):
         return [float(f) for f in self.reply.upperlegforce]
 
+    def getUpperLegLinearVelocity(self):
+        vs = [(leg[0],leg[1],leg[2])   for leg in self.reply.upperLegVelocity]
+        return vs
+
+    def getUpperLegAngularVelocity(self):
+        vs = [(leg[0],leg[1],leg[2])  for leg in self.reply.upperLegAngularVelocity]
+        return vs
+
+    def getLowerLegLinearVelocity(self):
+        vs = [(leg[0],leg[1],leg[2])  for leg in self.reply.lowerLegVelocity]
+        return vs
+
+    def getLowerLegAngularVelocity(self):
+        vs = [(leg[0],leg[1],leg[2])  for leg in self.reply.lowerLegAngularVelocity]
+        return vs
+    
+    def getMagnitude(self, vs):
+        return [np.sqrt(np.sum(np.power(v,2))) for v in vs ];
+
+    def getUpperLegLinearMag(self):
+        return self.getMagnitude(self.upperleglinearvelocities)
+
+    def getLowerLegLinearMag(self):
+        return self.getMagnitude(self.lowerleglinearvelocities)
+
+    def getUpperLegAngularMag(self):
+        return self.getMagnitude(self.upperlegangularvelocities)
+
+    def getLowerLegAngularMag(self):
+        return self.getMagnitude(self.lowerlegangularvelocities)
+
     xpos = property(getxpos)
     ypos = property(getypos)
     zpos = property(getzpos)
     upperlegforce = property(getupperlegforces)
     lowerlegforce = property(getlowerlegforces)
+    upperleglinearvelocities = property(getUpperLegLinearVelocity)
+    upperlegangularvelocities = property(getUpperLegAngularVelocity)
+    lowerleglinearvelocities = property(getLowerLegLinearVelocity)
+    lowerlegangularvelocities = property(getLowerLegAngularVelocity)
+    upperleglinearmag = property(getUpperLegLinearMag)
+    lowerleglinearmag = property(getLowerLegLinearMag)
+    upperlegangularmag = property(getUpperLegAngularMag)
+    lowerlegangularmag = property(getLowerLegAngularMag)
 
 
 class HpodSimCtrlParam(c_uint):
@@ -82,7 +123,11 @@ class HpodReply(Structure):
                 ("ypos", c_float),
                 ("zpos", c_float),
                 ("upperlegforce", c_float*NUMLEGS),
-                ("lowerlegforce", c_float*NUMLEGS)]
+                ("lowerlegforce", c_float*NUMLEGS),
+                ("upperLegVelocity",(c_float*DIMS)*NUMLEGS),
+                ("upperLegAngularVelocity",(c_float*DIMS)*NUMLEGS),
+                ("lowerLegVelocity",(c_float*DIMS)*NUMLEGS),
+                ("lowerLegAngularVelocity",(c_float*DIMS)*NUMLEGS)]
 
 
 class HpodCtrlParams(Structure):
@@ -382,5 +427,3 @@ class Hexapod(HexapodObject, HexapodBody):
         return "Hexapod(id='%d')" % id(self)
 
     sendString = property(getParamString)
-
-

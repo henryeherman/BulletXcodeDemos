@@ -228,7 +228,7 @@ Hexapod::Hexapod ( btDynamicsWorld* ownerWorld, const btVector3& positionOffset,
     m_rightlegs.push_back(legs[MIDDLE_RIGHT]);
     m_rightlegs.push_back(legs[REAR_RIGHT]);
     
-    
+    legs[REAR_LEFT]->knee->getMotorTargetVelosity();  // WTH with spelling error
     goDefaultPos();
     
 }
@@ -245,13 +245,11 @@ void Hexapod::goDefaultPos() {
     setCtrlParams(param);
 }
 
-
 void Hexapod::setCtrlParams(const HpodCtrlParams params) {
 
     for(int i=0;i<LEG_COUNT;i++) {
         legs[i]->setKneeTarget(params.kneeAngles[i], params.dtKnee);
         legs[i]->setHipTarget(params.hipAnglesX[i], params.hipAnglesY[i], params.dtHip);
-//        legs[i]->setHipTarget(params.hipAngles[0][i], params.hipAngles[1][i], 0.01);
         legs[i]->setKneeMaxStrength(params.kneeStrength);
         legs[i]->setHipMaxStrength(params.hipStrength);
     }
@@ -263,7 +261,6 @@ void Hexapod::getCtrlParams(HpodCtrlParams &params) {
         params.kneeAngles[i] = legs[i]->getKneeAngle();
         params.hipAnglesX[i] = legs[i]->getHipAngleA();
         params.hipAnglesY[i] = legs[i]->getHipAngleB();
-        //m_bodies[BODY_THORAX]->getWorldTransform();
     }
 }
 
@@ -332,16 +329,6 @@ void Hexapod::reset() {
     m_replys.clear();
     m_ctrlParams.clear();
     reset_idx();
-    /*
-    HpodCtrlParams params;
-    params.dtHip = 1;
-    params.dtKnee = 1;
-    for (int j=0; j<LEG_COUNT; j++) {
-        params.hipAnglesX[j]=0;
-        params.hipAnglesY[j]=0;
-        params.kneeAngles[j]=0;
-    }
-     */
 }
 
 void Hexapod::reset_idx() {
@@ -365,6 +352,24 @@ void Hexapod::storeReply() {
     for(int i = 0; i<NUMLEGS; i++) {
         reply.upperlegforce[i] =  m_legs[i]->hip->getAppliedImpulse();
         reply.lowerlegforce[i] = m_legs[i]->knee->getAppliedImpulse();
+        btVector3 temp;
+        btVector3 zero(1.0f,2.0f,3.0f);
+        temp = m_legs[i]->upperleg->getAngularVelocity();
+        reply.upperLegAngularVelocities[i][0] = temp.x();
+        reply.upperLegAngularVelocities[i][1] = temp.y();
+        reply.upperLegAngularVelocities[i][2] = temp.z();
+        temp = m_legs[i]->upperleg->getLinearVelocity();;
+        reply.upperLegVelocities[i][0] = temp.x();
+        reply.upperLegVelocities[i][1] = temp.y();
+        reply.upperLegVelocities[i][2] = temp.z();
+        temp = m_legs[i]->lowerleg->getLinearVelocity();
+        reply.lowerLegVelocities[i][0] = temp.x();
+        reply.lowerLegVelocities[i][1] = temp.y();
+        reply.lowerLegVelocities[i][2] = temp.z();
+        temp = m_legs[i]->lowerleg->getAngularVelocity();
+        reply.lowerLegAngularVelocities[i][0] = temp.x();
+        reply.lowerLegAngularVelocities[i][1] = temp.y();
+        reply.lowerLegAngularVelocities[i][2] = temp.z();
     }
     m_replys.push_back(reply);
     std::cout<<"Store reply:"<<m_replys.size()<<std::endl;
