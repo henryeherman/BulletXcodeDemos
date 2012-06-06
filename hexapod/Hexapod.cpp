@@ -33,7 +33,7 @@ void debugCtrlParams(HpodCtrlParams params) {
     
     int i;
     for(i= 0;i< NUMLEGS;i++) {
-        std::cout << params.kneeAngles[i] << " ";
+        std::cout << params.kneeAngles[i] << " ";   
     }
     
     std::cout << "\nHip AnglesX: ";
@@ -229,6 +229,20 @@ Hexapod::Hexapod ( btDynamicsWorld* ownerWorld, const btVector3& positionOffset,
     m_rightlegs.push_back(legs[REAR_RIGHT]);
     
     
+    goDefaultPos();
+    
+}
+
+void Hexapod::goDefaultPos() {
+    HpodCtrlParams param;
+    param.dtHip = 0.5;
+    param.dtHip = 0.5;
+    for(int i=0;i<LEG_COUNT;i++) {
+        param.hipAnglesX[i] = 0.75f;
+        param.hipAnglesY[i] = 0.0f;
+        param.kneeAngles[i] = 2.5f;
+    }
+    setCtrlParams(param);
 }
 
 
@@ -255,6 +269,7 @@ void Hexapod::getCtrlParams(HpodCtrlParams &params) {
 
 
 void Hexapod::loadCtrlParams(HpodCtrlParams *params, unsigned long size) {
+    param_idx = 0;
     unsigned int count = 0;
     if (!m_ctrlParams.empty()) {
         m_ctrlParams.clear();
@@ -314,8 +329,23 @@ void Hexapod::getForces() {
     
 }
 void Hexapod::reset() {
-    param_idx = 0;
     m_replys.clear();
+    m_ctrlParams.clear();
+    reset_idx();
+    /*
+    HpodCtrlParams params;
+    params.dtHip = 1;
+    params.dtKnee = 1;
+    for (int j=0; j<LEG_COUNT; j++) {
+        params.hipAnglesX[j]=0;
+        params.hipAnglesY[j]=0;
+        params.kneeAngles[j]=0;
+    }
+     */
+}
+
+void Hexapod::reset_idx() {
+    param_idx = 0;
 }
 
 btVector3 Hexapod::getPosition() {

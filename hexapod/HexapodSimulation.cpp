@@ -187,30 +187,39 @@ void HexapodSimulationDemo::zmqRecv() {
                     reply.rebuild(4);
                     memcpy((void *) reply.data (), "YES", 4);
                     zsocket.send(reply);
+                    cout << "Busy" << endl;
                 } else {
                     reply.rebuild(3);
                     memcpy((void *) reply.data (), "NO", 3);
                     zsocket.send(reply);
+                    cout << "Not busy" << endl;
                 }
-            } else if(ctrlParam==SIMGETREPLY) {
-                //reply.rebuild(4);
-                //memcpy((void *) reply.data (), "REP", 4);
-                //zsocket.send(reply);
+            } else if (ctrlParam==SIMGETREPLY) {
+                static bool isMulti = false;
                 for (int r=0; r<m_hexapods.size(); r++) {
                     Hexapod *pod = m_hexapods[r];
                     for(int q=0;q<pod->m_replys.size();q++) {
+                        isMulti = true;
                         HpodReply podreply = pod->m_replys[q];
                         reply.rebuild(sizeof(HpodReply));
                         memcpy((void *) reply.data (), &podreply, sizeof(HpodReply));
-                        if (r==(m_hexapods.size()-1) && q==(pod->m_replys.size()-1)) 
-                        zsocket.send(reply);
-                        else {
-                            zsocket.send(reply, ZMQ_SNDMORE);
-                        }
+                        zsocket.send(reply, ZMQ_SNDMORE);
                     }
-                 
                 }	
-                    
+                
+                reply.rebuild(5);
+                memcpy((void *)reply.data (), "DONE", 5);
+                
+                if (isMulti) {
+                    //cout << "Multi Reply" << endl;
+                    zsocket.send(reply, 0);
+                } else {
+                    //cout << "Single Reply" << endl;
+                    zsocket.send(reply);
+                }
+                isMulti = false;
+                
+                
             } else {
                 reply.rebuild(4);
                 memcpy((void *) reply.data (), "ACK", 4);
@@ -234,7 +243,7 @@ void HexapodSimulationDemo::setMotorTargets(btVector3 translation)
     // Animate the bodies
 //    btVector3 kinTranslation(-0.01,-1,0);
     int collision_array_size = m_dynamicsWorld->getNumCollisionObjects();
-    cout << "Collision array size: " << collision_array_size << endl;
+    //cout << "Collision array size: " << collision_array_size << endl;
     if(collision_array_size > 1) {
         for(int i = 1; i < collision_array_size; i++) {
             btCollisionObject *colObj = m_dynamicsWorld->getCollisionObjectArray()[i];
@@ -314,7 +323,6 @@ void HexapodSimulationDemo::keyboardCallback(unsigned char key, int x, int y)
         case 'e':
             spawnHexapod(true);
             break;
-        
         case 'j':
             setMotorTargets(btVector3(0, -1, 0));
             break;
@@ -459,16 +467,28 @@ void HexapodSimulationDemo::processCommand(HpodSimCtrl cmd,HpodCtrlParams *param
             cout << "CMD:RESET"<<endl;
 #endif
             clientResetScene();
-            setIdle(true);
-            state=RUN;
+            if (!isIdle()) 
+                setIdle(true);
+            
+            state=RESET;
+            break;
+            
+        case SIMRESETEXP:
+#ifdef DEBUG_CMD
+            cout << "CMD:RESETEXP"<<endl;
+#endif
+            clientResetScene();
+            
+            if (!isIdle()) 
+                setIdle(true);
+            
+            state=RESETEXP;
             break;
             
         case SIMLOAD:
 #ifdef DEBUG_CMD
             cout << "CMD:LOAD"<<endl;
 #endif    
-            clientResetScene();
-            setIdle(true);
             state = LOAD;
             break;
             
@@ -489,16 +509,10 @@ void HexapodSimulationDemo::processCommand(HpodSimCtrl cmd,HpodCtrlParams *param
             state=RUNEXP;
             break;
             
-        case SIMRESETEXP:
-#ifdef DEBUG_CMD
-            cout << "CMD:RESEREXP"<<endl;
-#endif
-            clientResetScene();
-            state=RESETEXP;
-            break;
         case SIMCHKBUSY:
             cout << "CMD:CHKBUSY"<<endl;
             //Do NOTHING Dealt with in zmqRec
+            break;
         default:
             break;
     }
@@ -515,6 +529,7 @@ void HexapodSimulationDemo::setMotorTargets(btScalar deltaTime)
                 Hexapod* hpod= m_hexapods[r];
                 hpod->loadCtrlParams(params, param_count);
             }
+            state=RESET;
             break;
             
         case RUNEXP:
@@ -523,12 +538,20 @@ void HexapodSimulationDemo::setMotorTargets(btScalar deltaTime)
                 hpod->step();
             }
             break;
+        case RESET:
+            for (int r=0; r<m_hexapods.size(); r++) {
+                Hexapod* hpod=m_hexapods[r];
+                hpod->reset_idx();
+            }
+            state = RUN;
+            break;
             
         case RESETEXP:
             for (int r=0; r<m_hexapods.size(); r++) {
                 Hexapod* hpod=m_hexapods[r];
                 hpod->reset();
             }
+            state = RUN;
             break;
             
         case RUNIMM:
