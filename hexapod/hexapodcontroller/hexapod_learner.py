@@ -5,6 +5,7 @@ import hexapod
 from hexapod import HpodSimCtrlParam, HpodReplies
 import numpy as np
 import sys
+import copy
 
 from matplotlib import pyplot
 
@@ -71,40 +72,56 @@ class HexapodSimulator():
 
         iteration = 0
         total_states = 0
-        print "Total states: " + str(len(self.frequencies)*len(self.amplitudes)*len(self.phases))
+        total_states = len(self.frequencies) * len(self.amplitudes) * len(self.phases)
+        total_states = pow(total_states, 3)
+        print "Total States: " + str(total_states)
+        total_states = 1
 
-        pod = hexapod.HexapodBody()
-
-        for leg_index, leg in enumerate(pod.legs):
+        for state in range(total_states):
+            pod = hexapod.HexapodBody()
             for freq in self.frequencies:
                 for ampl in self.amplitudes:
                     for phase in self.phases:
-                        #print "Freq: " + str(freq)
-                        #print "Ampl: " + str(ampl)
-                        #print "Phase: " + str(phase)
+                        print "Freq: " + str(freq)
+                        print "Ampl: " + str(ampl)
+                        print "Phase: " + str(phase)
+
                         time = np.arange(0, self.config.total_time, 0.01)
                         xs = np.sin(2*np.pi*time/freq)
-                        xc = np.cos(1*np.pi*time/freq)
+                        xc = np.cos(2*np.pi*time/freq)
                         xs_half = -(np.sin(1*np.pi*time/freq))
                         xc_half = -(np.cos(1*np.pi*time/freq))
+
+                        #print str(xs)
+
+                        #exit(0)
 
                         for pos_index, sin_pos in enumerate(xs[::1]):
                             cos_pos = xc[pos_index]
                             sin_pos_half = xs_half[pos_index]
                             cos_pos_half = xc_half[pos_index]
 
-                            leg.knee.angle = np.pi/2
+                            for leg_index, leg in enumerate(pod.legs):
 
-                            leg.hip.yangle = -ampl * sin_pos
-                            leg.hip.xangle = ampl* abs(sin_pos_half)
+                                leg.knee.angle = np.pi/2
 
-                            total_states += 1
-                            self.hexapodConfigs.append(pod)
+                                # Control FRONT_LEFT, MIDDLE_RIGHT, and BACK_LEFT legs
+                                if leg_index in [0, 3, 4]:
+                                    leg.hip.yangle = -ampl * sin_pos
+                                    leg.hip.xangle = ampl* abs(sin_pos_half)
 
-                    print "Frequency counter: " + str(iteration)
-                    iteration += 1
+                                # Control FRONT_RIGHT, MIDDLE_LEFT, and BACK_RIGHT legs
+                                else:
+                                    leg.hip.yangle = -ampl * cos_pos
+                                    leg.hip.xangle = ampl* abs(cos_pos_half)
 
-                #for phase in self.phases:
+                            copy_pod = copy.copy(pod)
+                            self.hexapodConfigs.append(copy_pod)
+
+            print state
+
+
+                    #for phase in self.phases:
 
         #print str(self.hexapodConfigs)
         for hexpod in self.hexapodConfigs:
@@ -115,7 +132,33 @@ class HexapodSimulator():
 
 
     def runSimulation(self):
-        pass
+        print "Hex config size: " + str(len(self.hexapodConfigs))
+        pod = hexapod.Hexapod()
+
+        pod.kneeStrength = 100
+        pod.hipStrength = 30
+        pod.dtKnee = 0.1
+        pod.dtHip = 0.1
+
+        pod.resetExp()
+        pod.cont()
+
+        #pod.copyHexapodBody(self.hexapodConfigs[0])
+        for config in self.hexapodConfigs:
+            pod.copyHexapodBody(config)
+            pod.addParam()
+
+        pod.load()
+        results = pod.runexp()
+
+        print "Configuration: "
+        print str(self.hexapodConfigs[0])
+        print "RESULTS: "
+        print str(results)
+
+
+
+
 
 class HexapodConfiguration:
 
@@ -142,15 +185,15 @@ def main():
     config = HexapodConfiguration()
 
     config.min_freq = 1
-    config.max_freq = 4
+    config.max_freq = 1
     config.step_freq = 1
 
     config.min_ampl = 1
-    config.max_ampl = 4
+    config.max_ampl = 1
     config.step_ampl = 1
 
-    config.min_phase = 0
-    config.max_phase = np.pi/2
+    config.min_phase = np.pi/6
+    config.max_phase = np.pi/6
     config.step_phase = np.pi/6
 
     config.total_time = 10

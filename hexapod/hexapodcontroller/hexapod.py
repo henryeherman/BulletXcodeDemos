@@ -258,6 +258,7 @@ class HexapodBody:
             
         return " ".join(ret_string)
 
+
 class Hexapod(HexapodObject, HexapodBody):
 
     def __init__(self):
@@ -273,6 +274,36 @@ class Hexapod(HexapodObject, HexapodBody):
 
         self._paramsArray = []
         self.setControl()
+
+    def __str__(self):
+        ret_string = []
+        for leg in self.legs:
+            leg_string = str(leg) + ", kneeAngle: " + str(leg.knee.angle) +\
+                    ", hipAngleX: " + str(leg.hip.xangle) + ", hipAngleY: " +\
+                    str(leg.hip.yangle) + "\n"
+            ret_string.append(leg_string)
+            
+        return " ".join(ret_string)
+
+    def __repr__(self):
+        ret_string = []
+        for leg in self.legs:
+            leg_string = str(leg) + ", kneeAngle: " + str(leg.knee.angle) +\
+                    ", hipAngleX: " + str(leg.hip.xangle) + ", hipAngleY: " +\
+                    str(leg.hip.yangle) + "\n"
+            ret_string.append(leg_string)
+            
+        return " ".join(ret_string)
+
+    def copyHexapodBody(self, hexapodBody):
+        self.thorax = hexapodBody.thorax
+        self.leftFrontLeg = hexapodBody.leftFrontLeg
+        self.rightFrontLeg = hexapodBody.rightFrontLeg
+        self.leftCenterLeg = hexapodBody.leftCenterLeg
+        self.rightCenterLeg = hexapodBody.rightCenterLeg
+        self.leftRearLeg = hexapodBody.leftRearLeg
+        self.rightRearLeg = hexapodBody.rightRearLeg
+
 
     def setControl(self, ctrl=None):
         if ctrl in HpodSimCtrlParam.OPTS:

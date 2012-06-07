@@ -25,7 +25,6 @@ xc = np.cos(2*np.pi*t/1)
 xs_half = -(np.sin(1*np.pi*t/1))
 xc_half = -(np.cos(1*np.pi*t/1))
 
-
 pod.resetExp()
 pod.cont()
 
@@ -53,11 +52,18 @@ try:
                 leg.hip.xangle= np.pi/6 * abs(cos_pos_half)
 
         pod.addParam()
+        #print str(pod._paramsArray)
+        #exit()
 
         print "Add Param %f" % sin_pos
         print "Array Built... sending"
+
+    print "param list size: " + str(len(pod._paramsArray))
     pod.load()
     results = pod.runexp()
+
+    print "Configuration: "
+    print str(pod)
 
     print "Sent %d packets" % len(xs)
 
