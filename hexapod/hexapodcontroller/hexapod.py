@@ -296,13 +296,33 @@ class Hexapod(HexapodObject, HexapodBody):
         return " ".join(ret_string)
 
     def copyHexapodBody(self, hexapodBody):
-        self.thorax = hexapodBody.thorax
-        self.leftFrontLeg = hexapodBody.leftFrontLeg
-        self.rightFrontLeg = hexapodBody.rightFrontLeg
-        self.leftCenterLeg = hexapodBody.leftCenterLeg
-        self.rightCenterLeg = hexapodBody.rightCenterLeg
-        self.leftRearLeg = hexapodBody.leftRearLeg
-        self.rightRearLeg = hexapodBody.rightRearLeg
+        #self.thorax = hexapodBody.thorax
+        #self.leftFrontLeg = hexapodBody.leftFrontLeg
+        #self.rightFrontLeg = hexapodBody.rightFrontLeg
+        #self.leftCenterLeg = hexapodBody.leftCenterLeg
+        #self.rightCenterLeg = hexapodBody.rightCenterLeg
+        #self.leftRearLeg = hexapodBody.leftRearLeg
+        #self.rightRearLeg = hexapodBody.rightRearLeg
+        self.legs[0].knee.angle = hexapodBody.legs[0].knee.angle;
+        self.legs[1].knee.angle = hexapodBody.legs[1].knee.angle;
+        self.legs[2].knee.angle = hexapodBody.legs[2].knee.angle;
+        self.legs[3].knee.angle = hexapodBody.legs[3].knee.angle;
+        self.legs[4].knee.angle = hexapodBody.legs[4].knee.angle;
+        self.legs[5].knee.angle = hexapodBody.legs[5].knee.angle;
+
+        self.legs[0].hip.xangle = hexapodBody.legs[0].hip.xangle
+        self.legs[1].hip.xangle = hexapodBody.legs[1].hip.xangle
+        self.legs[2].hip.xangle = hexapodBody.legs[2].hip.xangle
+        self.legs[3].hip.xangle = hexapodBody.legs[3].hip.xangle
+        self.legs[4].hip.xangle = hexapodBody.legs[4].hip.xangle
+        self.legs[5].hip.xangle = hexapodBody.legs[5].hip.xangle
+
+        self.legs[0].hip.yangle = hexapodBody.legs[0].hip.yangle
+        self.legs[1].hip.yangle = hexapodBody.legs[1].hip.yangle
+        self.legs[2].hip.yangle = hexapodBody.legs[2].hip.yangle
+        self.legs[3].hip.yangle = hexapodBody.legs[3].hip.yangle
+        self.legs[4].hip.yangle = hexapodBody.legs[4].hip.yangle
+        self.legs[5].hip.yangle = hexapodBody.legs[5].hip.yangle
 
 
     def setControl(self, ctrl=None):

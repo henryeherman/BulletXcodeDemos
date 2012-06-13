@@ -18,7 +18,6 @@ pod.dtKnee = 0.1
 pod.dtHip = 0.1
 
 t = np.arange(0,10,0.01)
-w = 1
 xs = np.sin(2*np.pi*t/1)
 xc = np.cos(2*np.pi*t/1)
 
@@ -52,11 +51,8 @@ try:
                 leg.hip.xangle= np.pi/6 * abs(cos_pos_half)
 
         pod.addParam()
-        #print str(pod._paramsArray)
+        print str(pod._paramsArray)
         #exit()
-
-        print "Add Param %f" % sin_pos
-        print "Array Built... sending"
 
     print "param list size: " + str(len(pod._paramsArray))
     pod.load()

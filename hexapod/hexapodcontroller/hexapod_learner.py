@@ -29,6 +29,9 @@ class HexapodSimulator():
         self.phases = []
         self.total_states = 0
 
+        # Holds the results for different configurations
+        self.results = []
+
         self.pod = hexapod.Hexapod()
         self.pod.kneeStrength = 100
         self.pod.hipStrength = 30
@@ -39,17 +42,6 @@ class HexapodSimulator():
         self.hexapodConfigs = []
 
         self.createParamVectors()
-
-    #def calculateTotalStates(self):
-        #self.total_states = 0
-
-        #total_frequencies = (1+self.config.max_freq - self.config.min_freq)/self.config.step_freq
-        #total_amplitudes = (1+self.config.max_ampl - self.config.min_ampl)/self.config.step_ampl
-        #total_phases = (1+self.config.max_phase - self.config.min_phase)/self.config.step_phase
-
-        #print total_frequencies
-        #print total_amplitudes
-        #print total_phases
 
 
     def createParamVectors(self):
@@ -77,6 +69,8 @@ class HexapodSimulator():
         print "Total States: " + str(total_states)
         total_states = 1
 
+        hexapod_config = []
+
         for state in range(total_states):
             pod = hexapod.HexapodBody()
             for freq in self.frequencies:
@@ -91,10 +85,6 @@ class HexapodSimulator():
                         xc = np.cos(2*np.pi*time/freq)
                         xs_half = -(np.sin(1*np.pi*time/freq))
                         xc_half = -(np.cos(1*np.pi*time/freq))
-
-                        #print str(xs)
-
-                        #exit(0)
 
                         for pos_index, sin_pos in enumerate(xs[::1]):
                             cos_pos = xc[pos_index]
@@ -112,53 +102,36 @@ class HexapodSimulator():
 
                                 # Control FRONT_RIGHT, MIDDLE_LEFT, and BACK_RIGHT legs
                                 else:
-                                    leg.hip.yangle = -ampl * cos_pos
+                                    leg.hip.yangle = ampl * cos_pos
                                     leg.hip.xangle = ampl* abs(cos_pos_half)
 
-                            copy_pod = copy.copy(pod)
-                            self.hexapodConfigs.append(copy_pod)
+                            copy_pod = copy.deepcopy(pod)
+                            hexapod_config.append(copy_pod)
 
-            print state
-
-
-                    #for phase in self.phases:
-
-        #print str(self.hexapodConfigs)
-        for hexpod in self.hexapodConfigs:
-           print hexpod
-        print total_states
-
-
-
+                        self.hexapodConfigs.append(copy.deepcopy(hexapod_config))
+                        hexapod_config = []
 
     def runSimulation(self):
         print "Hex config size: " + str(len(self.hexapodConfigs))
         pod = hexapod.Hexapod()
 
-        pod.kneeStrength = 100
-        pod.hipStrength = 30
-        pod.dtKnee = 0.1
-        pod.dtHip = 0.1
-
-        pod.resetExp()
-        pod.cont()
-
-        #pod.copyHexapodBody(self.hexapodConfigs[0])
         for config in self.hexapodConfigs:
-            pod.copyHexapodBody(config)
-            pod.addParam()
+            pod.resetExp()
+            pod.cont()
+            for body in config:
+                pod.kneeStrength = 100
+                pod.hipStrength = 30
+                pod.dtKnee = 0.1
+                pod.dtHip = 0.1
 
-        pod.load()
-        results = pod.runexp()
+                pod.copyHexapodBody(body)
 
-        print "Configuration: "
-        print str(self.hexapodConfigs[0])
-        print "RESULTS: "
-        print str(results)
+                pod.addParam()
+            pod.load()
+            results = pod.runexp()
 
-
-
-
+            self.results.append(copy.deepcopy(results))
+            results = []
 
 class HexapodConfiguration:
 
@@ -176,24 +149,21 @@ class HexapodConfiguration:
 
     total_time = 0
 
-
-
-
 def main():
 
     # Configure the Hexapod
     config = HexapodConfiguration()
 
     config.min_freq = 1
-    config.max_freq = 1
+    config.max_freq = 2
     config.step_freq = 1
 
-    config.min_ampl = 1
-    config.max_ampl = 1
-    config.step_ampl = 1
+    config.min_ampl = np.pi/7
+    config.max_ampl = np.pi/7
+    config.step_ampl = np.pi/7
 
     config.min_phase = np.pi/6
-    config.max_phase = np.pi/6
+    config.max_phase = np.pi/2
     config.step_phase = np.pi/6
 
     config.total_time = 10
@@ -206,8 +176,6 @@ def main():
 
     # Run Simulation
     sim.runSimulation()
-
-
 
 if __name__ == "__main__":
     main()
