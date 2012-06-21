@@ -6,6 +6,7 @@ from hexapod import HpodSimCtrlParam, HpodReplies
 import numpy as np
 import sys
 import copy
+import operator
 
 from matplotlib import pyplot
 
@@ -115,9 +116,13 @@ class HexapodSimulator():
         print "Hex config size: " + str(len(self.hexapodConfigs))
         pod = hexapod.Hexapod()
 
-        for config in self.hexapodConfigs:
+        z_positions = []
+
+        for index, config in enumerate(self.hexapodConfigs):
+            results = []
             pod.resetExp()
             pod.cont()
+            pod.clearParamArray()
             for body in config:
                 pod.kneeStrength = 100
                 pod.hipStrength = 30
@@ -130,8 +135,21 @@ class HexapodSimulator():
             pod.load()
             results = pod.runexp()
 
+
+            zpos = self.getLastZpos(results)
+            z_positions.append(zpos)
+
             self.results.append(copy.deepcopy(results))
-            results = []
+
+        print "Z_positions: " + str(z_positions)
+        max_index, max_value = max(enumerate(z_positions), key=operator.itemgetter(1))
+        print "Best Configuration: " + str(max_index)
+        print "With a Z position of: " + str(max_value)
+
+    def getLastZpos(self, results):
+        return results[-1].getzpos()
+
+
 
 class HexapodConfiguration:
 
@@ -166,7 +184,7 @@ def main():
     config.max_phase = np.pi/2
     config.step_phase = np.pi/6
 
-    config.total_time = 10
+    config.total_time = 3
 
     # Initialize Simulator with config
     sim = HexapodSimulator(config)

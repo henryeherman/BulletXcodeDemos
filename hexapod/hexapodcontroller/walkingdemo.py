@@ -51,15 +51,11 @@ try:
                 leg.hip.xangle= np.pi/6 * abs(cos_pos_half)
 
         pod.addParam()
-        print str(pod._paramsArray)
         #exit()
 
-    print "param list size: " + str(len(pod._paramsArray))
     pod.load()
     results = pod.runexp()
 
-    print "Configuration: "
-    print str(pod)
 
     print "Sent %d packets" % len(xs)
 

@@ -68,7 +68,7 @@ class HpodSimStep(object):
     def getLowerLegAngularVelocity(self):
         vs = [(leg[0],leg[1],leg[2])  for leg in self.reply.lowerLegAngularVelocity]
         return vs
-    
+
     def getMagnitude(self, vs):
         return [np.sqrt(np.sum(np.power(v,2))) for v in vs ];
 
@@ -245,7 +245,7 @@ class HexapodBody:
                     ", hipAngleX: " + str(leg.hip.xangle) + ", hipAngleY: " +\
                     str(leg.hip.yangle) + "\n"
             ret_string.append(leg_string)
-            
+
         return " ".join(ret_string)
 
     def __repr__(self):
@@ -255,7 +255,7 @@ class HexapodBody:
                     ", hipAngleX: " + str(leg.hip.xangle) + ", hipAngleY: " +\
                     str(leg.hip.yangle) + "\n"
             ret_string.append(leg_string)
-            
+
         return " ".join(ret_string)
 
 
@@ -282,7 +282,7 @@ class Hexapod(HexapodObject, HexapodBody):
                     ", hipAngleX: " + str(leg.hip.xangle) + ", hipAngleY: " +\
                     str(leg.hip.yangle) + "\n"
             ret_string.append(leg_string)
-            
+
         return " ".join(ret_string)
 
     def __repr__(self):
@@ -292,7 +292,7 @@ class Hexapod(HexapodObject, HexapodBody):
                     ", hipAngleX: " + str(leg.hip.xangle) + ", hipAngleY: " +\
                     str(leg.hip.yangle) + "\n"
             ret_string.append(leg_string)
-            
+
         return " ".join(ret_string)
 
     def copyHexapodBody(self, hexapodBody):
@@ -446,7 +446,7 @@ class Hexapod(HexapodObject, HexapodBody):
     def resetExp(self):
         self.setControl(HpodSimCtrlParam.RESETEXP)
         self.send()
-    
+
     def reset(self):
         self.setControl(HpodSimCtrlParam.RESET)
         self.send()
@@ -454,7 +454,7 @@ class Hexapod(HexapodObject, HexapodBody):
     def cont(self):
         self.setControl(HpodSimCtrlParam.CONTINUE)
         self.send()
-    
+
     def pause(self):
         self.setControl(HpodSimCtrlParam.PAUSE)
         self.send()
@@ -463,6 +463,9 @@ class Hexapod(HexapodObject, HexapodBody):
         self.loadParam()
         tempParam = copy.copy(self.params)
         self._paramsArray.append(tempParam)
+
+    def clearParams(self):
+        self._paramsArray = []
 
     def _getParamsArray(self):
         self.m_HpodCtrlParams = HpodCtrlParams*len(self._paramsArray)
