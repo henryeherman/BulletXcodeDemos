@@ -217,7 +217,6 @@ void HexapodSimulationDemo::zmqRecv() {
                     //cout << "Single Reply" << endl;
                     zsocket.send(reply);
                 }
-                
                 isMulti = false;
                 
                 

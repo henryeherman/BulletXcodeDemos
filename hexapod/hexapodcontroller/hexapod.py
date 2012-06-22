@@ -236,6 +236,11 @@ class HexapodBody:
         self.hipStrength = 0
         self.dtHip = 0
         self.dtKnee = 0
+
+        self.frequencies = []
+        self.amplitudes = []
+        self.phases = []
+
         self.params = HpodCtrlParams()
 
     def __str__(self):
