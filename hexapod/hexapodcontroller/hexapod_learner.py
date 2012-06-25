@@ -373,8 +373,8 @@ def main():
     config.step_ampl = [np.pi/7, np.pi/7]
 
     config.min_phase = [np.pi/6, np.pi/6+np.pi/2]
-    config.max_phase = [np.pi/6, np.pi/6+np.pi/2]
-    #config.max_phase = [np.pi/2, np.pi/2+np.pi/2]
+    #config.max_phase = [np.pi/6, np.pi/6+np.pi/2]
+    config.max_phase = [np.pi/2, np.pi/2+np.pi/2]
     config.step_phase = [np.pi/6, np.pi/6]
 
     config.total_time = 3
@@ -393,7 +393,7 @@ def main():
 
     prev_best_sim = copy.deepcopy(best_sim)
 
-    num_iterations = 2      # This specifies how many times to iterate through
+    num_iterations = 5      # This specifies how many times to iterate through
                             # Higher amount of iterations should give better results
     for iteration in range(num_iterations):
 
